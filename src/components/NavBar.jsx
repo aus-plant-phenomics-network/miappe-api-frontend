@@ -8,7 +8,7 @@ const NavBar = forwardRef(({ children, ...rest }, ref) => {
   const [width, setWidth] = useState("260px");
   const title = isVisible ? "Collapse" : "Expand";
 
-  const onClickHandler = () => {
+  const onClick = () => {
     isVisible ? setWidth("0px") : setWidth("260px");
     setIsVisibe(!isVisible);
   };
@@ -18,11 +18,13 @@ const NavBar = forwardRef(({ children, ...rest }, ref) => {
     <ToggleButton
       className="w-fit h-fit absolute left-0 top-1/2"
       state={isVisible}
-      imgClassName="w-4 h-4"
-      onClickHandler={onClickHandler}
+      buttonProps={{
+        className: "w-4 h-4",
+        onClick: onClick,
+        title: title,
+      }}
       onImg={collapseIcon}
       offImg={expandIcon}
-      title={title}
     />
   );
 

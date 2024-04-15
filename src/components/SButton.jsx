@@ -13,7 +13,7 @@ const SButton = forwardRef(
     const Element = buttonElement;
     return (
       <Element {...rest} ref={ref}>
-        <img src={imgSrc} alt="sbutton" className={imgClassName} />
+        <img src={imgSrc} alt="button" className={imgClassName} />
       </Element>
     );
   }

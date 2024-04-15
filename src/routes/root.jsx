@@ -11,8 +11,8 @@ function SideBar({ data, className, ...rest }) {
         Object.entries(data).map(([titleString, listData]) => (
           <ToggleList
             key={titleString}
-            titleString={titleString}
-            listData={listData}
+            titleValue={titleString}
+            listValue={listData}
           />
         ))
       ) : (
