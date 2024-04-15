@@ -1,10 +1,26 @@
 import { forwardRef } from "react";
+import SButton from "./SButton";
 
 const ToggleButton = forwardRef(
-  ({ state, onButton, offButton, ...rest }, ref) => {
+  (
+    { state, onClickHandler, onImg, offImg, imgClassName, ...rest },
+    ref
+  ) => {
     return (
       <div {...rest} ref={ref}>
-        {state ? onButton : offButton}
+        {state ? (
+          <SButton
+            onClick={onClickHandler}
+            className={imgClassName}
+            imgSrc={onImg}
+          />
+        ) : (
+          <SButton
+            onClick={onClickHandler}
+            className={imgClassName}
+            imgSrc={offImg}
+          />
+        )}
       </div>
     );
   }

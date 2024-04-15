@@ -6,7 +6,7 @@ import ToggleButton from "./ToggleButton";
 const NavBar = forwardRef(({ children, ...rest }, ref) => {
   const [isVisible, setIsVisibe] = useState(true);
   const [width, setWidth] = useState("260px");
-  const title = isVisible?"Collapse":"Expand"
+  const title = isVisible ? "Collapse" : "Expand";
 
   const onClickHandler = () => {
     isVisible ? setWidth("0px") : setWidth("260px");
