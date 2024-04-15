@@ -1,12 +1,23 @@
 import { forwardRef } from "react";
 
-const SButton = forwardRef(({ imgSrc, ...rest }, ref) => {
-  return (
-    <button {...rest} ref={ref}>
-      <img src={imgSrc} alt="sbutton" className="hover:opacity-50" />
-    </button>
-  );
-});
+const SButton = forwardRef(
+  (
+    {
+      buttonElement = "button",
+      imgSrc,
+      imgClassName = "hover:opacity-50",
+      ...rest
+    },
+    ref
+  ) => {
+    const Element = buttonElement;
+    return (
+      <Element {...rest} ref={ref}>
+        <img src={imgSrc} alt="sbutton" className={imgClassName} />
+      </Element>
+    );
+  }
+);
 
 SButton.displayName = "SButton";
 export default SButton;
