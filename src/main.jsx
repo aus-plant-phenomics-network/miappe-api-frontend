@@ -1,21 +1,25 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
 import "./index.css";
-import Root from "./routes/root";
+import { Context } from "ailiyah-ui";
+import { theme } from "./assets/theme.ts";
+
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root/>
+    element: <App />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Context.ThemeProvider value={theme}>
+      <RouterProvider router={router} />
+    </Context.ThemeProvider>
+    ,
   </React.StrictMode>
 );
