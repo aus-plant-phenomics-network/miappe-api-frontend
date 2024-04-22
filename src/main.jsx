@@ -20,6 +20,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Context.ThemeProvider value={theme}>
       <RouterProvider router={router} />
     </Context.ThemeProvider>
-    ,
   </React.StrictMode>
 );
