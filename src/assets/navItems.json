@@ -1,28 +1,28 @@
 {
-    "Study Definition": {
-        "Institution": "institution",
-        "Investigation": "investigation",
-        "Staff": "staff",
-        "Data File": "data_file",
-        "Study": "study",
-        "Experiment": "experiment"
-    },
-    "Data Collection Setup": {
-        "Facility": "facility",
-        "Observation Unit": "observation_unit",
-        "Sample": "sample",
-        "Event": "event"
-    },
-    "Variable Definition": {
-        "Unit": "unit",
-        "Method": "method",
-        "Device": "device",
-        "Biological Material": "biological_material",
-        "Environment": "environment",
-        "Experiment Factor": "experiment_factor",
-        "Observed Variable": "observed_variable"
-    },
-    "Ontology": {
-        "Vocabulary": "vocabulary"
-    }
+  "Study Definition": {
+    "Institution": "institution",
+    "Investigation": "investigation",
+    "Staff": "staff",
+    "Data File": "data_file",
+    "Study": "study",
+    "Experiment": "experiment"
+  },
+  "Data Collection Setup": {
+    "Facility": "facility",
+    "Observation Unit": "observation_unit",
+    "Sample": "sample",
+    "Event": "event"
+  },
+  "Variable Definition": {
+    "Unit": "unit",
+    "Method": "method",
+    "Device": "device",
+    "Biological Material": "biological_material",
+    "Environment": "environment",
+    "Experiment Factor": "experiment_factor",
+    "Observed Variable": "observed_variable"
+  },
+  "Ontology": {
+    "Vocabulary": "vocabulary"
+  }
 }
