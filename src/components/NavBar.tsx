@@ -17,25 +17,38 @@ interface NavDefinition {
 const StyledLink = styled(NavLink);
 const parsedData: NavDefinition = data;
 
-const NavBar: React.FC<{}> = () => {
+const NavBar: React.FC<{ useLink: boolean }> = ({
+  useLink,
+}: {
+  useLink: boolean;
+}) => {
   const Content = (value: FieldDefinition) =>
     Object.entries(value).map((entry) => {
       const [name, link] = entry;
       return (
         <Accordion.Content themeName="NavBarAccordionContent" key={name}>
-          <StyledLink to={link}>
-            {({ isActive }) => {
-              const dataState = isActive ? "active" : "inactive";
-              return (
-                <styled.p
-                  data-state={dataState}
-                  themeName="NavBarAccordionContentLink"
-                >
-                  {name}
-                </styled.p>
-              );
-            }}
-          </StyledLink>
+          {useLink ? (
+            <StyledLink to={link}>
+              {({ isActive }) => {
+                const dataState = isActive ? "active" : "inactive";
+                return (
+                  <styled.p
+                    data-state={dataState}
+                    themeName="NavBarAccordionContentLink"
+                  >
+                    {name}
+                  </styled.p>
+                );
+              }}
+            </StyledLink>
+          ) : (
+            <styled.p
+              data-state="inactive"
+              themeName="NavBarAccordionContentLink"
+            >
+              {name}
+            </styled.p>
+          )}
         </Accordion.Content>
       );
     });
