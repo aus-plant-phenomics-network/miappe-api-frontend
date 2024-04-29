@@ -7,6 +7,7 @@ import { ThemeProvider } from "@ailiyah-ui/context";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+import "@ailiyah-ui/utils/src/tailwind.css"
 
 const router = createBrowserRouter([
   {

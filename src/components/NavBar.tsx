@@ -40,7 +40,7 @@ const NavBar: React.FC<{}> = () => {
       );
     });
 
-  const NavItems = (entry) => {
+  const NavItems = (entry: [string, FieldDefinition]) => {
     const [key, value] = entry;
     const Icon = styled(ChevronDownIcon);
     return (
