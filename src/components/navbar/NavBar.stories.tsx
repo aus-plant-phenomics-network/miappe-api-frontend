@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { NavBarStoryComponent } from "./NavBar.helpers";
-import { theme } from "../assets/theme";
+import { theme } from "../../assets/theme";
 import { userEvent } from "@storybook/test";
 import { ActionFactory } from "./NavBar.helpers";
 

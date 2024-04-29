@@ -1,7 +1,7 @@
 import React from "react";
 import { Themed as PNavBar } from "@ailiyah-ui/navbar";
 import { Accordion } from "@ailiyah-ui/accordion";
-import data from "../assets/navItems.json";
+import data from "../../assets/navItems.json";
 import { styled } from "@ailiyah-ui/factory";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { NavLink } from "react-router-dom";

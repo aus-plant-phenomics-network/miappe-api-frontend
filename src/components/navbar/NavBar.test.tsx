@@ -1,7 +1,7 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { NavBarStoryComponent } from "./NavBar.helpers";
-import { theme } from "../assets/theme";
+import { theme } from "../../assets/theme";
 import React from "react";
 import { ActionFactory } from "./NavBar.helpers";
 import userEvent from "@testing-library/user-event";
