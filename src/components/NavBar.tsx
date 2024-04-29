@@ -5,14 +5,7 @@ import data from "../assets/navItems.json";
 import { styled } from "@ailiyah-ui/factory";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { NavLink } from "react-router-dom";
-
-interface FieldDefinition {
-  [key: string]: string;
-}
-
-interface NavDefinition {
-  [key: string]: FieldDefinition;
-}
+import { NavDefinition, FieldDefinition } from "./NavBar.types";
 
 const StyledLink = styled(NavLink);
 const parsedData: NavDefinition = data;
