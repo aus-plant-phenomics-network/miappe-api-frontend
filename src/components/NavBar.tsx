@@ -1,9 +1,10 @@
-import * as React from "react";
-import { NavBar as _NavBar } from "ailiyah-ui/src/components/themed";
+import React from "react";
+import { Themed as PNavBar } from "@ailiyah-ui/navbar";
+import { Accordion } from "@ailiyah-ui/accordion";
 import data from "../assets/navItems.json";
-import { Accordion } from "ailiyah-ui/src/components/primitives";
+import { styled } from "@ailiyah-ui/factory";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { styled } from "ailiyah-ui/src/components/context";
+import { NavLink } from "react-router-dom";
 
 interface FieldDefinition {
   [key: string]: string;
@@ -13,6 +14,7 @@ interface NavDefinition {
   [key: string]: FieldDefinition;
 }
 
+const StyledLink = styled(NavLink);
 const parsedData: NavDefinition = data;
 
 const NavBar: React.FC<{}> = () => {
@@ -21,7 +23,19 @@ const NavBar: React.FC<{}> = () => {
       const [name, link] = entry;
       return (
         <Accordion.Content themeName="NavBarAccordionContent" key={name}>
-          {name}
+          <StyledLink to={link}>
+            {({ isActive }) => {
+              const dataState = isActive ? "active" : "inactive";
+              return (
+                <styled.p
+                  data-state={dataState}
+                  themeName="NavBarAccordionContentLink"
+                >
+                  {name}
+                </styled.p>
+              );
+            }}
+          </StyledLink>
         </Accordion.Content>
       );
     });
@@ -31,24 +45,23 @@ const NavBar: React.FC<{}> = () => {
     const Icon = styled(ChevronDownIcon);
     return (
       <Accordion.Item value={key} key={key} themeName="NavBarAccordionItem">
-        
         <Accordion.Trigger themeName="NavBarAccordionTrigger">
           {key}
           <Icon data-rotate="180" themeName="Icons" />
         </Accordion.Trigger>
         <hr />
         <styled.div themeName="NavBarAccordionContentContainer">
-        {value ? Content(value) : <></>}
+          {value ? Content(value) : <></>}
         </styled.div>
       </Accordion.Item>
     );
   };
 
   return (
-    <_NavBar.Root>
-      <_NavBar.Trigger />
-      <_NavBar.Content>
-        <_NavBar.Body twOther="scrollbar-thin">
+    <PNavBar.Root themeName="NavBarRoot">
+      <PNavBar.Trigger themeName="NavBarTrigger" />
+      <PNavBar.Content themeName="NavBarContent">
+        <PNavBar.Body twOther="scrollbar-thin" themeName="NavBarContentBody">
           <Accordion.Root type="multiple">
             {parsedData ? (
               Object.entries(parsedData).map((entry) => NavItems(entry))
@@ -56,9 +69,9 @@ const NavBar: React.FC<{}> = () => {
               <></>
             )}
           </Accordion.Root>
-        </_NavBar.Body>
-      </_NavBar.Content>
-    </_NavBar.Root>
+        </PNavBar.Body>
+      </PNavBar.Content>
+    </PNavBar.Root>
   );
 };
 
