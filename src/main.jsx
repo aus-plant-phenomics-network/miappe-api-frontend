@@ -4,15 +4,29 @@ import App from "./App.jsx";
 import "./index.css";
 import { theme } from "./assets/theme.ts";
 import { ThemeProvider } from "@ailiyah-ui/context";
-
+import ErrorPage from "./routes/error.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import "@ailiyah-ui/utils/src/tailwind.css"
+import "@ailiyah-ui/utils/src/tailwind.css";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "investigation/",
+            element: <App/>,
+          },
+          /* the rest of the routes */
+        ],
+      },
+    ],
   },
 ]);
 
