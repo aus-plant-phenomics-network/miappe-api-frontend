@@ -1,0 +1,42 @@
+{
+    "title": {
+        "required": true,
+        "type": "text",
+        "placeholder": "Investigation title"
+    },
+    "description": {
+        "required": true,
+        "type": "text",
+        "placeholder": "Investigation description"
+    },
+    "submission date": {
+        "required": false,
+        "type": "date",
+        "placeholder": "Investigation submission date"
+    },
+    "release date": {
+        "required": false,
+        "type": "date",
+        "placeholder": "Investigation release date"
+    },
+    "license": {
+        "required": false,
+        "type": "text",
+        "placeholder": "Investigation license"
+    },
+    "doi": {
+        "required": false,
+        "type": "text",
+        "placeholder": "Investigation doi"
+    },
+    "website": {
+        "required": false,
+        "type": "text",
+        "placeholder": "Investigation website"
+    },
+    "funding": {
+        "required": false,
+        "type": "text",
+        "placeholder": "Investigation funding"
+    }
+}

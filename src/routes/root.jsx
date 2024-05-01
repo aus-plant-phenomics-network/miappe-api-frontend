@@ -1,9 +1,5 @@
-import {NavBar} from "../components/navbar"
+import { NavBar } from "../components/navbar";
 
 export default function Root() {
-  return (
-    <div className="flex">
-      <NavBar />
-    </div>
-  );
+  return <NavBar useLink={true}/>;
 }
