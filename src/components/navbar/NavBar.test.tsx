@@ -7,7 +7,7 @@ import { ActionFactory } from "./NavBar.helpers";
 import userEvent from "@testing-library/user-event";
 import { NavDefinition } from "./NavBar.types";
 
-const data: NavDefinition = require("../assets/navItems.json");
+const data: NavDefinition = require("../../assets/navItems.json");
 
 const keys = Object.keys(data);
 
