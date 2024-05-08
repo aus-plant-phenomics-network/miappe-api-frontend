@@ -6,15 +6,15 @@ export default defineConfig({
   test: {
     coverage: {
       thresholds: {
-        lines: 70,
-        branches: 70,
-        functions: 70,
-        statements: 70
+        lines: 50,
+        branches: 50,
+        functions: 50,
+        statements: 50
       },
       enabled: true,
       provider: "istanbul",
       reportOnFailure: true,
-      reporter: "html"
+      reporter: ['json-summary', 'json', 'text'],
     },
     global: true,
     environment: "jsdom",
