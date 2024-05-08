@@ -1,4 +1,8 @@
 {
+    "id": {
+        "required": true,
+        "type": "text"
+    },
     "title": {
         "required": true,
         "type": "text",
