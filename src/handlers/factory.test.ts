@@ -157,4 +157,109 @@ describe("Test actionLoader with no redirect", async () => {
     });
     expect(result).toEqual(TEST_OBJ_WITH_EMPTY_DATE);
   });
+  test("test delete action returns empty object", async () => {
+    const result = await actionLoader.actionDelete({ params: { id: TEST_ID } });
+    expect(result).toEqual({});
+  });
+});
+
+const REDIRECT_STR = "/example";
+const REDIRECT_FN = (...args: any[]) => {
+  return REDIRECT_STR;
+};
+
+const actionLoaderWithRedirectString = createLoaderAction<
+  TestDataWithDateType,
+  "id"
+>(TEST_URL, SchemaWithDate, "id", REDIRECT_STR, REDIRECT_STR, REDIRECT_STR);
+
+const actionLoaderWithRedirectFunction = createLoaderAction<
+  TestDataWithDateType,
+  "id"
+>(TEST_URL, SchemaWithDate, "id", REDIRECT_FN, REDIRECT_FN, REDIRECT_FN);
+
+describe("Test actionLoader with redirect URL", async () => {
+  let REQUEST_FULL_DATA: Request;
+  beforeEach(() => {
+    REQUEST_FULL_DATA = createRequest(TEST_OBJ_WITH_DATE_STR);
+  });
+  test("test action get all returns testObj", async () => {
+    const result = await actionLoaderWithRedirectString.loaderAll();
+    expect(result).toEqual([TEST_OBJ]);
+  });
+  test("test action get by id returns testObj", async () => {
+    const result = await actionLoaderWithRedirectString.loaderById({
+      params: { id: TEST_ID },
+    });
+    expect(result).toEqual(TEST_OBJ_WITH_ID);
+  });
+  test("test create action returns redirect", async () => {
+    const result = await actionLoaderWithRedirectString.actionCreate({
+      request: REQUEST_FULL_DATA,
+      params: { id: TEST_ID },
+    });
+    expect(result.status).toBe(302);
+    let header = result.headers as Headers;
+    expect(header.get("Location")).toBe(REDIRECT_STR);
+  });
+  test("test update action returns redirect", async () => {
+    const result = await actionLoaderWithRedirectString.actionUpdate({
+      request: REQUEST_FULL_DATA,
+      params: { id: TEST_ID },
+    });
+    expect(result.status).toBe(302);
+    let header = result.headers as Headers;
+    expect(header.get("Location")).toBe(REDIRECT_STR);
+  });
+  test("test delete action returns redirect", async () => {
+    const result = (await actionLoaderWithRedirectString.actionDelete({
+      params: { id: TEST_ID },
+    })) as Response;
+    expect(result.status).toBe(302);
+    let header = result.headers as Headers;
+    expect(header.get("Location")).toBe(REDIRECT_STR);
+  });
+});
+
+describe("Test actionLoader with redirect Function", async () => {
+  let REQUEST_FULL_DATA: Request;
+  beforeEach(() => {
+    REQUEST_FULL_DATA = createRequest(TEST_OBJ_WITH_DATE_STR);
+  });
+  test("test action get all returns testObj", async () => {
+    const result = await actionLoaderWithRedirectFunction.loaderAll();
+    expect(result).toEqual([TEST_OBJ]);
+  });
+  test("test action get by id returns testObj", async () => {
+    const result = await actionLoaderWithRedirectFunction.loaderById({
+      params: { id: TEST_ID },
+    });
+    expect(result).toEqual(TEST_OBJ_WITH_ID);
+  });
+  test("test create action returns redirect", async () => {
+    const result = await actionLoaderWithRedirectFunction.actionCreate({
+      request: REQUEST_FULL_DATA,
+      params: { id: TEST_ID },
+    });
+    expect(result.status).toBe(302);
+    let header = result.headers as Headers;
+    expect(header.get("Location")).toBe(REDIRECT_STR);
+  });
+  test("test update action returns redirect", async () => {
+    const result = await actionLoaderWithRedirectFunction.actionUpdate({
+      request: REQUEST_FULL_DATA,
+      params: { id: TEST_ID },
+    });
+    expect(result.status).toBe(302);
+    let header = result.headers as Headers;
+    expect(header.get("Location")).toBe(REDIRECT_STR);
+  });
+  test("test delete action returns redirect", async () => {
+    const result = (await actionLoaderWithRedirectFunction.actionDelete({
+      params: { id: TEST_ID },
+    })) as Response;
+    expect(result.status).toBe(302);
+    let header = result.headers as Headers;
+    expect(header.get("Location")).toBe(REDIRECT_STR);
+  });
 });
