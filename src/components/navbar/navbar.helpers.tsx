@@ -1,6 +1,6 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
 import { ThemeProvider } from "@ailiyah-ui/context";
-import { NavBar } from "./NavBar";
+import { NavBar } from "./navbar";
 import React from "react";
 import { UserEvent as RTLUserEvent } from "@testing-library/user-event";
 import { UserEvent as StoryUserEvent } from "@storybook/test";
