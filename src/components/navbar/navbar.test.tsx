@@ -1,13 +1,13 @@
 import { expect, describe, test, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { NavBarStoryComponent } from "./NavBar.helpers";
+import { NavBarStoryComponent } from "./navbar.helpers";
 import { theme } from "../../assets/theme";
 import React from "react";
-import { ActionFactory } from "./NavBar.helpers";
+import { ActionFactory } from "./navbar.helpers";
 import userEvent from "@testing-library/user-event";
-import { NavDefinition } from "./NavBar.types";
+import { NavDefinition } from "./navbar.types.";
 
-const data: NavDefinition = require("../assets/navItems.json");
+const data: NavDefinition = require("../../assets/navItems.json");
 
 const keys = Object.keys(data);
 

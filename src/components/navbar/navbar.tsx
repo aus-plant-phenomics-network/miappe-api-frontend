@@ -5,7 +5,7 @@ import data from "../../assets/navItems.json";
 import { styled } from "@ailiyah-ui/factory";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { NavLink } from "react-router-dom";
-import { NavDefinition, FieldDefinition } from "./NavBar.types";
+import { NavDefinition, FieldDefinition } from "./navbar.types.";
 
 const StyledLink = styled(NavLink);
 const parsedData: NavDefinition = data;
@@ -67,7 +67,7 @@ const NavBar: React.FC<{ useLink: boolean }> = ({
     <PNavBar.Root themeName="NavBarRoot">
       <PNavBar.Trigger themeName="NavBarTrigger" />
       <PNavBar.Content themeName="NavBarContent">
-        <PNavBar.Body twOther="scrollbar-thin" themeName="NavBarContentBody">
+        <PNavBar.Body themeName="NavBarContentBody">
           <Accordion.Root type="multiple">
             {parsedData ? (
               Object.entries(parsedData).map((entry) => NavItems(entry))

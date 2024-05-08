@@ -1,9 +1,9 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { NavBarStoryComponent } from "./NavBar.helpers";
+import { NavBarStoryComponent } from "./navbar.helpers";
 import { theme } from "../../assets/theme";
 import { userEvent } from "@storybook/test";
-import { ActionFactory } from "./NavBar.helpers";
+import { ActionFactory } from "./navbar.helpers";
 
 const Actions = ActionFactory(userEvent);
 
