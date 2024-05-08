@@ -1,6 +1,6 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
 
-export const navbarTheme: PresetTheme = {
+const navbarTheme: PresetTheme = {
   NavBarRoot: {
     twHeight: "h-screen",
     twWidth: "w-fit",
@@ -67,7 +67,7 @@ export const navbarTheme: PresetTheme = {
   },
 };
 
-export const navbarAccordionTheme: PresetTheme = {
+const navbarAccordionTheme: PresetTheme = {
   NavBarAccordionItem: {
     twPadding: "pr-1 pt-2",
     twFlex: "flex",
@@ -100,7 +100,9 @@ export const navbarAccordionTheme: PresetTheme = {
   },
 };
 
-export const theme: PresetTheme = {
+const theme: PresetTheme = {
   ...navbarTheme,
   ...navbarAccordionTheme,
 };
+
+export { theme as navbarTheme };
