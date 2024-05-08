@@ -9,12 +9,12 @@
         "type": "text",
         "placeholder": "Investigation description"
     },
-    "submission date": {
+    "submissionDate": {
         "required": false,
         "type": "date",
         "placeholder": "Investigation submission date"
     },
-    "release date": {
+    "publicReleaseDate": {
         "required": false,
         "type": "date",
         "placeholder": "Investigation release date"
@@ -24,7 +24,7 @@
         "type": "text",
         "placeholder": "Investigation license"
     },
-    "doi": {
+    "publicationDoi": {
         "required": false,
         "type": "text",
         "placeholder": "Investigation doi"
