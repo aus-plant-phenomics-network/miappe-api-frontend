@@ -1,13 +1,17 @@
-interface InvestigationDTO {
+import { AbstractDataType, AbstractSchemaType } from "../../handlers";
+
+interface InvestigationType extends AbstractDataType {
   id: string;
   title: string;
   description: string;
-  submissionDate: Date;
-  releaseDate: Date;
+  submissionDate: Date | null;
+  publicReleaseDate: Date | null;
   license: string;
-  doi: string;
+  publicationDoi: string;
   website: string;
   funding: string;
 }
 
-export type { InvestigationDTO };
+type InvestigationSchema = AbstractSchemaType<InvestigationType>;
+
+export type { InvestigationType, InvestigationSchema };
