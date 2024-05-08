@@ -80,14 +80,18 @@ const InputField = React.memo(
  * form rendering
  *
  * @param data InputArrayType
+ * @param exclude: list of keys to exclude from schema
  * @returns Array<InputField>
  */
 const createInputArray = <T extends AbstractDataType>(
-  data: AbstractSchemaType<T>
+  schema: AbstractSchemaType<T>,
+  exclude: Array<String> = []
 ): Array<React.ReactElement> => {
-  return Object.entries(data).map(([key, value], _) => {
-    return <InputField key={key} name={key} {...value} />;
-  });
+  return Object.entries(schema)
+    .filter(([key, _]) => !exclude.includes(key))
+    .map(([key, value], _) => {
+      return <InputField key={key} name={key} {...value} />;
+    });
 };
 
 /**
