@@ -125,10 +125,9 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
     request: Request;
     params: Params<Key>;
   }) => {
-    console.log("Create action");
     const submitData = await parseData(request);
     let result = await handlers.createData(submitData);
-    console.log("POST result", result);
+
     if (createRedirect)
       return redirect(
         typeof createRedirect === "string"

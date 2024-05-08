@@ -10,9 +10,11 @@ const createEchoHandlers = <T extends AbstractDataType>(
   mockGetObj: T
 ) => [
   http.get(url, () => {
-    return HttpResponse.json({
-      ...mockGetObj,
-    });
+    return HttpResponse.json([
+      {
+        ...mockGetObj,
+      },
+    ]);
   }),
   http.get<ParamsWithId, T, T>(`${url}/:id`, async ({ params }) => {
     const { id } = params;
