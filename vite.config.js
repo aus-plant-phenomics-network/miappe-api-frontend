@@ -15,6 +15,12 @@ export default defineConfig({
       provider: "istanbul",
       reportOnFailure: true,
       reporter: ['json-summary', 'json', 'text'],
+      exclude: [
+        "**/*.stories.[jt]sx",
+        "**/*.helper.[jt]sx",
+        "**/*.helpers.[jt]sx",
+        "**/*.types.ts",
+      ]
     },
     global: true,
     environment: "jsdom",
