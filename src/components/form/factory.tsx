@@ -2,7 +2,8 @@ import React from "react";
 import { TailwindProps } from "@ailiyah-ui/utils";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
-import { NameRequiredInputProps, InputArrayType } from "../types";
+import { NameRequiredInputProps } from "../types";
+import { AbstractDataType, AbstractSchemaType } from "../../handlers";
 import { capitalise, toSnakeCase } from "../helpers";
 import { Form, FormProps } from "react-router-dom";
 
@@ -81,7 +82,9 @@ const InputField = React.memo(
  * @param data InputArrayType
  * @returns Array<InputField>
  */
-const createInputArray = (data: InputArrayType): Array<React.ReactElement> => {
+const createInputArray = <T extends AbstractDataType>(
+  data: AbstractSchemaType<T>
+): Array<React.ReactElement> => {
   return Object.entries(data).map(([key, value], _) => {
     return <InputField key={key} name={key} {...value} />;
   });
