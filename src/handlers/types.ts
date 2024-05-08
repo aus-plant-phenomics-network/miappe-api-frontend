@@ -1,5 +1,5 @@
 interface AbstractDataType {
-  [key: string]: string | number | Date | null;
+  [key: string]: string | number | Date | null | undefined;
 }
 
 interface SchemaElementType {
@@ -21,7 +21,7 @@ interface HandlerType<T extends AbstractDataType> {
   getDataById: (id: string) => Promise<T>;
   createData: (data: T) => Promise<T>;
   updateData: (data: T, id: string) => Promise<T>;
-  deleteData: (id: string) => Promise<void>;
+  deleteData: (id: string) => Promise<unknown>;
 }
 
 export type {

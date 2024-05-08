@@ -1,4 +1,3 @@
-import React = require("react");
 import { TailwindComponentProps } from "@ailiyah-ui/factory";
 
 interface NameRequiredInputProps

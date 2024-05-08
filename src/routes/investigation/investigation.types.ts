@@ -1,7 +1,7 @@
 import { AbstractDataType, AbstractSchemaType } from "../../handlers";
 
 interface InvestigationType extends AbstractDataType {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   submissionDate: Date | null;

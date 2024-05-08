@@ -2,9 +2,9 @@ import React from "react";
 import { createForm, createInputArray } from "../../components/form";
 import { InvestigationSchema } from "./investigation.types";
 
-const investigationSchema: InvestigationSchema = require("./data.json");
+let schema: InvestigationSchema = (await import("./data.json")).default;
 
-const investigationComponents = createInputArray(investigationSchema);
+const investigationComponents = createInputArray(schema, ["id"]);
 
 const InvestigationForm = createForm(investigationComponents);
 

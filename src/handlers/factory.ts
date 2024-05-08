@@ -18,7 +18,7 @@ const createHandlers = <T extends AbstractDataType>(
     }
 
     const result = await response.json();
-    return result;
+    return result as unknown as Array<T>;
   };
 
   const getDataById = async (id: string): Promise<T> => {
@@ -28,7 +28,7 @@ const createHandlers = <T extends AbstractDataType>(
     }
 
     const result = await response.json();
-    return result;
+    return result as unknown as T;
   };
 
   const createData = async (data: T): Promise<T> => {
@@ -44,7 +44,7 @@ const createHandlers = <T extends AbstractDataType>(
     }
 
     const result = await response.json();
-    return result;
+    return result as unknown as T;
   };
 
   const updateData = async (data: T, id: string): Promise<T> => {
@@ -60,7 +60,7 @@ const createHandlers = <T extends AbstractDataType>(
     }
 
     const result = await response.json();
-    return result;
+    return result as unknown as T;
   };
 
   const deleteData = async (id: string) => {
@@ -97,7 +97,7 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
     ) as AbstractFormDataType<T>;
     return Object.entries(formDataObj).reduce((acc, dataEntry) => {
       let [key, value] = dataEntry;
-      if (schema[key].type === "date") {
+      if (schema[key]!.type === "date") {
         acc[key] = string2Date(value);
       } else {
         acc[key] = value;
