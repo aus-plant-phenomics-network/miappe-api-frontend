@@ -15,6 +15,7 @@ const createHandlers = <T extends AbstractDataType>(
 
     if (!response.ok) {
       console.error(response);
+      throw response;
     }
 
     const result = await response.json();
@@ -25,6 +26,7 @@ const createHandlers = <T extends AbstractDataType>(
     const response = await fetch(`${url}/${id}`);
     if (!response.ok) {
       console.error(response);
+      throw response;
     }
 
     const result = await response.json();
@@ -40,7 +42,8 @@ const createHandlers = <T extends AbstractDataType>(
       body: JSON.stringify(data),
     });
     if (!response.ok) {
-      console.error(response);
+      // console.error(response);
+      throw response;
     }
 
     const result = await response.json();
@@ -57,6 +60,7 @@ const createHandlers = <T extends AbstractDataType>(
     });
     if (!response.ok) {
       console.error(response);
+      throw response;
     }
 
     const result = await response.json();
@@ -69,10 +73,9 @@ const createHandlers = <T extends AbstractDataType>(
     });
     if (!response.ok) {
       console.error(response);
+      throw response;
     }
-
-    const result = await response.json();
-    return result;
+    return response;
   };
 
   return {
@@ -85,7 +88,7 @@ const createHandlers = <T extends AbstractDataType>(
 };
 
 const createLoaderAction = <T extends AbstractDataType, Key extends string>(
-  url: string,
+  handlers: HandlerType<T>,
   schema: AbstractSchemaType<T>,
   idKey: Key,
   createRedirect?:
@@ -96,7 +99,6 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
     | ((request: Request, params: Params<Key>, result: T) => string),
   deleteRedirect?: string | ((params: Params<Key>) => string)
 ) => {
-  const handlers: HandlerType<T> = createHandlers(url);
   const parseData = async (request: Request): Promise<T> => {
     const formData = await request.formData();
     const formDataObj: AbstractFormDataType<T> = Object.fromEntries(
@@ -112,11 +114,23 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
       return acc;
     }, {} as any) as T;
   };
-  const loaderAll = async () => {
-    return await handlers.getAllData();
+  const loaderAll = async (): Promise<T[] | null> => {
+    try {
+      return await handlers.getAllData();
+    } catch (error) {
+      return null;
+    }
   };
-  const loaderById = async ({ params }: { params: Params<Key> }) => {
-    return await handlers.getDataById(params[idKey]!);
+  const loaderById = async ({
+    params,
+  }: {
+    params: Params<Key>;
+  }): Promise<T | null> => {
+    try {
+      return await handlers.getDataById(params[idKey]!);
+    } catch (error) {
+      return null;
+    }
   };
   const actionCreate = async ({
     request,
@@ -126,15 +140,18 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
     params: Params<Key>;
   }) => {
     const submitData = await parseData(request);
-    let result = await handlers.createData(submitData);
-
-    if (createRedirect)
-      return redirect(
-        typeof createRedirect === "string"
-          ? createRedirect
-          : createRedirect(request, params, result)
-      );
-    return result;
+    try {
+      let result = await handlers.createData(submitData);
+      if (createRedirect)
+        return redirect(
+          typeof createRedirect === "string"
+            ? createRedirect
+            : createRedirect(request, params, result)
+        );
+      return result;
+    } catch (error) {
+      throw error;
+    }
   };
   const actionUpdate = async ({
     request,
@@ -144,24 +161,32 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
     params: Params<Key>;
   }) => {
     const submitData = await parseData(request);
-    const result = await handlers.updateData(submitData, params[idKey]!);
-    if (updateRedirect)
-      return redirect(
-        typeof updateRedirect === "string"
-          ? updateRedirect
-          : updateRedirect(request, params, result)
-      );
-    return result;
+    try {
+      const result = await handlers.updateData(submitData, params[idKey]!);
+      if (updateRedirect)
+        return redirect(
+          typeof updateRedirect === "string"
+            ? updateRedirect
+            : updateRedirect(request, params, result)
+        );
+      return result;
+    } catch (error) {
+      throw error;
+    }
   };
   const actionDelete = async ({ params }: { params: Params<Key> }) => {
-    const result = await handlers.deleteData(params[idKey]!);
-    if (deleteRedirect)
-      return redirect(
-        typeof deleteRedirect === "string"
-          ? deleteRedirect
-          : deleteRedirect(params)
-      );
-    return result;
+    try {
+      const result = await handlers.deleteData(params[idKey]!);
+      if (deleteRedirect)
+        return redirect(
+          typeof deleteRedirect === "string"
+            ? deleteRedirect
+            : deleteRedirect(params)
+        );
+      return result;
+    } catch (error) {
+      throw error;
+    }
   };
   return {
     handlers: handlers,
