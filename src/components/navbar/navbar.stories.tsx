@@ -4,6 +4,7 @@ import { NavBarStoryComponent } from "./navbar.helpers";
 import { theme } from "../../assets/theme";
 import { userEvent } from "@storybook/test";
 import { ActionFactory } from "./navbar.helpers";
+import { defaultData } from "./navbar";
 
 const Actions = ActionFactory(userEvent);
 
@@ -12,6 +13,7 @@ const meta: Meta<typeof NavBarStoryComponent> = {
   component: NavBarStoryComponent,
   args: {
     themeValue: theme,
+    parsedData: defaultData,
   },
   decorators: [
     (Story) => (

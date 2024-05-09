@@ -10,13 +10,10 @@ const StyledLink = styled(NavLink);
 const defaultData: NavDefinition = (await import("../../assets/navItems.json"))
   .default;
 
-const NavBar: React.FC<{ useLink: boolean; parsedData: NavDefinition }> = ({
-  useLink,
-  parsedData = defaultData,
-}: {
+const NavBar: React.FC<{
   useLink: boolean;
-  parsedData: NavDefinition;
-}) => {
+  parsedData?: NavDefinition | null;
+}> = ({ useLink, parsedData = defaultData }) => {
   const Content = (value: FieldDefinition) =>
     Object.entries(value).map((entry) => {
       const [name, link] = entry;
@@ -59,7 +56,7 @@ const NavBar: React.FC<{ useLink: boolean; parsedData: NavDefinition }> = ({
         </Accordion.Trigger>
         <hr />
         <styled.div themeName="NavBarAccordionContentContainer">
-          {value ? Content(value) : <></>}
+          {value && Content(value)}
         </styled.div>
       </Accordion.Item>
     );
@@ -71,11 +68,8 @@ const NavBar: React.FC<{ useLink: boolean; parsedData: NavDefinition }> = ({
       <PNavBar.Content themeName="NavBarContent">
         <PNavBar.Body themeName="NavBarContentBody">
           <Accordion.Root type="multiple">
-            {parsedData ? (
-              Object.entries(parsedData).map((entry) => NavItems(entry))
-            ) : (
-              <></>
-            )}
+            {parsedData &&
+              Object.entries(parsedData).map((entry) => NavItems(entry))}
           </Accordion.Root>
         </PNavBar.Body>
       </PNavBar.Content>
