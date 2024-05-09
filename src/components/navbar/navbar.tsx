@@ -1,19 +1,21 @@
 import React from "react";
 import { Themed as PNavBar } from "@ailiyah-ui/navbar";
 import { Accordion } from "@ailiyah-ui/accordion";
-import data from "../../assets/navItems.json";
 import { styled } from "@ailiyah-ui/factory";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { NavLink } from "react-router-dom";
 import { NavDefinition, FieldDefinition } from "./navbar.types.";
 
 const StyledLink = styled(NavLink);
-const parsedData: NavDefinition = data;
+const defaultData: NavDefinition = (await import("../../assets/navItems.json"))
+  .default;
 
-const NavBar: React.FC<{ useLink: boolean }> = ({
+const NavBar: React.FC<{ useLink: boolean; parsedData: NavDefinition }> = ({
   useLink,
+  parsedData = defaultData,
 }: {
   useLink: boolean;
+  parsedData: NavDefinition;
 }) => {
   const Content = (value: FieldDefinition) =>
     Object.entries(value).map((entry) => {
@@ -81,4 +83,4 @@ const NavBar: React.FC<{ useLink: boolean }> = ({
   );
 };
 
-export { NavBar };
+export { NavBar, defaultData };
