@@ -21,7 +21,7 @@ interface HandlerType<T extends AbstractDataType> {
   getDataById: (id: string) => Promise<T>;
   createData: (data: T) => Promise<T>;
   updateData: (data: T, id: string) => Promise<T>;
-  deleteData: (id: string) => Promise<unknown>;
+  deleteData: (id: string) => Promise<Response>;
 }
 
 export type {
