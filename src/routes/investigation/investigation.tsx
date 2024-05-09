@@ -12,7 +12,7 @@ const Component = createStateBoxChildren("div", "Component", useBoxContext);
 function InvestigationDetails(data: InvestigationType) {}
 
 function InvestigationList() {
-  const data: Array<InvestigationType> =
+  const data: Array<InvestigationType> | null =
     useLoaderData() as Array<InvestigationType>;
   console.log(data);
   return (
