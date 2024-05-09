@@ -38,8 +38,41 @@ const createEchoHandlers = <T extends AbstractDataType>(
     });
   }),
   http.delete<ParamsWithId>(`${url}/:id`, async ({ params }) => {
-    return HttpResponse.json({});
+    return new HttpResponse(null, { status: 204 });
   }),
 ];
 
-export { createEchoHandlers };
+const createErrorHandlers = (url: string) => [
+  http.get(url, () => {
+    return new HttpResponse(null, {
+      status: 400,
+      statusText: "Validation Error",
+    });
+  }),
+  http.get(`${url}/:id`, () => {
+    return new HttpResponse(null, {
+      status: 400,
+      statusText: "Validation Error",
+    });
+  }),
+  http.post(url, async () => {
+    return new HttpResponse(null, {
+      status: 400,
+      statusText: "Validation Error",
+    });
+  }),
+  http.put(`${url}/:id`, async () => {
+    return new HttpResponse(null, {
+      status: 400,
+      statusText: "Validation Error",
+    });
+  }),
+  http.delete(`${url}/:id`, async () => {
+    return new HttpResponse(null, {
+      status: 400,
+      statusText: "Validation Error",
+    });
+  }),
+];
+
+export { createEchoHandlers, createErrorHandlers };
