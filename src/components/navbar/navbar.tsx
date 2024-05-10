@@ -22,10 +22,13 @@ const NavBar: React.FC<{
           {useLink ? (
             <StyledLink to={link}>
               {({ isActive }) => {
-                const dataState = isActive ? "active" : "inactive";
+                const [state, setState] = React.useState(false);
+                const dataState = state || isActive ? "active" : "inactive";
                 return (
                   <styled.p
                     data-state={dataState}
+                    onMouseEnter={() => setState(true)}
+                    onMouseLeave={() => setState(false)}
                     themeName="NavBarAccordionContentLink"
                   >
                     {name}
