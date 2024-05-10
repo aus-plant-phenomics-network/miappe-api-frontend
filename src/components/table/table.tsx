@@ -1,7 +1,9 @@
 import React from "react";
 import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
-import { Link } from "react-router-dom";
 import { AbstractDataType } from "../../handlers";
+import { BodyOwnProps, HeaderOwnProps } from "./table.types";
+import { DeleteAlertButton, EditButton } from "@ailiyah-ui/button";
+import { Form, Link, useSubmit } from "react-router-dom";
 
 const TBody = styled("tbody");
 const TFoot = styled("tfoot");
@@ -21,17 +23,6 @@ const Table = React.memo(
     }
   )
 );
-
-interface HeaderOwnProps<T extends AbstractDataType> {
-  headers: Array<keyof T>;
-  title?: keyof T;
-}
-
-interface BodyOwnProps<T extends AbstractDataType> {
-  bodyData: Array<T>;
-  fields: Array<keyof T>;
-  title?: keyof T;
-}
 
 const createHeaders = <T extends AbstractDataType>(
   headerProps: HeaderOwnProps<T>
@@ -57,6 +48,7 @@ const createHeaders = <T extends AbstractDataType>(
                     {header.toString()}
                   </styled.th>
                 ))}
+              <styled.th themeName="TableHeadHeader">Action</styled.th>
             </styled.tr>
           </styled.thead>
         );
@@ -70,7 +62,8 @@ const createBody = <T extends AbstractDataType>(bodyProps: BodyOwnProps<T>) => {
   const TBody = React.memo(
     React.forwardRef<HTMLTableSectionElement, TailwindComponentProps<"tbody">>(
       (props, ref) => {
-        let { bodyData, title = "title", fields } = bodyProps;
+        let { bodyData, fields } = bodyProps;
+        const submit = useSubmit();
         return (
           <styled.tbody themeName="TableBody" {...props} ref={ref}>
             {bodyData &&
@@ -83,16 +76,32 @@ const createBody = <T extends AbstractDataType>(bodyProps: BodyOwnProps<T>) => {
                       themeName="TableBodyData"
                       colSpan={1}
                     >
-                      {item[field] &&
-                        (field === title ? (
-                          <Link to={item["id"]!.toString()}>
-                            {item[field]!.toString()}
-                          </Link>
-                        ) : (
-                          item[field]!.toString()
-                        ))}
+                      {item[field]!.toString()}
                     </Td>
                   ))}
+                  <Td themeName="TableBodyData">
+                    <Link to={`${item.id}`}>
+                      <EditButton tooltipContent="Edit Entry" />
+                    </Link>
+                    <DeleteAlertButton
+                      tooltipContent="Delete Entry"
+                      dialogTitle="Remove Entry"
+                      dialogDescription="This action is PERMANENT. Are you sure you want to continue?"
+                      dialogCancelButtonName="Cancel"
+                      dialogSubmitButtonName="Proceed"
+                      dialogOnCancel={() => {}}
+                      dialogOnSubmit={(e) => {
+                        e.preventDefault();
+                        submit(
+                          {},
+                          {
+                            method: "DELETE",
+                            action: `${item.id}/delete`,
+                          }
+                        );
+                      }}
+                    />
+                  </Td>
                 </Tr>
               ))}
           </styled.tbody>

@@ -1,14 +1,15 @@
-import { createInputArray, createForm } from "./factory";
+import { createInputArray, FormComponent } from "./factory";
 import { AbstractDataType, AbstractSchemaType } from "../../handlers";
 import { expect, describe, test, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { getDefaultValue } from "./factory";
 
 interface TestType extends AbstractDataType {
   firstName: string;
   secondName: string;
-  thirdName: Date;
+  thirdName?: Date | string;
 }
 
 type TestSchemaType = AbstractSchemaType<TestType>;
@@ -19,6 +20,17 @@ const Schema: TestSchemaType = {
   thirdName: { type: "date", required: true },
 };
 
+const TestInitData: TestType = {
+  firstName: "Hoang",
+  secondName: "Son",
+  thirdName: "Le",
+};
+
+const TestInitDataPartial: TestType = {
+  firstName: "Hoang",
+  secondName: "Le",
+};
+
 describe("Test createInputArray", () => {
   describe("When using all fields", () => {
     let inputArray = createInputArray(Schema);
@@ -26,19 +38,31 @@ describe("Test createInputArray", () => {
       expect(inputArray.length).toBe(Object.keys(Schema).length);
     });
     test("First item should be input with type text and is required", () => {
-      expect(inputArray[0].props["type"]).toBe("text");
-      expect(inputArray[0].props["required"]).toBe(true);
-      expect(inputArray[0].props["placeholder"]).toBe("first item");
+      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+        "first item"
+      );
     });
     test("Second item should be input with type text and is not required", () => {
-      expect(inputArray[1].props["type"]).toBe("text");
-      expect(inputArray[1].props["required"]).toBe(false);
-      expect(inputArray[1].props["placeholder"]).toBe("second item");
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+        false
+      );
+      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
+        "second item"
+      );
     });
     test("Third item should be input with type date and is required", () => {
-      expect(inputArray[2].props["type"]).toBe("date");
-      expect(inputArray[2].props["required"]).toBe(true);
-      expect(inputArray[2].props["placeholder"]).toBeUndefined();
+      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect(
+        (inputArray[2] as React.ReactElement).props["placeholder"]
+      ).toBeUndefined();
     });
   });
   describe("When omitting second field", () => {
@@ -47,14 +71,106 @@ describe("Test createInputArray", () => {
       expect(inputArray.length).toBe(Object.keys(Schema).length - 1);
     });
     test("First item should be input with type text and is required", () => {
-      expect(inputArray[0].props["type"]).toBe("text");
-      expect(inputArray[0].props["required"]).toBe(true);
-      expect(inputArray[0].props["placeholder"]).toBe("first item");
+      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+        "first item"
+      );
     });
     test("Second item should be input with type date and is required", () => {
-      expect(inputArray[1].props["type"]).toBe("date");
-      expect(inputArray[1].props["required"]).toBe(true);
-      expect(inputArray[1].props["placeholder"]).toBeUndefined();
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect(
+        (inputArray[1] as React.ReactElement).props["placeholder"]
+      ).toBeUndefined();
+    });
+  });
+  describe("When using all fields with initial data full", () => {
+    let inputArray: Array<React.ReactNode>;
+    beforeEach(() => {
+      inputArray = createInputArray(Schema, [], TestInitData);
+    });
+    test("First item has correct props", () => {
+      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+        "first item"
+      );
+      expect((inputArray[0] as React.ReactElement).props["defaultValue"]).toBe(
+        TestInitData.firstName
+      );
+    });
+    test("Second item has correct props", () => {
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+        false
+      );
+      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
+        "second item"
+      );
+      expect((inputArray[1] as React.ReactElement).props["defaultValue"]).toBe(
+        TestInitData.secondName
+      );
+    });
+    test("Third item has correct props", () => {
+      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect(
+        (inputArray[2] as React.ReactElement).props["placeholder"]
+      ).toBeUndefined();
+      expect((inputArray[2] as React.ReactElement).props["defaultValue"]).toBe(
+        TestInitData.thirdName
+      );
+    });
+  });
+  describe("When using all fields with initial data missing third name", () => {
+    let inputArray: Array<React.ReactNode>;
+    beforeEach(() => {
+      inputArray = createInputArray(Schema, [], TestInitDataPartial);
+    });
+    test("First item has correct props", () => {
+      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+        "first item"
+      );
+      expect((inputArray[0] as React.ReactElement).props["defaultValue"]).toBe(
+        TestInitDataPartial.firstName
+      );
+    });
+    test("Second item has correct props", () => {
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+        false
+      );
+      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
+        "second item"
+      );
+      expect((inputArray[1] as React.ReactElement).props["defaultValue"]).toBe(
+        TestInitDataPartial.secondName
+      );
+    });
+    test("Third item has correct props", () => {
+      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
+        true
+      );
+      expect(
+        (inputArray[2] as React.ReactElement).props["placeholder"]
+      ).toBeUndefined();
+      expect((inputArray[2] as React.ReactElement).props["defaultValue"]).toBe(
+        ""
+      );
     });
   });
 });
@@ -136,11 +252,10 @@ describe("Test createForm", () => {
   describe("When using all fields", () => {
     beforeEach(() => {
       let inputArr = createInputArray(Schema);
-      let Form = createForm(inputArr);
       const router = createBrowserRouter([
         {
           path: "/",
-          element: <Form />,
+          element: <FormComponent>{inputArr}</FormComponent>,
         },
       ]);
       render(<RouterProvider router={router} />);
@@ -165,11 +280,10 @@ describe("Test createForm", () => {
   describe("When omitting the second field", () => {
     beforeEach(() => {
       let inputArr = createInputArray(Schema, ["secondName"]);
-      let Form = createForm(inputArr);
       const router = createBrowserRouter([
         {
           path: "/",
-          element: <Form />,
+          element: <FormComponent>{inputArr}</FormComponent>,
         },
       ]);
       render(<RouterProvider router={router} />);
@@ -193,11 +307,10 @@ describe("Test createForm", () => {
     beforeEach(() => {
       let inputArr = createInputArray(Schema);
       inputArr.push(<input type="select" name="fourthName" />);
-      let Form = createForm(inputArr);
       const router = createBrowserRouter([
         {
           path: "/",
-          element: <Form />,
+          element: <FormComponent>{inputArr}</FormComponent>,
         },
       ]);
       render(<RouterProvider router={router} />);
@@ -222,5 +335,19 @@ describe("Test createForm", () => {
       Validator.fourthName.isRendered();
       Validator.fourthName.isTypeSelect();
     });
+  });
+});
+
+describe("Test getDefaultValue", () => {
+  test.each([
+    ["text", undefined, ""],
+    ["text", null, ""],
+    ["datew", undefined, ""],
+    ["datew", null, ""],
+    ["text", "value", "value"],
+    ["text", 123, "123"],
+    ["date", "2021-11-11T00:00:00", "2021-11-11"],
+  ])("given type: %s, input %s, expects %s", (type, inputValue, expValue) => {
+    expect(getDefaultValue(type, inputValue)).toBe(expValue);
   });
 });

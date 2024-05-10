@@ -3,74 +3,75 @@ import React from "react";
 import { InvestigationType } from "./investigation.types";
 import { Table, createHeaders, createBody } from "../../components/table/table";
 import { Link, useLoaderData } from "react-router-dom";
-import { createForm, createInputArray } from "../../components/form";
+import { FormComponent, createInputArray } from "../../components/form";
 import { InvestigationSchema } from "./investigation.types";
 import { Form } from "react-router-dom";
 import * as Button from "@ailiyah-ui/button";
 import { styled } from "@ailiyah-ui/factory";
+import { AbstractDataType, AbstractSchemaType } from "../../handlers";
 
 let schema: InvestigationSchema = (await import("./data.json")).default;
 
-const investigationComponents = createInputArray(schema, ["id"]);
-
-const InvestigationForm = createForm(investigationComponents);
-
-export { InvestigationForm };
-
-const [Box, useBoxContext] = createStateBox("Root");
-const Component = createStateBoxChildren("div", "Component", useBoxContext);
-const HEADERS = ["title", "description", "submissionDate"];
-const THeader = createHeaders<InvestigationType>({
-  title: "title",
-  headers: HEADERS,
-});
-
-function InvestigationUpdate() {
-  console.log("Update page");
-  const data: InvestigationType | null = useLoaderData() as InvestigationType;
-  console.log(data);
-  const UpdateForm = React.useMemo(() => {
-    const components = createInputArray(schema, [], data);
-    return createForm(components);
-  }, [JSON.stringify(data)]);
-  return <UpdateForm method="PUT" />;
-}
-
-function InvestigationList() {
-  const data: Array<InvestigationType> | null =
-    useLoaderData() as Array<InvestigationType>;
-  const TBody = createBody<InvestigationType>({
-    bodyData: data,
+const createPages = <T extends AbstractDataType>(
+  title: string,
+  schema: AbstractSchemaType<T>,
+  headers: Array<keyof T>
+) => {
+  const components = createInputArray<T>(schema, ["id"]);
+  const THeader = createHeaders<T>({
     title: "title",
-    fields: HEADERS,
+    headers: headers,
   });
-  return (
-    <>
-      <styled.h1>Investigation</styled.h1>
-      <Form id="search-form" role="search">
-        <input
-          id="title"
-          aria-label="Search title"
-          placeholder="Search"
-          type="search"
-          name="title"
-        />
-        <div id="search-spinner" aria-hidden hidden={true} />
-        <div className="sr-only" aria-live="polite"></div>
-      </Form>
-      <Link to="/investigation/create">
-        <Button.AddButton />
-      </Link>
-      <Table>
-        <THeader />
-        <TBody />
-      </Table>
-    </>
-  );
-}
+  const DetailPage: React.FC<{}> = () => {
+    const data = useLoaderData() as Array<T> | null;
+    const TBody = createBody<T>({
+      bodyData: data,
+      fields: headers,
+    });
+    return (
+      <styled.div>
+        <styled.h1 themeName="PageTitle">{title}</styled.h1>
+        <Form id="search-form" role="search">
+          <styled.div>
+            <styled.input
+              id="title"
+              aria-label="Search title"
+              placeholder="Search"
+              type="search"
+              name="title"
+              themeName="PageSearchInput"
+            />
+            <Link to={`/${title}/create`}>
+              <Button.AddButton type="button" tooltipContent="New" />
+            </Link>
+          </styled.div>
+        </Form>
+        <Table>
+          <THeader />
+          <TBody />
+        </Table>
+      </styled.div>
+    );
+  };
+  const CreatePage: React.FC<{}> = () => {
+    return <FormComponent method="POST">{components}</FormComponent>;
+  };
+  const UpdatePage: React.FC<{}> = () => {
+    const data = useLoaderData() as T | null;
+    const updateComponents = React.useMemo(
+      () => createInputArray(schema, [], data),
+      [JSON.stringify(data)]
+    );
+    return <FormComponent method="PUT">{updateComponents}</FormComponent>;
+  };
+  return [DetailPage, CreatePage, UpdatePage];
+};
 
-function InvestigationCreate() {
-  return <InvestigationForm method="POST" />;
-}
+const [InvestigationList, InvestigationCreate, InvestigationUpdate] =
+  createPages<InvestigationType>("investigation", schema, [
+    "title",
+    "description",
+    "submissionDate",
+  ]);
 
 export { InvestigationCreate, InvestigationList, InvestigationUpdate };

@@ -1,8 +1,13 @@
 import { TailwindComponentProps } from "@ailiyah-ui/factory";
 
-interface NameRequiredInputProps
-  extends Omit<TailwindComponentProps<"input">, "name"> {
+interface InputProps
+  extends Omit<
+    TailwindComponentProps<"input">,
+    "name" | "hidden" | "required"
+  > {
   name: string;
+  required: boolean;
+  hidden: boolean;
 }
 
-export type { NameRequiredInputProps };
+export type { InputProps };

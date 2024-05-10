@@ -2,7 +2,7 @@ import React from "react";
 import { TailwindProps } from "@ailiyah-ui/utils";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
-import { NameRequiredInputProps } from "../types";
+import { InputProps } from "../types";
 import { AbstractDataType, AbstractSchemaType } from "../../handlers";
 import { capitalise, toSnakeCase } from "../helpers";
 import { Form, FormProps } from "react-router-dom";
@@ -48,14 +48,20 @@ const Component = createBox("Component", { twPosition: "relative" });
 /**
  * Renders a LabelGroup with contained label and input components
  * Required fields has * for label and is marked required
+ * @params - hidden - hides both label and input
+ * @params - required - whether input field is required
+ * @params - name - name of input field
  */
 const InputField = React.memo(
-  React.forwardRef<HTMLInputElement, NameRequiredInputProps>((props, ref) => {
+  React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     let { id, name, required, hidden, ...rest } = props;
     if (!id) id = React.useId();
+
+    // Process label name and input name
     let labelName = capitalise(name);
     name = toSnakeCase(name);
     if (required) labelName = labelName + "*";
+
     return (
       <LabelGroup themeName="FormLabelGroup">
         <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
@@ -75,68 +81,76 @@ const InputField = React.memo(
   })
 );
 
+const processDate = (value: string) => value.substring(0, 10);
+const processText = (value: string | number) => value.toString();
+
+const getDefaultValue = (
+  type: string,
+  value: string | number | undefined | null | Date
+): string => {
+  if (value) {
+    switch (type) {
+      case "date":
+        return processDate(value as string);
+      default:
+        return processText(value as string);
+    }
+  }
+  return "";
+};
+
 /**
  * Convenient factory method to create a list of input fields from input data - Data that contains fields that
  * do not require external data fetch. Note that other more complex fields can be appended to this array for
  * form rendering
  *
- * @param data InputArrayType
- * @param exclude: list of keys to exclude from schema
+ * @params - schema - input schema
+ * @params - exclude - input fields to exclude from creation
+ * @params - data - data to initialise field value
  * @returns Array<InputField>
  */
 const createInputArray = <T extends AbstractDataType>(
   schema: AbstractSchemaType<T>,
   exclude: Array<String> = [],
-  data?: T
-): Array<React.ReactElement> => {
+  data?: T | null
+): Array<React.ReactNode> => {
   return Object.entries(schema)
     .filter(([key, _]) => !exclude.includes(key))
     .map(([key, value], _) => {
-      return data && data[key] ? (
+      const schemaType = schema[key].type;
+      const defaultDataValue = data ? data[key] : undefined;
+      const hidden = key === "id";
+      return (
         <InputField
-          hidden={key === "id"}
+          hidden={hidden}
           key={key}
           name={key}
           {...value}
-          defaultValue={
-            data[key]
-              ? schema[key].type === "date"
-                ? (data[key] as string).substring(0, 10)
-                : data[key]?.toString()
-              : ""
-          }
+          defaultValue={getDefaultValue(schemaType, defaultDataValue)}
         />
-      ) : (
-        <InputField key={key} name={key} {...value} />
       );
     });
 };
 
-/**
- * Convenient factory method to create a form with field information listed in data. Data can be any arbitrary array
- * of react elements, but is typically obtained after calling createInputArray and append the resulting array with any
- * other required fields.
- *
- * @param data Array<React.ReactElement>
- * @returns a Form component that accepts form props from react-routing-dom and tailwind props
- */
-const createForm = (data: Array<React.ReactElement>) => {
-  const FormComponent = React.forwardRef<
-    HTMLFormElement,
-    Omit<FormProps, "children"> & TailwindProps
-  >((props, ref) => {
-    return (
-      <Form {...props} ref={ref}>
-        <Root themeName="FormRoot">
-          <Content themeName="FormContent">{data}</Content>
-          <Component themeName="FormComponent">
-            <styled.button themeName="FormSubmitButton">Submit</styled.button>
-          </Component>
-        </Root>
-      </Form>
-    );
-  });
-  return FormComponent;
-};
+interface FormComponentOwnProp {
+  children: React.ReactNode;
+}
 
-export { createInputArray, createForm };
+const FormComponent = React.forwardRef<
+  HTMLFormElement,
+  Omit<FormProps, "children"> & TailwindProps & FormComponentOwnProp
+>((props, ref) => {
+  let { children, ...rest } = props;
+  return (
+    <Form {...rest} ref={ref}>
+      <Root themeName="FormRoot">
+        <Content themeName="FormContent">{children}</Content>
+        <Component themeName="FormComponent">
+          <styled.button themeName="FormSubmitButton">Submit</styled.button>
+        </Component>
+      </Root>
+    </Form>
+  );
+});
+
+export { createInputArray, getDefaultValue, FormComponent };

@@ -40,6 +40,12 @@ const router = createBrowserRouter([
             loader: InvestigationActions.loaderById,
             action: InvestigationActions.actionUpdate,
           },
+          {
+            path: "/investigation/:investigationId/delete",
+            element: <InvestigationUpdate />,
+            loader: InvestigationActions.loaderById,
+            action: InvestigationActions.actionDelete,
+          },
 
           /* the rest of the routes */
         ],

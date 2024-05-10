@@ -124,7 +124,7 @@ describe("Test actionLoader with no redirect", async () => {
     REQUEST_DATA_NO_DATE = createRequest(TEST_OBJ_WITH_EMPTY_DATE_STR);
   });
   test("test action get all returns testObj", async () => {
-    const result = await actionLoader.loaderAll();
+    const result = await actionLoader.loaderAll({ request: REQUEST_FULL_DATA });
     expect(result).toEqual([TEST_OBJ]);
   });
   test("test action get by id returns testObj", async () => {
@@ -186,7 +186,9 @@ describe("Test actionLoader with redirect URL", async () => {
     REQUEST_FULL_DATA = createRequest(TEST_OBJ_WITH_DATE_STR);
   });
   test("test action get all returns testObj", async () => {
-    const result = await actionLoaderWithRedirectString.loaderAll();
+    const result = await actionLoaderWithRedirectString.loaderAll({
+      request: REQUEST_FULL_DATA,
+    });
     expect(result).toEqual([TEST_OBJ]);
   });
   test("test action get by id returns testObj", async () => {
@@ -229,7 +231,9 @@ describe("Test actionLoader with redirect Function", async () => {
     REQUEST_FULL_DATA = createRequest(TEST_OBJ_WITH_DATE_STR);
   });
   test("test action get all returns testObj", async () => {
-    const result = await actionLoaderWithRedirectFunction.loaderAll();
+    const result = await actionLoaderWithRedirectFunction.loaderAll({
+      request: REQUEST_FULL_DATA,
+    });
     expect(result).toEqual([TEST_OBJ]);
   });
   test("test action get by id returns testObj", async () => {
@@ -282,7 +286,9 @@ describe("Test actionLoader with no redirect using error server", async () => {
     server.use(...createErrorHandlers(TEST_URL));
   });
   test("test action get all returns undefined", async () => {
-    const result = await errorLoaderAction.loaderAll();
+    const result = await errorLoaderAction.loaderAll({
+      request: REQUEST_FULL_DATA,
+    });
     expect(result).toBeNull();
   });
   test("test action get by id returns undefined", async () => {
