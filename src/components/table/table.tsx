@@ -29,6 +29,7 @@ interface HeaderOwnProps<T extends AbstractDataType> {
 
 interface BodyOwnProps<T extends AbstractDataType> {
   bodyData: Array<T>;
+  fields: Array<keyof T>;
   title?: keyof T;
 }
 
@@ -42,13 +43,17 @@ const createHeaders = <T extends AbstractDataType>(
         headers = headers.filter((item) => item !== title);
         return (
           <styled.thead themeName="TableHead" ref={ref} {...props}>
-            <styled.tr themeName="TableRow">
+            <styled.tr themeName="TableHeadRow">
               <styled.th colSpan={1} themeName="TableHeadHeader">
                 {title.toString()}
               </styled.th>
               {headers &&
                 headers.map((header) => (
-                  <styled.th colSpan={1} themeName="TableHeadHeader">
+                  <styled.th
+                    colSpan={1}
+                    key={header.toString()}
+                    themeName="TableHeadHeader"
+                  >
                     {header.toString()}
                   </styled.th>
                 ))}
@@ -61,20 +66,17 @@ const createHeaders = <T extends AbstractDataType>(
   return THead;
 };
 
-const createTitle = <T extends AbstractDataType>(
-  bodyProps: BodyOwnProps<T>
-) => {
+const createBody = <T extends AbstractDataType>(bodyProps: BodyOwnProps<T>) => {
   const TBody = React.memo(
     React.forwardRef<HTMLTableSectionElement, TailwindComponentProps<"tbody">>(
       (props, ref) => {
-        let { bodyData, title = "title" } = bodyProps;
+        let { bodyData, title = "title", fields } = bodyProps;
         return (
           <styled.tbody themeName="TableBody" {...props} ref={ref}>
             {bodyData &&
-              bodyData &&
-              Object.entries(bodyData).length > 0 &&
-              Object.entries(bodyData).map((item) => (
-                <Tr key={item.id?.toString()} themeName="TableBodyRow">
+              bodyData.length > 0 &&
+              bodyData.map((item) => (
+                <Tr key={item.id!.toString()} themeName="TableBodyRow">
                   {fields.map((field) => (
                     <Td
                       key={field.toString()}
@@ -83,9 +85,11 @@ const createTitle = <T extends AbstractDataType>(
                     >
                       {item[field] &&
                         (field === title ? (
-                          <Link to={item["id"]}>{item[field].toString()}</Link>
+                          <Link to={item["id"]!.toString()}>
+                            {item[field]!.toString()}
+                          </Link>
                         ) : (
-                          item[field].toString()
+                          item[field]!.toString()
                         ))}
                     </Td>
                   ))}
@@ -96,6 +100,7 @@ const createTitle = <T extends AbstractDataType>(
       }
     )
   );
+  return TBody;
 };
 
-// export { Table };
+export { Table, createHeaders, createBody };
