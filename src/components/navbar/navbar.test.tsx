@@ -168,8 +168,7 @@ describe("Given router context", () => {
         );
     });
     test("Accordion items are link", async () => {
-      screen.debug();
-      // Validate.Accordion.headersAreLink();
+      Validate.Accordion.headersAreLink();
     });
   });
 });
