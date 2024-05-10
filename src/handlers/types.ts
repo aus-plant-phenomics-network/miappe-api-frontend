@@ -17,7 +17,7 @@ type AbstractSchemaType<T extends AbstractDataType> = {
 };
 
 interface HandlerType<T extends AbstractDataType> {
-  getAllData: () => Promise<Array<T>>;
+  getAllData: (title?: string | null) => Promise<Array<T>>;
   getDataById: (id: string) => Promise<T>;
   createData: (data: T) => Promise<T>;
   updateData: (data: T, id: string) => Promise<T>;

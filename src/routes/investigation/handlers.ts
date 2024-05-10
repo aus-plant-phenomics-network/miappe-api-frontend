@@ -11,7 +11,10 @@ const investigationHandlers =
 const LoaderAction = createLoaderAction<InvestigationType, "investigationId">(
   investigationHandlers,
   schema,
-  "investigationId"
+  "investigationId",
+  "/investigation",
+  "/investigation",
+  "/investigation"
 );
 
 export { LoaderAction as InvestigationActions };

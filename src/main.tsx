@@ -12,6 +12,7 @@ import {
   InvestigationCreate,
   InvestigationList,
   InvestigationActions,
+  InvestigationUpdate,
 } from "./routes/investigation";
 
 const router = createBrowserRouter([
@@ -24,21 +25,20 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
           {
-            path: "/investigation",
+            path: "investigation",
             element: <InvestigationList />,
             loader: InvestigationActions.loaderAll,
-            children: [
-              {
-                path: "/investigation/:investigationId",
-                element: <InvestigationCreate />,
-                loader: InvestigationActions.loaderById,
-              },
-            ],
           },
           {
-            path: "/investigation/create",
+            path: "investigation/create",
             element: <InvestigationCreate />,
             action: InvestigationActions.actionCreate,
+          },
+          {
+            path: "/investigation/:investigationId/",
+            element: <InvestigationUpdate />,
+            loader: InvestigationActions.loaderById,
+            action: InvestigationActions.actionUpdate,
           },
 
           /* the rest of the routes */

@@ -10,8 +10,10 @@ import {
 const createHandlers = <T extends AbstractDataType>(
   url: string
 ): HandlerType<T> => {
-  const getAllData = async (): Promise<Array<T>> => {
-    const response = await fetch(url);
+  const getAllData = async (title?: string | null): Promise<Array<T>> => {
+    const response = await fetch(
+      title ? url + "?" + new URLSearchParams({ title: title }) : url
+    );
 
     if (!response.ok) {
       console.error(response);
@@ -114,9 +116,15 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
       return acc;
     }, {} as any) as T;
   };
-  const loaderAll = async (): Promise<T[] | null> => {
+  const loaderAll = async ({
+    request,
+  }: {
+    request: Request;
+  }): Promise<T[] | null> => {
     try {
-      return await handlers.getAllData();
+      const url = new URL(request.url);
+      const title = url.searchParams.get("title");
+      return await handlers.getAllData(title);
     } catch (error) {
       return null;
     }

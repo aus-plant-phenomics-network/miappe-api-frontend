@@ -51,18 +51,19 @@ const Component = createBox("Component", { twPosition: "relative" });
  */
 const InputField = React.memo(
   React.forwardRef<HTMLInputElement, NameRequiredInputProps>((props, ref) => {
-    let { id, name, required, ...rest } = props;
+    let { id, name, required, hidden, ...rest } = props;
     if (!id) id = React.useId();
     let labelName = capitalise(name);
     name = toSnakeCase(name);
     if (required) labelName = labelName + "*";
     return (
       <LabelGroup themeName="FormLabelGroup">
-        <Label htmlFor={id} themeName="FormLabel">
+        <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
           {labelName}
         </Label>
         <Input
           {...rest}
+          hidden={hidden}
           name={name}
           id={id}
           ref={ref}
@@ -85,12 +86,29 @@ const InputField = React.memo(
  */
 const createInputArray = <T extends AbstractDataType>(
   schema: AbstractSchemaType<T>,
-  exclude: Array<String> = []
+  exclude: Array<String> = [],
+  data?: T
 ): Array<React.ReactElement> => {
   return Object.entries(schema)
     .filter(([key, _]) => !exclude.includes(key))
     .map(([key, value], _) => {
-      return <InputField key={key} name={key} {...value} />;
+      return data && data[key] ? (
+        <InputField
+          hidden={key === "id"}
+          key={key}
+          name={key}
+          {...value}
+          defaultValue={
+            data[key]
+              ? schema[key].type === "date"
+                ? (data[key] as string).substring(0, 10)
+                : data[key]?.toString()
+              : ""
+          }
+        />
+      ) : (
+        <InputField key={key} name={key} {...value} />
+      );
     });
 };
 
