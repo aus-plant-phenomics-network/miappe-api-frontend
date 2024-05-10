@@ -17,12 +17,13 @@ const formTheme: PresetTheme = {
     twJustifyContent: "justify-end",
   },
   FormSubmitButton: {
-    twBackgroundColor:
-      "bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600",
+    twBackgroundColor: "bg-neutral-400 hover:bg-neutral-300",
     twPadding: "py-2 px-3",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-lg",
     twWidth: "w-[120px]",
+    twTextColor: "text-neutral-700",
+    twFontWeight: "font-medium",
   },
   FormLabelGroup: {
     twFlex: "flex",
