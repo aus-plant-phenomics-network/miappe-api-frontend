@@ -27,12 +27,20 @@ const router = createBrowserRouter([
             path: "/investigation",
             element: <InvestigationList />,
             loader: InvestigationActions.loaderAll,
+            children: [
+              {
+                path: "/investigation/:investigationId",
+                element: <InvestigationCreate />,
+                loader: InvestigationActions.loaderById,
+              },
+            ],
           },
           {
             path: "/investigation/create",
             element: <InvestigationCreate />,
             action: InvestigationActions.actionCreate,
           },
+
           /* the rest of the routes */
         ],
       },

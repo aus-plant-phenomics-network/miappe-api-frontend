@@ -19,7 +19,7 @@
     "@ailiyah-ui/context": "^0.0.3",
     "@ailiyah-ui/factory": "^0.0.2",
     "@ailiyah-ui/navbar": "^0.0.2",
-    "@ailiyah-ui/utils": "^0.0.7",
+    "@ailiyah-ui/utils": "^0.0.8",
     "@radix-ui/react-icons": "^1.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

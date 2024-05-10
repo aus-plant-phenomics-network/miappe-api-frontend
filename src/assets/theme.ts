@@ -1,6 +1,7 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
 import { defaultTheme } from "@ailiyah-ui/utils";
 import { formTheme, navbarTheme } from "../components";
+import { tableTheme } from "../components/table/theme";
 
 export const theme: PresetTheme = {
   ...defaultTheme,
@@ -10,4 +11,5 @@ export const theme: PresetTheme = {
   },
   ...navbarTheme,
   ...formTheme,
+  ...tableTheme,
 };
