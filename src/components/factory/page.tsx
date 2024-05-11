@@ -1,11 +1,12 @@
-import { Table, createHeaders, createBody } from "../../components/table/table";
+import { Table } from "../table";
 import { Link as _Link, useLoaderData } from "react-router-dom";
-import { FormComponent, createInputArray } from "../../components/form";
+import { FormComponent } from "../form";
 import React from "react";
 import { Form as _Form } from "react-router-dom";
-import * as Button from "@ailiyah-ui/button";
 import { styled } from "@ailiyah-ui/factory";
 import { AbstractDataType, AbstractSchemaType } from "../../handlers";
+import { createInputArray } from "./form";
+import { createHeaders, createBody } from "./table";
 
 const Link = styled(_Link);
 const Form = styled(_Form);

@@ -1,11 +1,11 @@
-import React from "react";
+import { FormComponentOwnProp } from "./form.types";
 import { TailwindProps } from "@ailiyah-ui/utils";
+import React from "react";
+import { Form, FormProps } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
-import { InputProps } from "../types";
-import { AbstractDataType, AbstractSchemaType } from "../../handlers";
 import { capitalise, toSnakeCase } from "../helpers";
-import { Form, FormProps } from "react-router-dom";
+import { InputProps } from "../types";
 
 /**
  * Renders a div that contains the created form.
@@ -20,6 +20,12 @@ const Root = createBox("FormRoot");
 const Content = createBox("Content", {
   twPosition: "relative",
 });
+
+/**
+ * Renders a div that can contain auxiliary components such as buttons or icons.
+ * Set twTopLeftBottomRight to position the components.
+ */
+const Component = createBox("Component", { twPosition: "relative" });
 
 /**
  * Renders a div that contains a label and the corresponding input.
@@ -38,12 +44,6 @@ const Label = styled("label");
  * Styled via themeName = FormInput
  */
 const Input = styled("input");
-
-/**
- * Renders a div that can contain auxiliary components such as buttons or icons.
- * Set twTopLeftBottomRight to position the components.
- */
-const Component = createBox("Component", { twPosition: "relative" });
 
 /**
  * Renders a LabelGroup with contained label and input components
@@ -81,61 +81,6 @@ const InputField = React.memo(
   })
 );
 
-const processDate = (value: string) => value.substring(0, 10);
-const processText = (value: string | number) => value.toString();
-
-const getDefaultValue = (
-  type: string,
-  value: string | number | undefined | null | Date
-): string => {
-  if (value) {
-    switch (type) {
-      case "date":
-        return processDate(value as string);
-      default:
-        return processText(value as string);
-    }
-  }
-  return "";
-};
-
-/**
- * Convenient factory method to create a list of input fields from input data - Data that contains fields that
- * do not require external data fetch. Note that other more complex fields can be appended to this array for
- * form rendering
- *
- * @params - schema - input schema
- * @params - exclude - input fields to exclude from creation
- * @params - data - data to initialise field value
- * @returns Array<InputField>
- */
-const createInputArray = <T extends AbstractDataType>(
-  schema: AbstractSchemaType<T>,
-  exclude: Array<String> = [],
-  data?: T | null
-): Array<React.ReactNode> => {
-  return Object.entries(schema)
-    .filter(([key, _]) => !exclude.includes(key))
-    .map(([key, value], _) => {
-      const schemaType = schema[key].type;
-      const defaultDataValue = data ? data[key] : undefined;
-      const hidden = key === "id";
-      return (
-        <InputField
-          hidden={hidden}
-          key={key}
-          name={key}
-          {...value}
-          defaultValue={getDefaultValue(schemaType, defaultDataValue)}
-        />
-      );
-    });
-};
-
-interface FormComponentOwnProp {
-  children: React.ReactNode;
-}
-
 const FormComponent = React.forwardRef<
   HTMLFormElement,
   Omit<FormProps, "children"> & TailwindProps & FormComponentOwnProp
@@ -153,4 +98,4 @@ const FormComponent = React.forwardRef<
   );
 });
 
-export { createInputArray, getDefaultValue, FormComponent };
+export { InputField, FormComponent };
