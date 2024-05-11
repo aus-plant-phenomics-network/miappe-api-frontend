@@ -1,4 +1,4 @@
-import { capitalise, string2Date, toSnakeCase } from "./helpers";
+import { capitalise, removeId, string2Date, toSnakeCase } from "./helpers";
 import { describe, expect, test } from "vitest";
 
 const capitaliseFixture = [
@@ -45,5 +45,16 @@ describe.each(string2DateFixture)("given %s", (inputValue, expValue) => {
     } else {
       expect(string2Date(inputValue)).toEqual(expValue);
     }
+  });
+});
+
+const removeIdFixture = [
+  ["investigation", "investigation"],
+  ["investigationId", "investigation"],
+];
+
+describe.each(removeIdFixture)("given %s", (inputValue, expValue) => {
+  test(`removeId returns ${expValue}`, () => {
+    expect(removeId(inputValue)).toBe(expValue);
   });
 });
