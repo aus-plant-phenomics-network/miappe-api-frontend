@@ -58,7 +58,7 @@ const createBody = <T extends AbstractDataType>(bodyProps: BodyOwnProps<T>) => {
                       themeName="TableBodyData"
                       colSpan={1}
                     >
-                      {item[field]!.toString()}
+                      {item[field]?.toString()}
                     </styled.td>
                   ))}
                   <styled.td themeName="TableBodyData">
