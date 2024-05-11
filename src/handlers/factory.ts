@@ -117,14 +117,8 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
           acc[key] = value;
         }
       } else {
-        let subKey = key.substring(0, key.length - 2);
-        if (subKey in schema) {
-          acc[key] = value;
-        } else {
-          throw new Error("Key cannot be found in schema: " + key);
-        }
+        throw new Error("Key cannot be found in schema: " + key);
       }
-
       return acc;
     }, {} as any) as T;
   };
