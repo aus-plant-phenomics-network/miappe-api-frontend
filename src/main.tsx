@@ -12,7 +12,14 @@ import {
   InvestigationCreate,
   InvestigationList,
   InvestigationActions,
+  InvestigationUpdate,
 } from "./routes/investigation";
+import {
+  StudyCreate,
+  StudyList,
+  StudyUpdate,
+  StudyActions,
+} from "./routes/study";
 
 const router = createBrowserRouter([
   {
@@ -24,15 +31,50 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
           {
-            path: "/investigation",
+            path: "investigation",
             element: <InvestigationList />,
             loader: InvestigationActions.loaderAll,
           },
           {
-            path: "/investigation/create",
+            path: "investigation/create",
             element: <InvestigationCreate />,
             action: InvestigationActions.actionCreate,
           },
+          {
+            path: "/investigation/:investigationId/",
+            element: <InvestigationUpdate />,
+            loader: InvestigationActions.loaderById,
+            action: InvestigationActions.actionUpdate,
+          },
+          {
+            path: "/investigation/:investigationId/delete",
+            element: <InvestigationUpdate />,
+            loader: InvestigationActions.loaderById,
+            action: InvestigationActions.actionDelete,
+          },
+          {
+            path: "study",
+            element: <StudyList />,
+            loader: StudyActions.loaderAll,
+          },
+          {
+            path: "study/create",
+            element: <StudyCreate />,
+            action: StudyActions.actionCreate,
+          },
+          {
+            path: "/study/:studyId/",
+            element: <StudyUpdate />,
+            loader: StudyActions.loaderById,
+            action: StudyActions.actionUpdate,
+          },
+          {
+            path: "/study/:studyId/delete",
+            element: <StudyUpdate />,
+            loader: StudyActions.loaderById,
+            action: StudyActions.actionDelete,
+          },
+
           /* the rest of the routes */
         ],
       },

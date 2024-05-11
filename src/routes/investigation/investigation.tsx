@@ -1,30 +1,14 @@
-import { createStateBox, createStateBoxChildren } from "@ailiyah-ui/box";
-import React from "react";
-import { InvestigationForm } from "./form";
 import { InvestigationType } from "./investigation.types";
-import { Table } from "../../components/table/table";
-import { Form, useLoaderData, useSubmit } from "react-router-dom";
-import { string2Date } from "../../components";
+import { InvestigationSchema } from "./investigation.types";
+import { createPages } from "../../components/factory/page";
 
-const [Box, useBoxContext] = createStateBox("Root");
-const Component = createStateBoxChildren("div", "Component", useBoxContext);
+let schema: InvestigationSchema = (await import("./data.json")).default;
 
-function InvestigationDetails(data: InvestigationType) {}
+const [InvestigationList, InvestigationCreate, InvestigationUpdate] =
+  createPages<InvestigationType>("investigation", schema, [
+    "title",
+    "description",
+    "submissionDate",
+  ]);
 
-function InvestigationList() {
-  const data: Array<InvestigationType> =
-    useLoaderData() as Array<InvestigationType>;
-  console.log(data);
-  return (
-    <Table
-      data={data}
-      fields={["title", "funding", "license", "submissionDate"]}
-    />
-  );
-}
-
-function InvestigationCreate() {
-  return <InvestigationForm method="POST" />;
-}
-
-export { InvestigationCreate, InvestigationList, InvestigationDetails };
+export { InvestigationCreate, InvestigationList, InvestigationUpdate };

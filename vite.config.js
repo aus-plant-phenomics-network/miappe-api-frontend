@@ -14,12 +14,20 @@ export default defineConfig({
       enabled: true,
       provider: "istanbul",
       reportOnFailure: true,
-      reporter: ['json-summary', 'json', 'text'],
+      reporter: ['json-summary', 'json', 'text', 'html'],
+      include: [
+        "src/components/**",
+        "src/handlers/**",
+        "src/mock/**",
+        "src/routes/**"
+      ],
       exclude: [
         "**/*.stories.[jt]sx",
         "**/*.helper.[jt]sx",
         "**/*.helpers.[jt]sx",
         "**/*.types.ts",
+        "src/routes/root.tsx",
+        "src/routes/error.tsx"
       ]
     },
     global: true,

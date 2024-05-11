@@ -94,7 +94,7 @@ const navbarAccordionTheme: PresetTheme = {
   NavBarAccordionContentLink: {
     // Different bg color for active/inactive and light/dark modes
     twBackgroundColor:
-      "data-[state=active]:bg-neutral-300 dark:data-[state=active]:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-700",
+      "data-[state=active]:bg-neutral-300 dark:data-[state=active]:bg-neutral-700",
     twBorderRadius: "rounded-md",
     twPadding: "px-2 py-1",
   },

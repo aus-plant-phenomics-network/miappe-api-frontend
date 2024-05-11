@@ -1,4 +1,4 @@
-import { createEchoServer } from "../mock";
+import { createEchoServer, createErrorHandlers } from "../mock";
 import { createHandlers, createLoaderAction } from "./factory";
 import {
   AbstractDataType,
@@ -12,12 +12,14 @@ import {
   beforeAll,
   afterEach,
   beforeEach,
+  afterAll,
 } from "vitest";
 
 // Handler Tests
 const TEST_DATE_STR = "2020-01-01";
 const TEST_DATE = new Date(TEST_DATE_STR);
 const TEST_URL = "http://test.com";
+const ERROR_URL = "http://error.com";
 const TEST_ID = "1";
 interface TestDataType extends AbstractDataType {
   name: string;
@@ -39,10 +41,10 @@ const TEST_OBJ_WITH_ID: TestDataType = {
 
 const server = createEchoServer<TestDataWithDateType>(TEST_URL, TEST_OBJ);
 
+const handlers = createHandlers<TestDataType>(TEST_URL);
+
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
-
-const handlers = createHandlers<TestDataType>(TEST_URL);
 
 describe("Test createHandler", async () => {
   test("GET method returns test_obj", async () => {
@@ -67,7 +69,7 @@ describe("Test createHandler", async () => {
 
   test("DELETE method returns nothing", async () => {
     const result = await handlers.deleteData(TEST_ID);
-    expect(result).toEqual({});
+    expect(result.status).toBe(204);
   });
 });
 
@@ -109,7 +111,7 @@ const createRequest = (testObj: AbstractFormDataType<TestDataWithDateType>) => {
 };
 
 const actionLoader = createLoaderAction<TestDataWithDateType, "id">(
-  TEST_URL,
+  handlers,
   SchemaWithDate,
   "id"
 );
@@ -122,7 +124,7 @@ describe("Test actionLoader with no redirect", async () => {
     REQUEST_DATA_NO_DATE = createRequest(TEST_OBJ_WITH_EMPTY_DATE_STR);
   });
   test("test action get all returns testObj", async () => {
-    const result = await actionLoader.loaderAll();
+    const result = await actionLoader.loaderAll({ request: REQUEST_FULL_DATA });
     expect(result).toEqual([TEST_OBJ]);
   });
   test("test action get by id returns testObj", async () => {
@@ -159,7 +161,7 @@ describe("Test actionLoader with no redirect", async () => {
   });
   test("test delete action returns empty object", async () => {
     const result = await actionLoader.actionDelete({ params: { id: TEST_ID } });
-    expect(result).toEqual({});
+    expect(result.status).toBe(204);
   });
 });
 
@@ -171,12 +173,12 @@ const REDIRECT_FN = (...args: any[]) => {
 const actionLoaderWithRedirectString = createLoaderAction<
   TestDataWithDateType,
   "id"
->(TEST_URL, SchemaWithDate, "id", REDIRECT_STR, REDIRECT_STR, REDIRECT_STR);
+>(handlers, SchemaWithDate, "id", REDIRECT_STR, REDIRECT_STR, REDIRECT_STR);
 
 const actionLoaderWithRedirectFunction = createLoaderAction<
   TestDataWithDateType,
   "id"
->(TEST_URL, SchemaWithDate, "id", REDIRECT_FN, REDIRECT_FN, REDIRECT_FN);
+>(handlers, SchemaWithDate, "id", REDIRECT_FN, REDIRECT_FN, REDIRECT_FN);
 
 describe("Test actionLoader with redirect URL", async () => {
   let REQUEST_FULL_DATA: Request;
@@ -184,7 +186,9 @@ describe("Test actionLoader with redirect URL", async () => {
     REQUEST_FULL_DATA = createRequest(TEST_OBJ_WITH_DATE_STR);
   });
   test("test action get all returns testObj", async () => {
-    const result = await actionLoaderWithRedirectString.loaderAll();
+    const result = await actionLoaderWithRedirectString.loaderAll({
+      request: REQUEST_FULL_DATA,
+    });
     expect(result).toEqual([TEST_OBJ]);
   });
   test("test action get by id returns testObj", async () => {
@@ -227,7 +231,9 @@ describe("Test actionLoader with redirect Function", async () => {
     REQUEST_FULL_DATA = createRequest(TEST_OBJ_WITH_DATE_STR);
   });
   test("test action get all returns testObj", async () => {
-    const result = await actionLoaderWithRedirectFunction.loaderAll();
+    const result = await actionLoaderWithRedirectFunction.loaderAll({
+      request: REQUEST_FULL_DATA,
+    });
     expect(result).toEqual([TEST_OBJ]);
   });
   test("test action get by id returns testObj", async () => {
@@ -261,5 +267,73 @@ describe("Test actionLoader with redirect Function", async () => {
     expect(result.status).toBe(302);
     let header = result.headers as Headers;
     expect(header.get("Location")).toBe(REDIRECT_STR);
+  });
+});
+
+// Test action with errorServer
+
+const errorLoaderAction = createLoaderAction<TestDataWithDateType, "id">(
+  handlers,
+  SchemaWithDate,
+  "id"
+);
+describe("Test actionLoader with no redirect using error server", async () => {
+  let REQUEST_FULL_DATA: Request;
+  let REQUEST_DATA_NO_DATE: Request;
+  beforeEach(() => {
+    REQUEST_FULL_DATA = createRequest(TEST_OBJ_WITH_DATE_STR);
+    REQUEST_DATA_NO_DATE = createRequest(TEST_OBJ_WITH_EMPTY_DATE_STR);
+    server.use(...createErrorHandlers(TEST_URL));
+  });
+  test("test action get all returns undefined", async () => {
+    const result = await errorLoaderAction.loaderAll({
+      request: REQUEST_FULL_DATA,
+    });
+    expect(result).toBeNull();
+  });
+  test("test action get by id returns undefined", async () => {
+    const result = await errorLoaderAction.loaderById({
+      params: { id: TEST_ID },
+    });
+    expect(result).toBeNull();
+  });
+  test("test create action with date string throws error", async () => {
+    await expect(
+      errorLoaderAction.actionCreate({
+        request: REQUEST_FULL_DATA,
+        params: { id: TEST_ID },
+      })
+    ).rejects.toThrowError();
+  });
+  test("test create action without date string throws error", async () => {
+    await expect(
+      errorLoaderAction.actionCreate({
+        request: REQUEST_DATA_NO_DATE,
+        params: { id: TEST_ID },
+      })
+    ).rejects.toThrowError();
+  });
+  test("test update action with date string throws error", async () => {
+    await expect(
+      errorLoaderAction.actionUpdate({
+        request: REQUEST_FULL_DATA,
+        params: { id: TEST_ID },
+      })
+    ).rejects.toThrowError();
+  });
+  test("test update action without date string throws error", async () => {
+    await expect(
+      errorLoaderAction.actionUpdate({
+        request: REQUEST_DATA_NO_DATE,
+        params: { id: TEST_ID },
+      })
+    ).rejects.toThrowError();
+  });
+  test("test delete action returns empty object", async () => {
+    await expect(
+      errorLoaderAction.actionDelete({
+        params: { id: TEST_ID },
+      })
+    ).rejects.toThrow();
   });
 });
