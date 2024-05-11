@@ -1,11 +1,22 @@
-import { FormComponentOwnProp } from "./form.types";
+import { FormComponentOwnProp, SelectProps } from "./form.types";
 import { TailwindProps } from "@ailiyah-ui/utils";
 import React from "react";
-import { Form, FormProps } from "react-router-dom";
+import { Form, FormProps, useFetcher, Link } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
 import { capitalise, toSnakeCase } from "../helpers";
-import { InputProps } from "../types";
+import { InputProps } from "./form.types";
+import { AddButton } from "@ailiyah-ui/button";
+import { AbstractDataType } from "../../handlers";
+
+const useFetcherData = (url: string) => {
+  const fetcher = useFetcher({ key: url });
+  React.useEffect(() => {
+    console.log("Fetcher load " + url);
+    fetcher.load(`../${url}`);
+  }, []);
+  return fetcher;
+};
 
 /**
  * Renders a div that contains the created form.
@@ -46,6 +57,49 @@ const Label = styled("label");
 const Input = styled("input");
 
 /**
+ * Renders a regular select component that accepts tailwind props
+ * Styled via themeName = FormSelect
+ */
+const Select = React.memo(
+  React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
+    let { url, name, ...rest } = props;
+    name = name + "Id";
+    const fetcher = useFetcherData(url);
+    const data = fetcher.data
+      ? (fetcher.data as unknown as Array<AbstractDataType> | null)
+      : [];
+
+    return (
+      <styled.div themeName="FormSelectContainer">
+        <styled.select
+          {...rest}
+          name={name}
+          aria-label={`${name}-select`}
+          ref={ref}
+        >
+          {data &&
+            data.map((dataItem) => (
+              <option
+                key={dataItem.id}
+                value={dataItem.id}
+                label={dataItem.title}
+              />
+            ))}
+        </styled.select>
+        <Link to={`../${url}/create`} aria-label={`${name}-create-link`}>
+          <AddButton
+            tooltipContent="Add"
+            type="button"
+            aria-label={`${name}-create-button`}
+            themeName="FormCreateButton"
+          />
+        </Link>
+      </styled.div>
+    );
+  })
+);
+
+/**
  * Renders a LabelGroup with contained label and input components
  * Required fields has * for label and is marked required
  * @params - hidden - hides both label and input
@@ -53,32 +107,47 @@ const Input = styled("input");
  * @params - name - name of input field
  */
 const InputField = React.memo(
-  React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-    let { id, name, required, hidden, ...rest } = props;
-    if (!id) id = React.useId();
+  React.forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
+    (props, ref) => {
+      let { id, name, required, hidden, type, ...rest } = props;
+      if (!id) id = React.useId();
 
-    // Process label name and input name
-    let labelName = capitalise(name);
-    name = toSnakeCase(name);
-    if (required) labelName = labelName + "*";
+      // Process label name and input name
+      let labelName = capitalise(name);
+      let inputName = toSnakeCase(name);
+      if (required) labelName = labelName + "*";
 
-    return (
-      <LabelGroup themeName="FormLabelGroup">
-        <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
-          {labelName}
-        </Label>
-        <Input
-          {...rest}
-          hidden={hidden}
-          name={name}
-          id={id}
-          ref={ref}
-          required={required}
-          themeName="FormInput"
-        />
-      </LabelGroup>
-    );
-  })
+      return (
+        <LabelGroup themeName="FormLabelGroup">
+          <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
+            {labelName}
+          </Label>
+          {type === "select" ? (
+            <Select
+              url={name}
+              hidden={hidden}
+              name={inputName}
+              id={id}
+              ref={ref as React.Ref<HTMLSelectElement>}
+              required={required}
+              themeName="FormSelect"
+            />
+          ) : (
+            <Input
+              type={type}
+              {...rest}
+              hidden={hidden}
+              name={inputName}
+              id={id}
+              ref={ref}
+              required={required}
+              themeName="FormInput"
+            />
+          )}
+        </LabelGroup>
+      );
+    }
+  )
 );
 
 const FormComponent = React.forwardRef<
@@ -91,11 +160,13 @@ const FormComponent = React.forwardRef<
       <Root themeName="FormRoot">
         <Content themeName="FormContent">{children}</Content>
         <Component themeName="FormComponent">
-          <styled.button themeName="FormSubmitButton">Submit</styled.button>
+          <styled.button type="submit" themeName="FormSubmitButton">
+            Submit
+          </styled.button>
         </Component>
       </Root>
     </Form>
   );
 });
 
-export { InputField, FormComponent };
+export { InputField, FormComponent, useFetcherData };
