@@ -1,4 +1,6 @@
 interface AbstractDataType {
+  id?: string;
+  title: string;
   [key: string]: string | number | Date | null | undefined;
 }
 
