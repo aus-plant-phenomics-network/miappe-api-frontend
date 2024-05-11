@@ -7,7 +7,7 @@ interface StudyType extends AbstractDataType {
   startDate: string | Date;
   endDate: string | Date | null;
   objective: string;
-  investigation: string;
+  investigationId: string;
 }
 
 type StudySchema = AbstractSchemaType<StudyType>;

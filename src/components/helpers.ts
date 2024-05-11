@@ -14,6 +14,10 @@ const capitalise = (text: string) => {
   return processedText[0]!.toUpperCase() + processedText.slice(1);
 };
 
+const removeId = (text: string) => {
+  return text.endsWith("Id") ? text.substring(0, text.length - 2) : text;
+};
+
 const string2Date = (text?: string | null) => {
   if (text) {
     let parsedDate = new Date(text);
@@ -24,4 +28,4 @@ const string2Date = (text?: string | null) => {
   return null;
 };
 
-export { capitalise, toSnakeCase, string2Date };
+export { capitalise, toSnakeCase, string2Date, removeId };

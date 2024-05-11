@@ -4,7 +4,7 @@ import React from "react";
 import { Form, FormProps, useFetcher, Link } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
-import { capitalise, toSnakeCase } from "../helpers";
+import { capitalise, removeId, toSnakeCase } from "../helpers";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
 import { AbstractDataType } from "../../handlers";
@@ -62,8 +62,8 @@ const Input = styled("input");
  */
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    let { url, name, ...rest } = props;
-    name = name + "Id";
+    let { name, ...rest } = props;
+    const url = removeId(name);
     const fetcher = useFetcherData(url);
     const data = fetcher.data
       ? (fetcher.data as unknown as Array<AbstractDataType> | null)
@@ -77,6 +77,7 @@ const Select = React.memo(
           aria-label={`${name}-select`}
           ref={ref}
         >
+          <option value="" hidden label="Select from dropdown" />
           {data &&
             data.map((dataItem) => (
               <option
@@ -107,47 +108,47 @@ const Select = React.memo(
  * @params - name - name of input field
  */
 const InputField = React.memo(
-  React.forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
-    (props, ref) => {
-      let { id, name, required, hidden, type, ...rest } = props;
-      if (!id) id = React.useId();
+  React.forwardRef<
+    HTMLInputElement | HTMLSelectElement,
+    InputProps | SelectProps
+  >((props, ref) => {
+    let { id, name, required, hidden, type, ...rest } = props;
+    if (!id) id = React.useId();
 
-      // Process label name and input name
-      let labelName = capitalise(name);
-      let inputName = toSnakeCase(name);
-      if (required) labelName = labelName + "*";
+    // Process label name and input name
+    let labelName = removeId(capitalise(name));
+    if (required) labelName = labelName + "*";
 
-      return (
-        <LabelGroup themeName="FormLabelGroup">
-          <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
-            {labelName}
-          </Label>
-          {type === "select" ? (
-            <Select
-              url={name}
-              hidden={hidden}
-              name={inputName}
-              id={id}
-              ref={ref as React.Ref<HTMLSelectElement>}
-              required={required}
-              themeName="FormSelect"
-            />
-          ) : (
-            <Input
-              type={type}
-              {...rest}
-              hidden={hidden}
-              name={inputName}
-              id={id}
-              ref={ref}
-              required={required}
-              themeName="FormInput"
-            />
-          )}
-        </LabelGroup>
-      );
-    }
-  )
+    return (
+      <LabelGroup themeName="FormLabelGroup">
+        <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
+          {hidden ? "" : labelName}
+        </Label>
+        {type === "select" ? (
+          <Select
+            {...(rest as SelectProps)}
+            hidden={hidden}
+            name={name}
+            id={id}
+            ref={ref as React.Ref<HTMLSelectElement>}
+            required={required}
+            themeName="FormSelect"
+          />
+        ) : (
+          <Input
+            {...(rest as InputProps)}
+            type={type}
+            hidden={hidden}
+            name={name}
+            id={id}
+            ref={ref}
+            required={required}
+            themeName="FormInput"
+          />
+        )}
+      </LabelGroup>
+    );
+  })
 );
 
 const FormComponent = React.forwardRef<

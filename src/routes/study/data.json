@@ -28,7 +28,7 @@
     "type": "text",
     "placeholder": "Study objective"
   },
-  "investigation": {
+  "investigationId": {
     "required": true,
     "type": "select"
   }

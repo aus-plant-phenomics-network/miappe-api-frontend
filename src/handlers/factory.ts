@@ -36,6 +36,7 @@ const createHandlers = <T extends AbstractDataType>(
   };
 
   const createData = async (data: T): Promise<T> => {
+    console.log(data);
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -116,14 +117,8 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
           acc[key] = value;
         }
       } else {
-        let subKey = key.substring(0, key.length - 2);
-        if (subKey in schema) {
-          acc[subKey] = value;
-        } else {
-          throw new Error("Key cannot be found in schema: " + key);
-        }
+        throw new Error("Key cannot be found in schema: " + key);
       }
-
       return acc;
     }, {} as any) as T;
   };
