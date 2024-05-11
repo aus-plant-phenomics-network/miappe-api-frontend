@@ -106,13 +106,24 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
     const formDataObj: AbstractFormDataType<T> = Object.fromEntries(
       formData.entries()
     ) as AbstractFormDataType<T>;
+
     return Object.entries(formDataObj).reduce((acc, dataEntry) => {
       let [key, value] = dataEntry;
-      if (schema[key]!.type === "date") {
-        acc[key] = string2Date(value);
+      if (key in schema) {
+        if (schema[key].type === "date") {
+          acc[key] = string2Date(value);
+        } else {
+          acc[key] = value;
+        }
       } else {
-        acc[key] = value;
+        let subKey = key.substring(0, key.length - 2);
+        if (subKey in schema) {
+          acc[subKey] = value;
+        } else {
+          throw new Error("Key cannot be found in schema: " + key);
+        }
       }
+
       return acc;
     }, {} as any) as T;
   };
