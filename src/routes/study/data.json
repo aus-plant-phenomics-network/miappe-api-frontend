@@ -1,0 +1,35 @@
+{
+  "id": {
+    "required": true,
+    "type": "text"
+  },
+  "title": {
+    "required": true,
+    "type": "text",
+    "placeholder": "Study title"
+  },
+  "startDate": {
+    "required": true,
+    "type": "date",
+    "placeholder": "Study start date"
+  },
+  "endDate": {
+    "required": false,
+    "type": "date",
+    "placeholder": "Study end date"
+  },
+  "objective": {
+    "required": true,
+    "type": "text",
+    "placeholder": "Study objective"
+  },
+  "description": {
+    "required": true,
+    "type": "text",
+    "placeholder": "Study objective"
+  },
+  "investigation": {
+    "required": true,
+    "type": "select"
+  }
+}
