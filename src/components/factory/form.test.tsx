@@ -11,30 +11,30 @@ describe("Test createInputArray", () => {
       expect(inputArray.length).toBe(Object.keys(Schema).length);
     });
     test("First item should be input with type text and is required", () => {
-      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
-      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
         true
       );
-      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
         "first item"
       );
     });
     test("Second item should be input with type text and is not required", () => {
-      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
-      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
         false
       );
-      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["placeholder"]).toBe(
         "second item"
       );
     });
     test("Third item should be input with type date and is required", () => {
-      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("date");
-      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[3] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[3] as React.ReactElement).props["required"]).toBe(
         true
       );
       expect(
-        (inputArray[2] as React.ReactElement).props["placeholder"]
+        (inputArray[3] as React.ReactElement).props["placeholder"]
       ).toBeUndefined();
     });
   });
@@ -44,21 +44,21 @@ describe("Test createInputArray", () => {
       expect(inputArray.length).toBe(Object.keys(Schema).length - 1);
     });
     test("First item should be input with type text and is required", () => {
-      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
-      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
         true
       );
-      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
         "first item"
       );
     });
     test("Second item should be input with type date and is required", () => {
-      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("date");
-      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
         true
       );
       expect(
-        (inputArray[1] as React.ReactElement).props["placeholder"]
+        (inputArray[2] as React.ReactElement).props["placeholder"]
       ).toBeUndefined();
     });
   });
@@ -68,38 +68,38 @@ describe("Test createInputArray", () => {
       inputArray = createInputArray(Schema, [], TestInitData);
     });
     test("First item has correct props", () => {
-      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
-      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
         true
       );
-      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
         "first item"
       );
-      expect((inputArray[0] as React.ReactElement).props["defaultValue"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["defaultValue"]).toBe(
         TestInitData.firstName
       );
     });
     test("Second item has correct props", () => {
-      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
-      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
         false
       );
-      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["placeholder"]).toBe(
         "second item"
       );
-      expect((inputArray[1] as React.ReactElement).props["defaultValue"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["defaultValue"]).toBe(
         TestInitData.secondName
       );
     });
     test("Third item has correct props", () => {
-      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("date");
-      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[3] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[3] as React.ReactElement).props["required"]).toBe(
         true
       );
       expect(
-        (inputArray[2] as React.ReactElement).props["placeholder"]
+        (inputArray[3] as React.ReactElement).props["placeholder"]
       ).toBeUndefined();
-      expect((inputArray[2] as React.ReactElement).props["defaultValue"]).toBe(
+      expect((inputArray[3] as React.ReactElement).props["defaultValue"]).toBe(
         TestInitData.thirdName
       );
     });
@@ -110,38 +110,38 @@ describe("Test createInputArray", () => {
       inputArray = createInputArray(Schema, [], TestInitDataPartial);
     });
     test("First item has correct props", () => {
-      expect((inputArray[0] as React.ReactElement).props["type"]).toBe("text");
-      expect((inputArray[0] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
         true
       );
-      expect((inputArray[0] as React.ReactElement).props["placeholder"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
         "first item"
       );
-      expect((inputArray[0] as React.ReactElement).props["defaultValue"]).toBe(
+      expect((inputArray[1] as React.ReactElement).props["defaultValue"]).toBe(
         TestInitDataPartial.firstName
       );
     });
     test("Second item has correct props", () => {
-      expect((inputArray[1] as React.ReactElement).props["type"]).toBe("text");
-      expect((inputArray[1] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("text");
+      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
         false
       );
-      expect((inputArray[1] as React.ReactElement).props["placeholder"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["placeholder"]).toBe(
         "second item"
       );
-      expect((inputArray[1] as React.ReactElement).props["defaultValue"]).toBe(
+      expect((inputArray[2] as React.ReactElement).props["defaultValue"]).toBe(
         TestInitDataPartial.secondName
       );
     });
     test("Third item has correct props", () => {
-      expect((inputArray[2] as React.ReactElement).props["type"]).toBe("date");
-      expect((inputArray[2] as React.ReactElement).props["required"]).toBe(
+      expect((inputArray[3] as React.ReactElement).props["type"]).toBe("date");
+      expect((inputArray[3] as React.ReactElement).props["required"]).toBe(
         true
       );
       expect(
-        (inputArray[2] as React.ReactElement).props["placeholder"]
+        (inputArray[3] as React.ReactElement).props["placeholder"]
       ).toBeUndefined();
-      expect((inputArray[2] as React.ReactElement).props["defaultValue"]).toBe(
+      expect((inputArray[3] as React.ReactElement).props["defaultValue"]).toBe(
         ""
       );
     });

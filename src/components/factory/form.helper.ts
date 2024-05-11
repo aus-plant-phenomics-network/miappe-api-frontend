@@ -10,18 +10,21 @@ interface TestType extends AbstractDataType {
 type TestSchemaType = AbstractSchemaType<TestType>;
 
 const Schema: TestSchemaType = {
+  title: { type: "text", required: true, placeholder: "title" },
   firstName: { type: "text", required: true, placeholder: "first item" },
   secondName: { type: "text", required: false, placeholder: "second item" },
   thirdName: { type: "date", required: true },
 };
 
 const TestInitData: TestType = {
+  title: "title",
   firstName: "Hoang",
   secondName: "Son",
   thirdName: "Le",
 };
 
 const TestInitDataPartial: TestType = {
+  title: "title",
   firstName: "Hoang",
   secondName: "Le",
 };
