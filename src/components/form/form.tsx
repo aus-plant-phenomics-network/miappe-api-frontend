@@ -63,7 +63,6 @@ const Input = styled("input");
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
     let { url, name, ...rest } = props;
-    name = name + "Id";
     const fetcher = useFetcherData(url);
     const data = fetcher.data
       ? (fetcher.data as unknown as Array<AbstractDataType> | null)
@@ -73,7 +72,7 @@ const Select = React.memo(
       <styled.div themeName="FormSelectContainer">
         <styled.select
           {...rest}
-          name={name}
+          name={name + "Id"}
           aria-label={`${name}-select`}
           ref={ref}
         >
