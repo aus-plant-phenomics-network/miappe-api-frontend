@@ -4,7 +4,7 @@ import { Accordion } from "@ailiyah-ui/accordion";
 import { styled } from "@ailiyah-ui/factory";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { NavLink } from "react-router-dom";
-import { NavDefinition, FieldDefinition } from "./navbar.types.";
+import { NavDefinition, FieldDefinition } from "./navbar.types";
 
 const StyledLink = styled(NavLink);
 const defaultData: NavDefinition = (await import("../../assets/navItems.json"))

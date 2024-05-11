@@ -5,7 +5,7 @@ import { theme } from "../../assets/theme";
 import React from "react";
 import { ActionFactory } from "./navbar.helpers";
 import userEvent from "@testing-library/user-event";
-import { NavDefinition } from "./navbar.types.";
+import { NavDefinition } from "./navbar.types";
 import { defaultData } from "./navbar";
 
 const data: NavDefinition = require("../../assets/navItems.json");

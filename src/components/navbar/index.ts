@@ -1,3 +1,3 @@
 export * from "./navbar";
 export * from "./theme";
-export type * from "./navbar.types.";
+export type * from "./navbar.types";

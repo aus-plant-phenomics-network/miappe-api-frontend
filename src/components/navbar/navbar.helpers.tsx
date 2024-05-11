@@ -4,7 +4,7 @@ import { NavBar } from "./navbar";
 import React from "react";
 import { UserEvent as RTLUserEvent } from "@testing-library/user-event";
 import { UserEvent as StoryUserEvent } from "@storybook/test";
-import { NavDefinition } from "./navbar.types.";
+import { NavDefinition } from "./navbar.types";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const ActionFactory = (userEvent: RTLUserEvent | StoryUserEvent) => {
