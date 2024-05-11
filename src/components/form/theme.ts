@@ -32,12 +32,30 @@ const formTheme: PresetTheme = {
   FormLabel: {
     twFontWeight: "font-bold",
     twFlexGrow: "flex-1",
+    twFlex: "flex",
+    twJustifyContent: "justify-left",
+    twAlignItems: "items-center",
   },
   FormInput: {
     twFlexGrow: "flex-1",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-md",
     twPadding: "p-1",
+  },
+  FormSelectContainer: {
+    twFlex: "flex",
+    twFlexGrow: "flex-1",
+    twBorderWidth: "border-2",
+    twBorderRadius: "rounded-md",
+    twPadding: "p-1",
+  },
+  FormSelect: {
+    twFlexGrow: "flex-1",
+  },
+  FormCreateButton: {
+    twWidth: "w-full",
+    twHeight: "h-full",
+    twPadding: "p-2",
   },
 };
 
