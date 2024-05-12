@@ -1,4 +1,4 @@
-import { SchemaElementType } from "./types";
+import { SchemaElementType, TypeLiterals } from "./types";
 
 /**
  * Get defaultValue prop's value for an input or select element,
@@ -46,7 +46,7 @@ const getLabelKey = (schema: SchemaElementType, key: string): string => {
   if (schema.labelKey) return schema.labelKey;
   const capitalisedKey =
     key.length >= 1 ? key[0].toUpperCase() + key.slice(1) : key;
-  return removeId(schema, capitalisedKey);
+  return removeId(schema.type, capitalisedKey);
 };
 
 /**
@@ -68,7 +68,7 @@ const getLabelKey = (schema: SchemaElementType, key: string): string => {
  */
 const getFetcherKey = (schema: SchemaElementType, key: string): string => {
   if (schema.fetcherKey) return schema.fetcherKey;
-  return removeId(schema, key);
+  return removeId(schema.type, key);
 };
 
 /**
@@ -78,8 +78,8 @@ const getFetcherKey = (schema: SchemaElementType, key: string): string => {
  * @param key - key value
  * @returns - key with Id removed (if possible)
  */
-const removeId = (schema: SchemaElementType, key: string): string => {
-  if (schema.type === "select" && key.endsWith("Id"))
+const removeId = (type: TypeLiterals, key: string): string => {
+  if (type === "select" && key.endsWith("Id"))
     return key.substring(0, key.length - 2);
   return key;
 };
