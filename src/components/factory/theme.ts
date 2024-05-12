@@ -4,7 +4,7 @@ const pageTheme: PresetTheme = {
   PageRoot: {
     twFlex: "flex",
     twFlexDirection: "flex-col",
-    twGap: "gap-y-4",
+    twGap: "gap-y-6",
   },
   PageTitle: {
     twFontSize: "text-2xl",
