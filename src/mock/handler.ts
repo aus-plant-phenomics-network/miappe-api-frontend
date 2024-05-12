@@ -7,7 +7,7 @@ interface ParamsWithId {
 
 const createEchoHandlers = <T extends AbstractDataType>(
   url: string,
-  mockGetObj: T
+  mockGetObj: T,
 ) => [
   http.get(url, () => {
     return HttpResponse.json([
@@ -37,7 +37,7 @@ const createEchoHandlers = <T extends AbstractDataType>(
       id: id,
     });
   }),
-  http.delete<ParamsWithId>(`${url}/:id`, async ({ params }) => {
+  http.delete<ParamsWithId>(`${url}/:id`, async () => {
     return new HttpResponse(null, { status: 204 });
   }),
 ];

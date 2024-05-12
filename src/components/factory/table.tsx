@@ -12,7 +12,8 @@ const createHeaders = <T extends AbstractDataType>(
   const THead = React.memo(
     React.forwardRef<HTMLTableRowElement, TailwindComponentProps<"thead">>(
       (props, ref) => {
-        let { headers, title = "title" } = headerProps;
+        let { headers } = headerProps;
+        const { title = "title" } = headerProps;
         headers = headers.filter((item) => item !== title);
         return (
           <styled.thead themeName="TableHead" ref={ref} {...props}>
@@ -44,7 +45,7 @@ const createBody = <T extends AbstractDataType>(bodyProps: BodyOwnProps<T>) => {
   const TBody = React.memo(
     React.forwardRef<HTMLTableSectionElement, TailwindComponentProps<"tbody">>(
       (props, ref) => {
-        let { bodyData, fields } = bodyProps;
+        const { bodyData, fields } = bodyProps;
         const submit = useSubmit();
         return (
           <styled.tbody themeName="TableBody" {...props} ref={ref}>

@@ -14,7 +14,7 @@ const ActionFactory = (userEvent: RTLUserEvent | StoryUserEvent) => {
     },
 
     clickAccordionItem: async (textContent: string) => {
-      let component = Array.from(
+      const component = Array.from(
         document.querySelectorAll(".NavBarAccordionTrigger")
       ).filter((item) => item.textContent === textContent)[0];
       await userEvent.click(component);

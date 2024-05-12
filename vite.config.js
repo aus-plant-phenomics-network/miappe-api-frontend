@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,17 +9,17 @@ export default defineConfig({
         lines: 50,
         branches: 50,
         functions: 50,
-        statements: 50
+        statements: 50,
       },
       enabled: true,
       provider: "istanbul",
       reportOnFailure: true,
-      reporter: ['json-summary', 'json', 'text', 'html'],
+      reporter: ["json-summary", "json", "text", "html"],
       include: [
         "src/components/**",
         "src/handlers/**",
         "src/mock/**",
-        "src/routes/**"
+        "src/routes/**",
       ],
       exclude: [
         "**/*.stories.[jt]sx",
@@ -27,8 +27,8 @@ export default defineConfig({
         "**/*.helpers.[jt]sx",
         "**/*.types.ts",
         "src/routes/root.tsx",
-        "src/routes/error.tsx"
-      ]
+        "src/routes/error.tsx",
+      ],
     },
     global: true,
     environment: "jsdom",
@@ -36,4 +36,4 @@ export default defineConfig({
     css: true,
   },
   plugins: [react()],
-})
+});

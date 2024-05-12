@@ -87,5 +87,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ThemeProvider value={theme}>
       <RouterProvider router={router} />
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

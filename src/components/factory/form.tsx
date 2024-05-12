@@ -6,7 +6,7 @@ const processDate = (value: string) => value.substring(0, 10);
 const processText = (value: string | number) => value.toString();
 const getDefaultValue = (
   type: string,
-  value: string | number | undefined | null | Date
+  value: string | number | undefined | null | Date,
 ): string => {
   if (value) {
     switch (type) {
@@ -31,12 +31,12 @@ const getDefaultValue = (
  */
 const createInputArray = <T extends AbstractDataType>(
   schema: AbstractSchemaType<T>,
-  exclude: Array<String> = [],
-  data?: T | null
+  exclude: Array<string> = [],
+  data?: T | null,
 ): Array<React.ReactNode> => {
   return Object.entries(schema)
-    .filter(([key, _]) => !exclude.includes(key))
-    .map(([key, value], _) => {
+    .filter(key => !exclude.includes(key[0]))
+    .map(([key, value]) => {
       const schemaType = schema[key].type;
       const defaultDataValue = data ? data[key] : undefined;
       const hidden = key === "id";

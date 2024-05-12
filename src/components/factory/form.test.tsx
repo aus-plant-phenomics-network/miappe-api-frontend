@@ -6,7 +6,7 @@ import { getDefaultValue } from "./form";
 
 describe("Test createInputArray", () => {
   describe("When using all fields", () => {
-    let inputArray = createInputArray(Schema);
+    const inputArray = createInputArray(Schema);
     test("Input array should have the same number of elements as Schema", () => {
       expect(inputArray.length).toBe(Object.keys(Schema).length);
     });
@@ -39,7 +39,7 @@ describe("Test createInputArray", () => {
     });
   });
   describe("When omitting second field", () => {
-    let inputArray = createInputArray(Schema, ["secondName"]);
+    const inputArray = createInputArray(Schema, ["secondName"]);
     test("Input array should have the same number of elements as Schema", () => {
       expect(inputArray.length).toBe(Object.keys(Schema).length - 1);
     });

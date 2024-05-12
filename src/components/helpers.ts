@@ -9,7 +9,7 @@ const capitalise = (text: string) => {
 
   processedText = toSnakeCase(processedText);
   const snakeToCamel = (s: string) =>
-    s.replace(/(_\w)/g, (k) => k[1]!.toUpperCase());
+    s.replace(/(_\w)/g, k => k[1]!.toUpperCase());
   processedText = snakeToCamel(processedText);
   return processedText[0]!.toUpperCase() + processedText.slice(1);
 };
@@ -20,7 +20,7 @@ const removeId = (text: string) => {
 
 const string2Date = (text?: string | null) => {
   if (text) {
-    let parsedDate = new Date(text);
+    const parsedDate = new Date(text);
     if (!isNaN(parsedDate.getDate())) {
       return parsedDate;
     }
