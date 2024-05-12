@@ -29,6 +29,10 @@ jobs:
           cache: "npm"
       - name: install dependencies
         run: npm ci
+      - name: run linting
+        run: npm run lint
+      - name: run formating
+        run: npm run format
       - name: run unit tests
         run: npm test
       - name: "Report Coverage"
