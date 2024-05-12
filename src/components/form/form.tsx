@@ -79,7 +79,7 @@ const Select = React.memo(
         >
           <option value="" hidden label="Select from dropdown" />
           {data &&
-            data.map((dataItem) => (
+            data.map(dataItem => (
               <option
                 key={dataItem.id}
                 value={dataItem.id}
@@ -97,7 +97,7 @@ const Select = React.memo(
         </Link>
       </styled.div>
     );
-  })
+  }),
 );
 
 /**
@@ -112,8 +112,8 @@ const InputField = React.memo(
     HTMLInputElement | HTMLSelectElement,
     InputProps | SelectProps
   >((props, ref) => {
-    let { id, name, required, hidden, type, ...rest } = props;
-    if (!id) id = React.useId();
+    const { name, required, hidden, type, ...rest } = props;
+    const id = rest.id ? rest.id : React.useId();
 
     // Process label name and input name
     let labelName = removeId(capitalise(name));
@@ -148,7 +148,7 @@ const InputField = React.memo(
         )}
       </LabelGroup>
     );
-  })
+  }),
 );
 
 const FormComponent = React.forwardRef<
@@ -169,5 +169,7 @@ const FormComponent = React.forwardRef<
     </Form>
   );
 });
+
+FormComponent.displayName = "FormComponent";
 
 export { InputField, FormComponent, useFetcherData };

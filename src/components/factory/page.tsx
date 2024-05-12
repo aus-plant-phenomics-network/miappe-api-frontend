@@ -14,14 +14,14 @@ const Form = styled(_Form);
 const createPages = <T extends AbstractDataType>(
   title: string,
   schema: AbstractSchemaType<T>,
-  headers: Array<keyof T>
+  headers: Array<keyof T>,
 ) => {
   const components = createInputArray<T>(schema, ["id"]);
   const THeader = createHeaders<T>({
     title: "title",
     headers: headers,
   });
-  const DetailPage: React.FC<{}> = () => {
+  function DetailPage() {
     const data = useLoaderData() as Array<T> | null;
     const TBody = createBody<T>({
       bodyData: data,
@@ -51,8 +51,8 @@ const createPages = <T extends AbstractDataType>(
         </Table>
       </styled.div>
     );
-  };
-  const CreatePage: React.FC<{}> = () => {
+  }
+  function CreatePage() {
     return (
       <styled.div themeName="PageRoot">
         <styled.h1 themeName="PageTitle">{title}</styled.h1>
@@ -62,12 +62,12 @@ const createPages = <T extends AbstractDataType>(
         <FormComponent method="POST">{components}</FormComponent>;
       </styled.div>
     );
-  };
-  const UpdatePage: React.FC<{}> = () => {
+  }
+  function UpdatePage() {
     const data = useLoaderData() as T | null;
     const updateComponents = React.useMemo(
       () => createInputArray(schema, [], data),
-      [JSON.stringify(data)]
+      [JSON.stringify(data)],
     );
     return (
       <styled.div themeName="PageRoot">
@@ -78,7 +78,7 @@ const createPages = <T extends AbstractDataType>(
         <FormComponent method="PUT">{updateComponents}</FormComponent>;
       </styled.div>
     );
-  };
+  }
   return [DetailPage, CreatePage, UpdatePage];
 };
 
