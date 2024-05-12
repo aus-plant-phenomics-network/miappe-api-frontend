@@ -1,0 +1,30 @@
+{
+  "id": {
+    "required": true,
+    "type": "text"
+  },
+  "title": {
+    "required": true,
+    "type": "text",
+    "placeholder": "File Name"
+  },
+  "description": {
+    "required": false,
+    "type": "text",
+    "placeholder": "Data File Description"
+  },
+  "dataFileVersion": {
+    "required": true,
+    "type": "text",
+    "placeholder": "1.0.0"
+  },
+  "dataFileLink": {
+    "required": false,
+    "type": "text",
+    "placeholder": "External Reference/URL"
+  },
+  "studyId": {
+    "required": true,
+    "type": "select"
+  }
+}

@@ -20,6 +20,12 @@ import {
   StudyUpdate,
   StudyActions,
 } from "./routes/study";
+import {
+  DataFileCreate,
+  DataFileList,
+  DataFileUpdate,
+  DataFileActions,
+} from "./routes/dataFile";
 
 const router = createBrowserRouter([
   {
@@ -74,7 +80,28 @@ const router = createBrowserRouter([
             loader: StudyActions.loaderById,
             action: StudyActions.actionDelete,
           },
-
+          {
+            path: "dataFile",
+            element: <DataFileList />,
+            loader: DataFileActions.loaderAll,
+          },
+          {
+            path: "dataFile/create",
+            element: <DataFileCreate />,
+            action: DataFileActions.actionCreate,
+          },
+          {
+            path: "/dataFile/:dataFileId/",
+            element: <DataFileUpdate />,
+            loader: DataFileActions.loaderById,
+            action: DataFileActions.actionUpdate,
+          },
+          {
+            path: "/dataFile/:dataFileId/delete",
+            element: <DataFileUpdate />,
+            loader: DataFileActions.loaderById,
+            action: DataFileActions.actionDelete,
+          },
           /* the rest of the routes */
         ],
       },
