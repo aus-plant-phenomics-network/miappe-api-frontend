@@ -5,7 +5,7 @@ import {
   AbstractFormDataType,
   AbstractSchemaType,
   HandlerType,
-} from "./types";
+} from "../components/types";
 
 const createHandlers = <T extends AbstractDataType>(
   url: string,

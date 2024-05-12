@@ -4,7 +4,7 @@ import {
   AbstractDataType,
   AbstractFormDataType,
   AbstractSchemaType,
-} from "./types";
+} from "../components/types";
 import {
   describe,
   test,
