@@ -24,12 +24,6 @@ describe.each(removeIdFixture)(
   },
 );
 
-const TestSchema: SchemaType = {
-  id: { type: "text", required: true },
-  title: { type: "text", required: false },
-  description: { type: "text", required: false },
-};
-
 const getLabelKeyFixture = [
   {
     inputValue: "",
@@ -250,4 +244,46 @@ const getDefaultValueFixture = [
     schema: { required: true, type: "select" },
     expValue: "2021-11-11T00:00:00",
   },
+
+  {
+    inputValue: "",
+    schema: { required: true, type: "date" },
+    expValue: "",
+  },
+  {
+    inputValue: "",
+    schema: { required: true, type: "text" },
+    expValue: "",
+  },
+  {
+    inputValue: "",
+    schema: { required: true, type: "select" },
+    expValue: "",
+  },
+  {
+    inputValue: null,
+    schema: { required: true, type: "date" },
+    expValue: "",
+  },
+  {
+    inputValue: null,
+    schema: { required: true, type: "text" },
+    expValue: "",
+  },
+  {
+    inputValue: null,
+    schema: { required: true, type: "select" },
+    expValue: "",
+  },
 ];
+
+describe.each(getDefaultValueFixture)(
+  "given key %s, schema: %o",
+  ({ inputValue, schema, expValue }) => {
+    test(`getSubmissionValue returns ${expValue}`, () => {
+      expect(
+        getDefaultValue(schema as SchemaElementType, inputValue as string),
+      ).toEqual(expValue);
+    });
+  },
+);

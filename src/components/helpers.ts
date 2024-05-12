@@ -8,12 +8,12 @@ import { SchemaElementType, TypeLiterals } from "./types";
  * If value type is date, extract only the date portion of the value
  *
  * @param schema - schema of given field. Used to determine the default value
- * @param value - value obtained from remote. Could be undefined or null
+ * @param value - value obtained from remote. Could be null
  * @returns value to be set as defaultValue prop for input/select
  */
 const getDefaultValue = (
   schema: SchemaElementType,
-  value: string | undefined | null,
+  value: string | null,
 ): string => {
   if (value) {
     switch (schema.type) {
