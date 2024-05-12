@@ -44,29 +44,71 @@ const getDefaultValue = (
  */
 const getLabelKey = (schema: SchemaElementType, key: string): string => {
   if (schema.labelKey) return schema.labelKey;
-  const processedKey =
+  const capitalisedKey =
     key.length >= 1 ? key[0].toUpperCase() + key.slice(1) : key;
-  return removeId(schema, processedKey);
+  return removeId(schema, capitalisedKey);
 };
 
+/**
+ * Get fetcher key associated with select element. This fetcher key is used to get
+ * the fetcher that loads data from corresponding route. For instance, a fetcher key
+ * of `investigation` loads the fetched value from loader of `/investigation`.
+ *
+ * If provided in schema, schema.fetcherKey is returned. Otherwise remove the trailing
+ * Id of the associated key (name prop of select element).
+ *
+ * The main use case of this is when fetcher key is different from param key or name prop of
+ * the select element. For instance, in the backend, `Institution` has an attribute `institution_type`
+ * that is an alias for `vocabulary`'s id. Hence key or name prop of schema should be `institutionType`
+ * and schema.fetcherKey should be vocabulary (since vocabulary data is fetched from /vocabulary)
+ *
+ * @param schema - schema correspond to given key.
+ * @param key - key of an entry in Schema. This is also the value of name prop of the select element
+ * @returns - fetcherKey value
+ */
 const getFetcherKey = (schema: SchemaElementType, key: string): string => {
   if (schema.fetcherKey) return schema.fetcherKey;
   return removeId(schema, key);
 };
 
+/**
+ * Utility method to remove trailing Id
+ *
+ * @param schema - provide type info. If type is not select, do nothing
+ * @param key - key value
+ * @returns - key with Id removed (if possible)
+ */
 const removeId = (schema: SchemaElementType, key: string): string => {
   if (schema.type === "select" && key.endsWith("Id"))
     return key.substring(0, key.length - 2);
   return key;
 };
 
+/**
+ * Get associated submission value from FormData. By default, formData obtained via form submission
+ * are string or File. Date type will not be serialised properly and will either not be accepted
+ * by the backend or require processing in the backend which is not idea.
+ *
+ * This function simply returns the value as is if schema type is not date. Otherwise convert given
+ * value to date if rawValue is not "".
+ *
+ * @param schema
+ * @param rawValue
+ * @returns
+ */
 const getSubmissionValue = (
   schema: SchemaElementType,
   rawValue: FormDataEntryValue,
 ): string | Date | File => {
   if (schema.type === "date" && typeof rawValue === "string")
-    return new Date(rawValue);
+    return rawValue !== "" ? new Date(rawValue) : "";
   else return rawValue;
 };
 
-export { getDefaultValue, getLabelKey, getFetcherKey, getSubmissionValue };
+export {
+  getDefaultValue,
+  getLabelKey,
+  getFetcherKey,
+  getSubmissionValue,
+  removeId,
+};
