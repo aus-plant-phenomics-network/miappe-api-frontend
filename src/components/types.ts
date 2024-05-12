@@ -1,6 +1,8 @@
+type TypeLiterals = "text" | "select" | "date";
+
 interface SchemaElementType {
   /** Type of form entry element */
-  type: "text" | "select" | "date";
+  type: TypeLiterals;
   /** Whether users are required to fill form value */
   required: boolean;
   /** Place holder value or guide */
@@ -30,4 +32,10 @@ interface HandlerType<T extends SchemaType> {
   deleteData: (id: string) => Promise<Response>;
 }
 
-export type { DataType, SchemaElementType, SchemaType, HandlerType };
+export type {
+  DataType,
+  SchemaElementType,
+  SchemaType,
+  HandlerType,
+  TypeLiterals,
+};
