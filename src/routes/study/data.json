@@ -26,7 +26,7 @@
   "description": {
     "required": true,
     "type": "text",
-    "placeholder": "Study objective"
+    "placeholder": "Study description"
   },
   "investigationId": {
     "required": true,
