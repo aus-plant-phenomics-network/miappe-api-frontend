@@ -4,7 +4,7 @@ import React from "react";
 import { Form, FormProps, useFetcher, Link } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
-import { capitalise, removeId, toSnakeCase } from "../helpers";
+import { capitalise, removeId } from "../helpers";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
 import { AbstractDataType } from "../../handlers";
@@ -62,7 +62,7 @@ const Input = styled("input");
  */
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    let { name, ...rest } = props;
+    const { name, ...rest } = props;
     const url = removeId(name);
     const fetcher = useFetcherData(url);
     const data = fetcher.data
@@ -155,7 +155,7 @@ const FormComponent = React.forwardRef<
   HTMLFormElement,
   Omit<FormProps, "children"> & TailwindProps & FormComponentOwnProp
 >((props, ref) => {
-  let { children, ...rest } = props;
+  const { children, ...rest } = props;
   return (
     <Form {...rest} ref={ref}>
       <Root themeName="FormRoot">

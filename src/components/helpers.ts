@@ -20,7 +20,7 @@ const removeId = (text: string) => {
 
 const string2Date = (text?: string | null) => {
   if (text) {
-    let parsedDate = new Date(text);
+    const parsedDate = new Date(text);
     if (!isNaN(parsedDate.getDate())) {
       return parsedDate;
     }

@@ -8,7 +8,8 @@ import userEvent from "@testing-library/user-event";
 import { NavDefinition } from "./navbar.types";
 import { defaultData } from "./navbar";
 
-const data: NavDefinition = require("../../assets/navItems.json");
+const data: NavDefinition = (await import("../../assets/navItems.json"))
+  .default;
 
 const keys = Object.keys(data);
 
@@ -21,7 +22,7 @@ const Validate = {
       expect(document.querySelector(".NavBarContent")).toBeVisible();
     },
     isExpanded: async () => {
-      let component = document.querySelector(".NavBarContent");
+      const component = document.querySelector(".NavBarContent");
       if (component?.hasAttribute("style")) {
         expect(component?.getAttribute("style")).toBe("");
       } else {

@@ -37,7 +37,7 @@ const createEchoHandlers = <T extends AbstractDataType>(
       id: id,
     });
   }),
-  http.delete<ParamsWithId>(`${url}/:id`, async ({ params }) => {
+  http.delete<ParamsWithId>(`${url}/:id`, async () => {
     return new HttpResponse(null, { status: 204 });
   }),
 ];

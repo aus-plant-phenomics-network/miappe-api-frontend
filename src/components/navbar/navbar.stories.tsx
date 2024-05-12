@@ -32,26 +32,26 @@ type Story = StoryObj<typeof NavBarStoryComponent>;
 export const Default: Story = {};
 
 export const CollapsedNavBar: Story = {
-  play: async (context) => {
+  play: async () => {
     Actions.clickExpandCollapseButton();
   },
 };
 
 export const ExpandedCollapsedNavBar: Story = {
-  play: async (context) => {
+  play: async () => {
     Actions.clickExpandCollapseButton();
     Actions.clickExpandCollapseButton();
   },
 };
 
 export const ExpandStudyDefinition: Story = {
-  play: async (context) => {
+  play: async () => {
     Actions.clickAccordionItem("Study Definition");
   },
 };
 
 export const UnexpandStudyDefinition: Story = {
-  play: async (context) => {
+  play: async () => {
     Actions.clickAccordionItem("Study Definition");
     Actions.clickAccordionItem("Study Definition");
   },

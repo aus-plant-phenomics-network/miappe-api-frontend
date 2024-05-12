@@ -3,7 +3,7 @@ import { InvestigationType, InvestigationSchema } from "./investigation.types";
 
 const INVESTIGATION_URL = "http://127.0.0.1:8000/investigation";
 
-let schema: InvestigationSchema = (await import("./data.json")).default;
+const schema: InvestigationSchema = (await import("./data.json")).default;
 
 const investigationHandlers =
   createHandlers<InvestigationType>(INVESTIGATION_URL);

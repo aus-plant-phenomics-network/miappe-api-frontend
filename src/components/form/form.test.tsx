@@ -9,7 +9,7 @@ import { Schema, Validator } from "../factory/form.helper";
 describe("Test Form Component", () => {
   describe("When using all fields", () => {
     beforeEach(() => {
-      let inputArr = createInputArray(Schema);
+      const inputArr = createInputArray(Schema);
       const router = createBrowserRouter([
         {
           path: "/",
@@ -36,7 +36,7 @@ describe("Test Form Component", () => {
   });
   describe("When omitting the second field", () => {
     beforeEach(() => {
-      let inputArr = createInputArray(Schema, ["secondName"]);
+      const inputArr = createInputArray(Schema, ["secondName"]);
       const router = createBrowserRouter([
         {
           path: "/",
@@ -61,7 +61,7 @@ describe("Test Form Component", () => {
   });
   describe("When having extra select field", () => {
     beforeEach(() => {
-      let inputArr = createInputArray(Schema);
+      const inputArr = createInputArray(Schema);
       inputArr.push(<input type="select" name="fourthName" />);
       const router = createBrowserRouter([
         {

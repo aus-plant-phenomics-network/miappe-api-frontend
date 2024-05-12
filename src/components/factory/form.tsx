@@ -31,7 +31,7 @@ const getDefaultValue = (
  */
 const createInputArray = <T extends AbstractDataType>(
   schema: AbstractSchemaType<T>,
-  exclude: Array<String> = [],
+  exclude: Array<string> = [],
   data?: T | null
 ): Array<React.ReactNode> => {
   return Object.entries(schema)

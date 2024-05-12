@@ -30,8 +30,8 @@ const TestInitDataPartial: TestType = {
 };
 
 const queryRenderedLabelGroup = (name: string) => {
-  let input = document.querySelector(`input[name="${name}"]`);
-  let label = document.querySelector(`label[for="${input!.id}"]`);
+  const input = document.querySelector(`input[name="${name}"]`);
+  const label = document.querySelector(`label[for="${input!.id}"]`);
   return { input: input, label: label };
 };
 
@@ -41,7 +41,7 @@ const queryInput = (name: string) => {
 
 const testIsRendered = (name: string) => {
   return () => {
-    let { input, label } = queryRenderedLabelGroup(name);
+    const { input, label } = queryRenderedLabelGroup(name);
     expect(input).toBeInTheDocument();
     expect(label).toBeInTheDocument();
   };
@@ -49,7 +49,7 @@ const testIsRendered = (name: string) => {
 
 const testIsNotRendered = (name: string) => {
   return () => {
-    let input = queryInput(name);
+    const input = queryInput(name);
     expect(input).toBeNull();
   };
 };
@@ -59,11 +59,11 @@ const Validator = {
     isRendered: testIsRendered("firstName"),
     isNotRendered: testIsNotRendered("firstName"),
     isTypeText: () => {
-      let input = queryInput("firstName");
+      const input = queryInput("firstName");
       expect(input?.getAttribute("type")).toBe("text");
     },
     isRequired: () => {
-      let input = queryInput("firstName");
+      const input = queryInput("firstName");
       expect(input?.hasAttribute("required")).toBe(true);
     },
   },
@@ -71,11 +71,11 @@ const Validator = {
     isRendered: testIsRendered("secondName"),
     isNotRendered: testIsNotRendered("secondName"),
     isTypeText: () => {
-      let input = queryInput("secondName");
+      const input = queryInput("secondName");
       expect(input?.getAttribute("type")).toBe("text");
     },
     isNotRequired: () => {
-      let input = queryInput("secondName");
+      const input = queryInput("secondName");
       expect(input?.hasAttribute("required")).toBe(false);
     },
   },
@@ -83,11 +83,11 @@ const Validator = {
     isRendered: testIsRendered("thirdName"),
     isNotRendered: testIsNotRendered("thirdName"),
     isTypeDate: () => {
-      let input = queryInput("thirdName");
+      const input = queryInput("thirdName");
       expect(input?.getAttribute("type")).toBe("date");
     },
     isRequired: () => {
-      let input = queryInput("thirdName");
+      const input = queryInput("thirdName");
       expect(input?.hasAttribute("required")).toBe(true);
     },
   },
@@ -96,7 +96,7 @@ const Validator = {
       expect(queryInput("fourthName")).toBeInTheDocument();
     },
     isTypeSelect: () => {
-      let input = queryInput("fourthName");
+      const input = queryInput("fourthName");
       expect(input!.getAttribute("type")).toBe("select");
     },
   },

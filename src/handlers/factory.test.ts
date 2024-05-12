@@ -12,26 +12,21 @@ import {
   beforeAll,
   afterEach,
   beforeEach,
-  afterAll,
 } from "vitest";
 
 // Handler Tests
 const TEST_DATE_STR = "2020-01-01";
 const TEST_DATE = new Date(TEST_DATE_STR);
 const TEST_URL = "http://test.com";
-const ERROR_URL = "http://error.com";
 const TEST_ID = "1";
-interface TestDataType extends AbstractDataType {
-  name: string;
-  id?: string;
-}
+interface TestDataType extends AbstractDataType {}
 
 interface TestDataWithDateType extends TestDataType {
   submissionDate?: Date | null;
 }
 
 const TEST_OBJ: TestDataType = {
-  name: "dummy",
+  title: "dummy",
 };
 
 const TEST_OBJ_WITH_ID: TestDataType = {
@@ -76,7 +71,7 @@ describe("Test createHandler", async () => {
 // ActionLoader Test
 
 const SchemaWithDate: AbstractSchemaType<TestDataWithDateType> = {
-  name: { type: "text", required: true },
+  title: { type: "text", required: true },
   submissionDate: { type: "date", required: false },
   id: { type: "text", required: false },
 };
@@ -104,7 +99,7 @@ const TEST_OBJ_WITH_EMPTY_DATE: TestDataWithDateType = {
 
 const createRequest = (testObj: AbstractFormDataType<TestDataWithDateType>) => {
   const data = new FormData();
-  for (let [key, value] of Object.entries(testObj)) {
+  for (const [key, value] of Object.entries(testObj)) {
     data.append(key, value);
   }
   return new Request(TEST_URL, { body: data, method: "POST" });
@@ -166,7 +161,7 @@ describe("Test actionLoader with no redirect", async () => {
 });
 
 const REDIRECT_STR = "/example";
-const REDIRECT_FN = (...args: any[]) => {
+const REDIRECT_FN = () => {
   return REDIRECT_STR;
 };
 
@@ -203,7 +198,7 @@ describe("Test actionLoader with redirect URL", async () => {
       params: { id: TEST_ID },
     });
     expect(result.status).toBe(302);
-    let header = result.headers as Headers;
+    const header = result.headers as Headers;
     expect(header.get("Location")).toBe(REDIRECT_STR);
   });
   test("test update action returns redirect", async () => {
@@ -212,7 +207,7 @@ describe("Test actionLoader with redirect URL", async () => {
       params: { id: TEST_ID },
     });
     expect(result.status).toBe(302);
-    let header = result.headers as Headers;
+    const header = result.headers as Headers;
     expect(header.get("Location")).toBe(REDIRECT_STR);
   });
   test("test delete action returns redirect", async () => {
@@ -220,7 +215,7 @@ describe("Test actionLoader with redirect URL", async () => {
       params: { id: TEST_ID },
     })) as Response;
     expect(result.status).toBe(302);
-    let header = result.headers as Headers;
+    const header = result.headers as Headers;
     expect(header.get("Location")).toBe(REDIRECT_STR);
   });
 });
@@ -248,7 +243,7 @@ describe("Test actionLoader with redirect Function", async () => {
       params: { id: TEST_ID },
     });
     expect(result.status).toBe(302);
-    let header = result.headers as Headers;
+    const header = result.headers as Headers;
     expect(header.get("Location")).toBe(REDIRECT_STR);
   });
   test("test update action returns redirect", async () => {
@@ -257,7 +252,7 @@ describe("Test actionLoader with redirect Function", async () => {
       params: { id: TEST_ID },
     });
     expect(result.status).toBe(302);
-    let header = result.headers as Headers;
+    const header = result.headers as Headers;
     expect(header.get("Location")).toBe(REDIRECT_STR);
   });
   test("test delete action returns redirect", async () => {
@@ -265,7 +260,7 @@ describe("Test actionLoader with redirect Function", async () => {
       params: { id: TEST_ID },
     })) as Response;
     expect(result.status).toBe(302);
-    let header = result.headers as Headers;
+    const header = result.headers as Headers;
     expect(header.get("Location")).toBe(REDIRECT_STR);
   });
 });
