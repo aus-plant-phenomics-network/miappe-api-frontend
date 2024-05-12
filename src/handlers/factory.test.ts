@@ -108,7 +108,7 @@ const createRequest = (testObj: AbstractFormDataType<TestDataWithDateType>) => {
 const actionLoader = createLoaderAction<TestDataWithDateType, "id">(
   handlers,
   SchemaWithDate,
-  "id"
+  "id",
 );
 
 describe("Test actionLoader with no redirect", async () => {
@@ -270,7 +270,7 @@ describe("Test actionLoader with redirect Function", async () => {
 const errorLoaderAction = createLoaderAction<TestDataWithDateType, "id">(
   handlers,
   SchemaWithDate,
-  "id"
+  "id",
 );
 describe("Test actionLoader with no redirect using error server", async () => {
   let REQUEST_FULL_DATA: Request;
@@ -297,7 +297,7 @@ describe("Test actionLoader with no redirect using error server", async () => {
       errorLoaderAction.actionCreate({
         request: REQUEST_FULL_DATA,
         params: { id: TEST_ID },
-      })
+      }),
     ).rejects.toThrowError();
   });
   test("test create action without date string throws error", async () => {
@@ -305,7 +305,7 @@ describe("Test actionLoader with no redirect using error server", async () => {
       errorLoaderAction.actionCreate({
         request: REQUEST_DATA_NO_DATE,
         params: { id: TEST_ID },
-      })
+      }),
     ).rejects.toThrowError();
   });
   test("test update action with date string throws error", async () => {
@@ -313,7 +313,7 @@ describe("Test actionLoader with no redirect using error server", async () => {
       errorLoaderAction.actionUpdate({
         request: REQUEST_FULL_DATA,
         params: { id: TEST_ID },
-      })
+      }),
     ).rejects.toThrowError();
   });
   test("test update action without date string throws error", async () => {
@@ -321,14 +321,14 @@ describe("Test actionLoader with no redirect using error server", async () => {
       errorLoaderAction.actionUpdate({
         request: REQUEST_DATA_NO_DATE,
         params: { id: TEST_ID },
-      })
+      }),
     ).rejects.toThrowError();
   });
   test("test delete action returns empty object", async () => {
     await expect(
       errorLoaderAction.actionDelete({
         params: { id: TEST_ID },
-      })
+      }),
     ).rejects.toThrow();
   });
 });

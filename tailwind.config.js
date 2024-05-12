@@ -1,15 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'selector',
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  darkMode: "selector",
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       screens: {
-        "md": "840px"
-      }
+        md: "840px",
+      },
     },
   },
-}
+};

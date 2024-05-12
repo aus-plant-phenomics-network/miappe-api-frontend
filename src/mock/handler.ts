@@ -7,7 +7,7 @@ interface ParamsWithId {
 
 const createEchoHandlers = <T extends AbstractDataType>(
   url: string,
-  mockGetObj: T
+  mockGetObj: T,
 ) => [
   http.get(url, () => {
     return HttpResponse.json([

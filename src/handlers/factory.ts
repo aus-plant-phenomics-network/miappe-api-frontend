@@ -8,11 +8,11 @@ import {
 } from "./types";
 
 const createHandlers = <T extends AbstractDataType>(
-  url: string
+  url: string,
 ): HandlerType<T> => {
   const getAllData = async (title?: string | null): Promise<Array<T>> => {
     const response = await fetch(
-      title ? url + "?" + new URLSearchParams({ title: title }) : url
+      title ? url + "?" + new URLSearchParams({ title: title }) : url,
     );
 
     if (!response.ok) {
@@ -100,12 +100,12 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
   updateRedirect?:
     | string
     | ((request: Request, params: Params<Key>, result: T) => string),
-  deleteRedirect?: string | ((params: Params<Key>) => string)
+  deleteRedirect?: string | ((params: Params<Key>) => string),
 ) => {
   const parseData = async (request: Request): Promise<T> => {
     const formData = await request.formData();
     const formDataObj: AbstractFormDataType<T> = Object.fromEntries(
-      formData.entries()
+      formData.entries(),
     ) as AbstractFormDataType<T>;
 
     return Object.entries(formDataObj).reduce((acc, dataEntry) => {
@@ -159,7 +159,7 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
       return redirect(
         typeof createRedirect === "string"
           ? createRedirect
-          : createRedirect(request, params, result)
+          : createRedirect(request, params, result),
       );
     return result;
   };
@@ -176,7 +176,7 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
       return redirect(
         typeof updateRedirect === "string"
           ? updateRedirect
-          : updateRedirect(request, params, result)
+          : updateRedirect(request, params, result),
       );
     return result;
   };
@@ -186,7 +186,7 @@ const createLoaderAction = <T extends AbstractDataType, Key extends string>(
       return redirect(
         typeof deleteRedirect === "string"
           ? deleteRedirect
-          : deleteRedirect(params)
+          : deleteRedirect(params),
       );
     return result;
   };

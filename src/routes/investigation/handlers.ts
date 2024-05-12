@@ -14,7 +14,7 @@ const LoaderAction = createLoaderAction<InvestigationType, "investigationId">(
   "investigationId",
   "/investigation",
   "/investigation",
-  "/investigation"
+  "/investigation",
 );
 
 export { LoaderAction as InvestigationActions };

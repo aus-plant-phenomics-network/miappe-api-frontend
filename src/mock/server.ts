@@ -4,7 +4,7 @@ import { AbstractDataType } from "../handlers";
 
 const createEchoServer = <T extends AbstractDataType>(
   url: string,
-  mockGetObj: T
+  mockGetObj: T,
 ) => {
   const handlers = createEchoHandlers<T>(url, mockGetObj);
   return setupServer(...handlers);
