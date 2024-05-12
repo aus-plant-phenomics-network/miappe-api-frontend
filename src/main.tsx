@@ -26,6 +26,12 @@ import {
   DataFileUpdate,
   DataFileActions,
 } from "./routes/dataFile";
+import {
+  VocabularyCreate,
+  VocabularyList,
+  VocabularyActions,
+  VocabularyUpdate,
+} from "./routes/vocabulary";
 
 const router = createBrowserRouter([
   {
@@ -101,6 +107,28 @@ const router = createBrowserRouter([
             element: <DataFileUpdate />,
             loader: DataFileActions.loaderById,
             action: DataFileActions.actionDelete,
+          },
+          {
+            path: "vocabulary",
+            element: <VocabularyList />,
+            loader: VocabularyActions.loaderAll,
+          },
+          {
+            path: "vocabulary/create",
+            element: <VocabularyCreate />,
+            action: VocabularyActions.actionCreate,
+          },
+          {
+            path: "/vocabulary/:vocabularyId/",
+            element: <VocabularyUpdate />,
+            loader: VocabularyActions.loaderById,
+            action: VocabularyActions.actionUpdate,
+          },
+          {
+            path: "/vocabulary/:vocabularyId/delete",
+            element: <VocabularyUpdate />,
+            loader: VocabularyActions.loaderById,
+            action: VocabularyActions.actionDelete,
           },
           /* the rest of the routes */
         ],
