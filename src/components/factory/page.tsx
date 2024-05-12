@@ -53,7 +53,15 @@ const createPages = <T extends AbstractDataType>(
     );
   };
   const CreatePage: React.FC<{}> = () => {
-    return <FormComponent method="POST">{components}</FormComponent>;
+    return (
+      <styled.div themeName="PageRoot">
+        <styled.h1 themeName="PageTitle">{title}</styled.h1>
+        <styled.p themeName="PageDescription">
+          Create a new {title} entry by filling out the form below.
+        </styled.p>
+        <FormComponent method="POST">{components}</FormComponent>;
+      </styled.div>
+    );
   };
   const UpdatePage: React.FC<{}> = () => {
     const data = useLoaderData() as T | null;
@@ -61,7 +69,15 @@ const createPages = <T extends AbstractDataType>(
       () => createInputArray(schema, [], data),
       [JSON.stringify(data)]
     );
-    return <FormComponent method="PUT">{updateComponents}</FormComponent>;
+    return (
+      <styled.div themeName="PageRoot">
+        <styled.h1 themeName="PageTitle">{title}</styled.h1>
+        <styled.p themeName="PageDescription">
+          Update the current {title} entry by filling out the form below.
+        </styled.p>
+        <FormComponent method="PUT">{updateComponents}</FormComponent>;
+      </styled.div>
+    );
   };
   return [DetailPage, CreatePage, UpdatePage];
 };
