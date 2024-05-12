@@ -3,13 +3,13 @@
     "Institution": "institution",
     "Investigation": "investigation",
     "Staff": "staff",
-    "Data File": "data_file",
+    "Data File": "dataFile",
     "Study": "study",
     "Experiment": "experiment"
   },
   "Data Collection Setup": {
     "Facility": "facility",
-    "Observation Unit": "observation_unit",
+    "Observation Unit": "observationUnit",
     "Sample": "sample",
     "Event": "event"
   },
@@ -17,10 +17,10 @@
     "Unit": "unit",
     "Method": "method",
     "Device": "device",
-    "Biological Material": "biological_material",
+    "Biological Material": "biologicalMaterial",
     "Environment": "environment",
-    "Experiment Factor": "experiment_factor",
-    "Observed Variable": "observed_variable"
+    "Experiment Factor": "experimentFactor",
+    "Observed Variable": "observedVariable"
   },
   "Ontology": {
     "Vocabulary": "vocabulary"
