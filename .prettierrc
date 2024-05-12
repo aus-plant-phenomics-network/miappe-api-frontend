@@ -4,5 +4,26 @@
   "trailingComma": "all",
   "bracketSameLine": false,
   "arrowParens": "avoid",
-  "parser": "typescript"
+  "overrides": [
+    {
+      "files": ["*.mjs", "*.cjs", "*.js"],
+      "options": {
+        "parser": "babel"
+      }
+    },
+
+    {
+      "files": ["*.mts", "*.cts", "*.ts"],
+      "options": {
+        "parser": "typescript"
+      }
+    },
+
+    {
+      "files": ["*.json", "*.jsonc", "*.json5"],
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
 }
