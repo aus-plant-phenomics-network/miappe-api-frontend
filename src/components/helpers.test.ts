@@ -4,9 +4,10 @@ import {
   getFetcherKey,
   getSubmissionValue,
   getDefaultValue,
+  getHiddenValue,
 } from "./helpers";
 import { describe, expect, test } from "vitest";
-import { SchemaElementType, SchemaType, TypeLiterals } from "./types";
+import { SchemaElementType, TypeLiterals } from "./types";
 
 const removeIdFixture = [
   ["text", "investigation", "investigation"],
@@ -283,6 +284,83 @@ describe.each(getDefaultValueFixture)(
     test(`getSubmissionValue returns ${expValue}`, () => {
       expect(
         getDefaultValue(schema as SchemaElementType, inputValue as string),
+      ).toEqual(expValue);
+    });
+  },
+);
+
+const getHiddenValueFixture = [
+  {
+    inputValue: "id",
+    schema: { type: "text", required: true },
+    expValue: true,
+  },
+  {
+    inputValue: "id",
+    schema: { type: "select", required: true },
+    expValue: true,
+  },
+  {
+    inputValue: "id",
+    schema: { type: "date", required: true },
+    expValue: true,
+  },
+
+  {
+    inputValue: "studyId",
+    schema: { type: "text", required: true },
+    expValue: false,
+  },
+  {
+    inputValue: "studyId",
+    schema: { type: "select", required: true },
+    expValue: false,
+  },
+  {
+    inputValue: "studyId",
+    schema: { type: "date", required: true },
+    expValue: false,
+  },
+
+  {
+    inputValue: "id",
+    schema: { hidden: false, type: "text", required: true },
+    expValue: false,
+  },
+  {
+    inputValue: "id",
+    schema: { hidden: false, type: "select", required: true },
+    expValue: false,
+  },
+  {
+    inputValue: "id",
+    schema: { hidden: false, type: "date", required: true },
+    expValue: false,
+  },
+
+  {
+    inputValue: "studyId",
+    schema: { hidden: true, type: "text", required: true },
+    expValue: true,
+  },
+  {
+    inputValue: "studyId",
+    schema: { hidden: true, type: "select", required: true },
+    expValue: true,
+  },
+  {
+    inputValue: "studyId",
+    schema: { hidden: true, type: "date", required: true },
+    expValue: true,
+  },
+];
+
+describe.each(getHiddenValueFixture)(
+  "given key %s, schema: %o",
+  ({ inputValue, schema, expValue }) => {
+    test(`getHiddenValue returns ${expValue}`, () => {
+      expect(
+        getHiddenValue(schema as SchemaElementType, inputValue as string),
       ).toEqual(expValue);
     });
   },
