@@ -13,7 +13,7 @@ const LoaderAction = createLoaderAction<StudyType, "studyId">(
   "studyId",
   "/study",
   "/study",
-  "/study"
+  "/study",
 );
 
 export { LoaderAction as StudyActions };

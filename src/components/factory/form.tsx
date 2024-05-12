@@ -35,8 +35,8 @@ const createInputArray = <T extends AbstractDataType>(
   data?: T | null
 ): Array<React.ReactNode> => {
   return Object.entries(schema)
-    .filter(([key, _]) => !exclude.includes(key))
-    .map(([key, value], _) => {
+    .filter(([key,]) => !exclude.includes(key))
+    .map(([key, value],) => {
       const schemaType = schema[key].type;
       const defaultDataValue = data ? data[key] : undefined;
       const hidden = key === "id";
