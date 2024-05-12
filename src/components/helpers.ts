@@ -1,6 +1,21 @@
 import { SchemaElementType, TypeLiterals } from "./types";
 
 /**
+ * Get hidden prop value for an input/select element.
+ *
+ * If schema.hidden is provided, this value will be used. Otherwise,
+ * returns true if key is id, false otherwise.
+ *
+ * @param schema - schema of given field
+ * @param key - name prop of input/select
+ * @returns - boolean results on whether the input/select element should be hidden
+ */
+const getHiddenValue = (schema: SchemaElementType, key: string): boolean => {
+  if (schema.hidden) return schema.hidden;
+  return key === "id" ? true : false;
+};
+
+/**
  * Get defaultValue prop's value for an input or select element,
  * given value obtained from a remove server. This function is
  * used to set default value for a field in update form (PUT).
@@ -111,5 +126,6 @@ export {
   getLabelKey,
   getFetcherKey,
   getSubmissionValue,
+  getHiddenValue,
   removeId,
 };

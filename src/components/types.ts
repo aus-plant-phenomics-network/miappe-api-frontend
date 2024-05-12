@@ -11,6 +11,8 @@ interface SchemaElementType {
   fetcherKey?: string;
   /** Key to be displayed as label for form data */
   labelKey?: string;
+  /** Whether data should be hidden */
+  hidden?: boolean;
 }
 
 interface SchemaType {
