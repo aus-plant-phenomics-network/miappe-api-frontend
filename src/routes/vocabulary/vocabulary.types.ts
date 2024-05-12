@@ -1,6 +1,6 @@
-import { AbstractDataType, AbstractSchemaType } from "../../handlers";
+import { DataType, AbstractSchemaType } from "../../handlers";
 
-interface VocabularyType extends AbstractDataType {
+interface VocabularyType extends DataType {
   id?: string;
   title: string;
   description: string;

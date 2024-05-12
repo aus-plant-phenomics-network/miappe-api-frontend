@@ -1,60 +1,253 @@
-import { capitalise, removeId, string2Date, toSnakeCase } from "./helpers";
+import {
+  removeId,
+  getLabelKey,
+  getFetcherKey,
+  getSubmissionValue,
+  getDefaultValue,
+} from "./helpers";
 import { describe, expect, test } from "vitest";
-
-const capitaliseFixture = [
-  ["", ""],
-  ["a", "A"],
-  [" ", ""],
-  ["A ", "A"],
-  ["first name ", "FirstName"],
-  ["firstName", "FirstName"],
-  ["lastName", "LastName"],
-  ["first name", "FirstName"],
-  ["last name", "LastName"],
-];
-
-describe.each(capitaliseFixture)("given %s", (inputValue, expValue) => {
-  test(`capitalise returns ${expValue}`, () => {
-    expect(capitalise(inputValue)).toBe(expValue);
-  });
-});
-
-const snakeCaseFixture = [
-  ["first name", "first_name"],
-  ["public release date", "public_release_date"],
-];
-
-describe.each(snakeCaseFixture)("given %s", (inputValue, expValue) => {
-  test(`toSnakeCase returns ${expValue}`, () => {
-    expect(toSnakeCase(inputValue)).toBe(expValue);
-  });
-});
-
-const string2DateFixture: Array<[string | null | undefined, Date | null]> = [
-  ["", null],
-  ["a", null],
-  ["2011-02-04", new Date("2011-02-04")],
-  [null, null],
-  [undefined, null],
-];
-
-describe.each(string2DateFixture)("given %s", (inputValue, expValue) => {
-  test(`string2Date returns ${expValue}`, () => {
-    if (expValue === null) {
-      expect(string2Date(inputValue)).toBeNull();
-    } else {
-      expect(string2Date(inputValue)).toEqual(expValue);
-    }
-  });
-});
+import { SchemaElementType, SchemaType, TypeLiterals } from "./types";
 
 const removeIdFixture = [
-  ["investigation", "investigation"],
-  ["investigationId", "investigation"],
+  ["text", "investigation", "investigation"],
+  ["text", "investigationId", "investigationId"],
+  ["date", "investigationId", "investigationId"],
+  ["select", "investigationId", "investigation"],
 ];
 
-describe.each(removeIdFixture)("given %s", (inputValue, expValue) => {
-  test(`removeId returns ${expValue}`, () => {
-    expect(removeId(inputValue)).toBe(expValue);
-  });
-});
+describe.each(removeIdFixture)(
+  "given type %s and input %s",
+  (inputType, inputValue, expValue) => {
+    test(`removeId returns ${expValue}`, () => {
+      expect(removeId(inputType as TypeLiterals, inputValue)).toEqual(expValue);
+    });
+  },
+);
+
+const TestSchema: SchemaType = {
+  id: { type: "text", required: true },
+  title: { type: "text", required: false },
+  description: { type: "text", required: false },
+};
+
+const getLabelKeyFixture = [
+  {
+    inputValue: "",
+    schema: { required: true, type: "select" },
+    expValue: "",
+  },
+  {
+    inputValue: "",
+    schema: { required: true, type: "date" },
+    expValue: "",
+  },
+  {
+    inputValue: "",
+    schema: { required: true, type: "text" },
+    expValue: "",
+  },
+  {
+    inputValue: "myInvestigation",
+    schema: { required: true, type: "select" },
+    expValue: "MyInvestigation",
+  },
+  {
+    inputValue: "myInvestigation",
+    schema: { required: true, type: "text" },
+    expValue: "MyInvestigation",
+  },
+  {
+    inputValue: "myInvestigation",
+    schema: { required: true, type: "date" },
+    expValue: "MyInvestigation",
+  },
+  {
+    inputValue: "myInvestigation",
+    schema: { labelKey: "Project", required: true, type: "select" },
+    expValue: "Project",
+  },
+  {
+    inputValue: "myInvestigation",
+    schema: { labelKey: "Project", required: true, type: "text" },
+    expValue: "Project",
+  },
+  {
+    inputValue: "myInvestigation",
+    schema: { labelKey: "Project", required: true, type: "date" },
+    expValue: "Project",
+  },
+
+  {
+    inputValue: "investigationId",
+    schema: { required: true, type: "select" },
+    expValue: "Investigation",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { required: true, type: "text" },
+    expValue: "InvestigationId",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { required: true, type: "date" },
+    expValue: "InvestigationId",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { labelKey: "Project", required: true, type: "select" },
+    expValue: "Project",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { labelKey: "Project", required: true, type: "text" },
+    expValue: "Project",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { labelKey: "Project", required: true, type: "date" },
+    expValue: "Project",
+  },
+];
+
+describe.each(getLabelKeyFixture)(
+  "given key %s, schema: %o",
+  ({ inputValue, schema, expValue }) => {
+    test(`getLabelKey returns ${expValue}`, () => {
+      expect(
+        getLabelKey(schema as SchemaElementType, inputValue as string),
+      ).toEqual(expValue);
+    });
+  },
+);
+
+const getFetcherKeyFixture = [
+  {
+    inputValue: "investigationId",
+    schema: { required: true, type: "text" },
+    expValue: "investigationId",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { required: true, type: "date" },
+    expValue: "investigationId",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { required: true, type: "select" },
+    expValue: "investigation",
+  },
+
+  {
+    inputValue: "investigation",
+    schema: { required: true, type: "text" },
+    expValue: "investigation",
+  },
+  {
+    inputValue: "investigation",
+    schema: { required: true, type: "date" },
+    expValue: "investigation",
+  },
+  {
+    inputValue: "investigation",
+    schema: { required: true, type: "select" },
+    expValue: "investigation",
+  },
+
+  {
+    inputValue: "institutionType",
+    schema: { fetcherKey: "vocabulary", required: true, type: "text" },
+    expValue: "vocabulary",
+  },
+  {
+    inputValue: "institutionType",
+    schema: { fetcherKey: "vocabulary", required: true, type: "date" },
+    expValue: "vocabulary",
+  },
+  {
+    inputValue: "institutionType",
+    schema: { fetcherKey: "vocabulary", required: true, type: "select" },
+    expValue: "vocabulary",
+  },
+
+  {
+    inputValue: "investigationId",
+    schema: { fetcherKey: "vocabulary", required: true, type: "text" },
+    expValue: "vocabulary",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { fetcherKey: "vocabulary", required: true, type: "date" },
+    expValue: "vocabulary",
+  },
+  {
+    inputValue: "investigationId",
+    schema: { fetcherKey: "vocabulary", required: true, type: "select" },
+    expValue: "vocabulary",
+  },
+];
+
+describe.each(getFetcherKeyFixture)(
+  "given key %s, schema: %o",
+  ({ inputValue, schema, expValue }) => {
+    test(`getFetcherKey returns ${expValue}`, () => {
+      expect(
+        getFetcherKey(schema as SchemaElementType, inputValue as string),
+      ).toEqual(expValue);
+    });
+  },
+);
+
+const getSubmissionValueFixture = [
+  {
+    inputValue: "",
+    schema: { required: true, type: "select" },
+    expValue: null,
+  },
+  { inputValue: "", schema: { required: true, type: "date" }, expValue: null },
+  { inputValue: "", schema: { required: true, type: "text" }, expValue: null },
+
+  {
+    inputValue: "2021-01-01",
+    schema: { required: true, type: "date" },
+    expValue: new Date("2021-01-01"),
+  },
+  {
+    inputValue: "2021-01-01",
+    schema: { required: true, type: "select" },
+    expValue: "2021-01-01",
+  },
+  {
+    inputValue: "2021-01-01",
+    schema: { required: true, type: "text" },
+    expValue: "2021-01-01",
+  },
+];
+
+describe.each(getSubmissionValueFixture)(
+  "given key %s, schema: %o",
+  ({ inputValue, schema, expValue }) => {
+    test(`getSubmissionValue returns ${expValue}`, () => {
+      expect(
+        getSubmissionValue(schema as SchemaElementType, inputValue as string),
+      ).toEqual(expValue);
+    });
+  },
+);
+
+const getDefaultValueFixture = [
+  {
+    inputValue: "2021-11-11T00:00:00",
+    schema: { required: true, type: "date" },
+    expValue: "2021-11-11",
+  },
+  {
+    inputValue: "2021-11-11T00:00:00",
+    schema: { required: true, type: "text" },
+    expValue: "2021-11-11T00:00:00",
+  },
+  {
+    inputValue: "2021-11-11T00:00:00",
+    schema: { required: true, type: "select" },
+    expValue: "2021-11-11T00:00:00",
+  },
+];

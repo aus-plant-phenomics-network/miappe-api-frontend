@@ -7,7 +7,7 @@ import { createBox } from "@ailiyah-ui/box";
 import { capitalise, removeId } from "../helpers";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
-import { AbstractDataType } from "../../handlers";
+import { DataType } from "../../handlers";
 
 const useFetcherData = (url: string) => {
   const fetcher = useFetcher({ key: url });
@@ -66,7 +66,7 @@ const Select = React.memo(
     const url = removeId(name);
     const fetcher = useFetcherData(url);
     const data = fetcher.data
-      ? (fetcher.data as unknown as Array<AbstractDataType> | null)
+      ? (fetcher.data as unknown as Array<DataType> | null)
       : [];
 
     return (

@@ -1,14 +1,11 @@
 import { http, HttpResponse } from "msw";
-import { AbstractDataType } from "../handlers";
+import { DataType } from "../handlers";
 
 interface ParamsWithId {
   id: string;
 }
 
-const createEchoHandlers = <T extends AbstractDataType>(
-  url: string,
-  mockGetObj: T,
-) => [
+const createEchoHandlers = <T extends DataType>(url: string, mockGetObj: T) => [
   http.get(url, () => {
     return HttpResponse.json([
       {

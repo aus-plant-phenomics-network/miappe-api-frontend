@@ -4,14 +4,14 @@ import { FormComponent } from "../form";
 import React from "react";
 import { Form as _Form } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
-import { AbstractDataType, AbstractSchemaType } from "../../handlers";
+import { DataType, AbstractSchemaType } from "../../handlers";
 import { createInputArray } from "./form";
 import { createHeaders, createBody } from "./table";
 
 const Link = styled(_Link);
 const Form = styled(_Form);
 
-const createPages = <T extends AbstractDataType>(
+const createPages = <T extends DataType>(
   title: string,
   schema: AbstractSchemaType<T>,
   headers: Array<keyof T>,

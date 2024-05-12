@@ -1,7 +1,7 @@
 import { expect } from "vitest";
-import { AbstractDataType, AbstractSchemaType } from "../../handlers";
+import { DataType, AbstractSchemaType } from "../../handlers";
 
-interface TestType extends AbstractDataType {
+interface TestType extends DataType {
   firstName: string;
   secondName: string;
   thirdName?: Date | string;

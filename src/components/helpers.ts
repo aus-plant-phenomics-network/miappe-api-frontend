@@ -99,9 +99,10 @@ const removeId = (type: TypeLiterals, key: string): string => {
 const getSubmissionValue = (
   schema: SchemaElementType,
   rawValue: FormDataEntryValue,
-): string | Date | File => {
+): string | Date | File | null => {
+  if (rawValue === "") return null;
   if (schema.type === "date" && typeof rawValue === "string")
-    return rawValue !== "" ? new Date(rawValue) : "";
+    return new Date(rawValue);
   else return rawValue;
 };
 

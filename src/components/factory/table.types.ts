@@ -1,11 +1,11 @@
-import { AbstractDataType } from "../../handlers";
+import { DataType } from "../../handlers";
 
-interface HeaderOwnProps<T extends AbstractDataType> {
+interface HeaderOwnProps<T extends DataType> {
   headers: Array<keyof T>;
   title?: keyof T;
 }
 
-interface BodyOwnProps<T extends AbstractDataType> {
+interface BodyOwnProps<T extends DataType> {
   bodyData: Array<T> | null;
   fields: Array<keyof T>;
 }

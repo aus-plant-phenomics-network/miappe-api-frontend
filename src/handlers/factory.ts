@@ -1,15 +1,13 @@
 import { Params, redirect } from "react-router-dom";
 import { string2Date } from "../components";
 import {
-  AbstractDataType,
+  DataType,
   AbstractFormDataType,
   AbstractSchemaType,
   HandlerType,
 } from "../components/types";
 
-const createHandlers = <T extends AbstractDataType>(
-  url: string,
-): HandlerType<T> => {
+const createHandlers = <T extends DataType>(url: string): HandlerType<T> => {
   const getAllData = async (title?: string | null): Promise<Array<T>> => {
     const response = await fetch(
       title ? url + "?" + new URLSearchParams({ title: title }) : url,
@@ -90,7 +88,7 @@ const createHandlers = <T extends AbstractDataType>(
   };
 };
 
-const createLoaderAction = <T extends AbstractDataType, Key extends string>(
+const createLoaderAction = <T extends DataType, Key extends string>(
   handlers: HandlerType<T>,
   schema: AbstractSchemaType<T>,
   idKey: Key,

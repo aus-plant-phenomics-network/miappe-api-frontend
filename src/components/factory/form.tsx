@@ -1,23 +1,8 @@
 import React from "react";
-import { AbstractDataType, AbstractSchemaType } from "../../handlers";
+import { DataType, AbstractSchemaType } from "../../handlers";
 import { InputField } from "../form/form";
 
-const processDate = (value: string) => value.substring(0, 10);
-const processText = (value: string | number) => value.toString();
-const getDefaultValue = (
-  type: string,
-  value: string | number | undefined | null | Date,
-): string => {
-  if (value) {
-    switch (type) {
-      case "date":
-        return processDate(value as string);
-      default:
-        return processText(value as string);
-    }
-  }
-  return "";
-};
+
 
 /**
  * Convenient factory method to create a list of input fields from input data - Data that contains fields that
@@ -29,7 +14,7 @@ const getDefaultValue = (
  * @params - data - data to initialise field value
  * @returns Array<InputField>
  */
-const createInputArray = <T extends AbstractDataType>(
+const createInputArray = <T extends DataType>(
   schema: AbstractSchemaType<T>,
   exclude: Array<string> = [],
   data?: T | null,

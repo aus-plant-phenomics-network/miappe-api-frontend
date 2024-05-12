@@ -1,7 +1,7 @@
 import { createEchoServer, createErrorHandlers } from "../mock";
 import { createHandlers, createLoaderAction } from "./factory";
 import {
-  AbstractDataType,
+  DataType,
   AbstractFormDataType,
   AbstractSchemaType,
 } from "../components/types";
@@ -19,7 +19,7 @@ const TEST_DATE_STR = "2020-01-01";
 const TEST_DATE = new Date(TEST_DATE_STR);
 const TEST_URL = "http://test.com";
 const TEST_ID = "1";
-interface TestDataType extends AbstractDataType {}
+interface TestDataType extends DataType {}
 
 interface TestDataWithDateType extends TestDataType {
   submissionDate?: Date | null;
