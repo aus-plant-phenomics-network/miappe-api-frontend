@@ -12,7 +12,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
-    "test": "vitest"
+    "test": "vitest",
+    "commit": "cz"
   },
   "dependencies": {
     "@ailiyah-ui/accordion": "^0.0.2",
