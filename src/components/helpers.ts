@@ -11,7 +11,8 @@ import { SchemaElementType, TypeLiterals } from "./types";
  * @returns - boolean results on whether the input/select element should be hidden
  */
 const getHiddenValue = (schema: SchemaElementType, key: string): boolean => {
-  if (schema.hidden) return schema.hidden;
+  if (schema.hidden !== null && schema.hidden !== undefined)
+    return schema.hidden;
   return key === "id" ? true : false;
 };
 
