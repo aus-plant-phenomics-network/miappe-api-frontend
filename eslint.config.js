@@ -3,7 +3,6 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 
-
 export default [
   {
     languageOptions: {
@@ -15,7 +14,8 @@ export default [
   pluginReactConfig,
   {
     rules: {
-      "@typescript-eslint/no-explicit-any": ["off"]
+      "@typescript-eslint/no-explicit-any": ["off"],
+      "react/prop-types": ["off"],
     },
-  }
+  },
 ];
