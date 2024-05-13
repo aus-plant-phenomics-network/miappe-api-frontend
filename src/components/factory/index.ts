@@ -1,6 +1,6 @@
-export * from "./form";
-export * from "./table";
-export * from "./page";
-export * from "./theme";
+// export * from "../form/factory";
+// export * from "../table/factory";
+// export * from "./page";
+// export * from "./theme";
 
-export type * from "./table.types";
+// export type * from "../table/table.types";
