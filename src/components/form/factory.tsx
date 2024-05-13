@@ -5,7 +5,7 @@ import {
   getDefaultValue,
   getFetcherKey,
   getHiddenValue,
-  getLabelKey,
+  getTableDisplayKey,
 } from "../helpers";
 
 /**
@@ -34,7 +34,7 @@ const createInputArray = <T extends SchemaType>(
         const hidden = getHiddenValue(schema, key);
         const defaultValue = getDefaultValue(schema, data?.[key]);
         const fetcherKey = getFetcherKey(schema, key);
-        const labelKey = getLabelKey(schema, key);
+        const labelKey = getTableDisplayKey(schema, key);
         return (
           <InputField
             key={key}

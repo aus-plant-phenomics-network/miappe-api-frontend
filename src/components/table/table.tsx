@@ -9,7 +9,7 @@ import {
 } from "./table.types";
 import { useSubmit, Link } from "react-router-dom";
 import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
-import { getLabelKey } from "../helpers";
+import { getTableDisplayKey } from "../helpers";
 
 const Root = React.memo(
   React.forwardRef<HTMLDivElement, TailwindComponentProps<"div">>(
@@ -137,7 +137,7 @@ const Table = React.memo(
   >((props, ref) => {
     const { fieldData, fields, schema, ...rest } = props;
     const tableFields = React.useMemo(
-      () => fields.map(item => getLabelKey(schema[item], item)),
+      () => fields.map(item => getTableDisplayKey(schema[item], item)),
       [...fields],
     );
     return (

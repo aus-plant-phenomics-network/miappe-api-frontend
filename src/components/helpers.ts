@@ -63,7 +63,7 @@ const getDefaultValue = (
  * @param key - key of an entry in Schema
  * @returns string display value of label
  */
-const getLabelKey = (schema: SchemaElementType, key: string): string => {
+const getTableDisplayKey = (schema: SchemaElementType, key: string): string => {
   if (schema.labelKey) return schema.labelKey;
   const capitalisedKey =
     key.length >= 1 ? key[0].toUpperCase() + key.slice(1) : key;
@@ -149,7 +149,7 @@ class BaseSchema implements SchemaType {
 
 export {
   getDefaultValue,
-  getLabelKey,
+  getTableDisplayKey,
   getFetcherKey,
   getSubmissionValue,
   getHiddenValue,
