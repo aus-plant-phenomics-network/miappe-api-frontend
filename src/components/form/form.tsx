@@ -102,11 +102,17 @@ const Select = React.memo(
 );
 
 /**
- * Renders a LabelGroup with contained label and input components
+ * Renders a LabelGroup with contained label and input/select components
  * Required fields has * for label and is marked required
- * @params - hidden - hides both label and input
- * @params - required - whether input field is required
- * @params - name - name of input field
+ *
+ * @param - name: name of input/select element. Field name of formData
+ * @param - required: whether input/select value is required for form validation
+ * @param - hidden: whether input/select and the corresponding label are hidden
+ * @param - type: input type. Atm supports text, date for input, and select for select
+ * @param - defaultValue - default value (from remote server for PUT request).
+ * @param - fetcherKey - only for select. Used for fetching data from corresponding loader.
+ * @param - labelKey - label name. Will be modified to "" if hidden and have an extra * if required.
+ * @param - placeholder - placeholder value if provided
  */
 const InputField = React.memo(
   React.forwardRef<
@@ -121,6 +127,7 @@ const InputField = React.memo(
       defaultValue,
       fetcherKey,
       labelKey,
+      placeholder,
       ...rest
     } = props;
     let labelName = hidden ? "" : required ? labelKey + "*" : labelKey;
@@ -153,6 +160,7 @@ const InputField = React.memo(
             hidden={hidden}
             type={type}
             defaultValue={defaultValue}
+            placeholder={placeholder}
             themeName="FormInput"
           />
         )}
