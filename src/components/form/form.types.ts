@@ -3,7 +3,7 @@ import React from "react";
 import { TypeLiterals } from "../types";
 
 interface FormComponentOwnProp {
-  children: React.ReactNode;
+  children: React.ReactElement;
 }
 
 interface InputSelectOwnProps {
