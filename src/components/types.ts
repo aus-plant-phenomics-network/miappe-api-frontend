@@ -1,4 +1,5 @@
 type TypeLiterals = "text" | "select" | "date";
+type RelationshipLiterals = "parent" | "children";
 
 interface SchemaElementType {
   /** Type of form entry element */
@@ -13,6 +14,10 @@ interface SchemaElementType {
   labelKey?: string;
   /** Whether data should be hidden */
   hidden?: boolean;
+  /** Whether this is a self-referencing field */
+  selfReferencing?: boolean;
+  /** Only holds for self-referencing fields - relationship between the form entry and the current entry */
+  selfReferencingRelationship?: RelationshipLiterals;
 }
 
 interface SchemaType {
@@ -43,6 +48,12 @@ interface HandlerType<T extends SchemaType> {
   deleteData: (id: string) => Promise<Response>;
 }
 
+type SubmissionElementType = string | Date | File | null;
+
+type SubmissionFormType<T extends SchemaType> = {
+  [k in keyof T]: SubmissionElementType;
+};
+
 export type {
   DataType,
   SchemaElementType,
@@ -52,4 +63,6 @@ export type {
   FetchDataType,
   FetchDataSuccessType,
   FetchDataArrayType,
+  SubmissionElementType,
+  SubmissionFormType,
 };

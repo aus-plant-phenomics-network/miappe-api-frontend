@@ -1,4 +1,9 @@
-import { SchemaElementType, TypeLiterals, SchemaType } from "./types";
+import {
+  SchemaElementType,
+  TypeLiterals,
+  SchemaType,
+  SubmissionElementType,
+} from "./types";
 
 /**
  * Get hidden prop value for an input/select element.
@@ -115,7 +120,7 @@ const removeId = (type: TypeLiterals, key: string): string => {
 const getSubmissionValue = (
   schema: SchemaElementType,
   rawValue: FormDataEntryValue,
-): string | Date | File | null => {
+): SubmissionElementType => {
   if (rawValue === "") return null;
   if (schema.type === "date" && typeof rawValue === "string")
     return new Date(rawValue);
