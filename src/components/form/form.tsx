@@ -6,7 +6,7 @@ import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
-import { DataType, SchemaType } from "../../handlers";
+import { FetchDataArrayType, SchemaType } from "../types";
 
 const useFetcherData = (url: string) => {
   const fetcher = useFetcher({ key: url });
@@ -63,8 +63,8 @@ const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
     const { name, required, hidden, defaultValue, fetcherKey, ...rest } = props;
     const fetcher = useFetcherData(fetcherKey);
-    const data = fetcher.data
-      ? (fetcher.data as unknown as Array<DataType<SchemaType>> | null)
+    const data = (fetcher.data as FetchDataArrayType<SchemaType>)
+      ? (fetcher.data as FetchDataArrayType<SchemaType>)
       : [];
 
     return (
@@ -80,11 +80,12 @@ const Select = React.memo(
         >
           <option value="" hidden label="Select from dropdown" />
           {data &&
+            data.length > 0 &&
             data.map(dataItem => (
               <option
                 key={dataItem.id}
-                value={dataItem.id}
-                label={dataItem.title}
+                value={dataItem.id as string}
+                label={dataItem.title as string}
               />
             ))}
         </styled.select>
