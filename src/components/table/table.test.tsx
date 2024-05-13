@@ -1,5 +1,5 @@
 import { screen, render } from "@testing-library/react";
-import { expect, test, describe, beforeEach, vi } from "vitest";
+import { expect, test, describe, beforeEach } from "vitest";
 import {
   TestSchema,
   schema,
@@ -99,8 +99,8 @@ describe("Test Render Header", () => {
 
 describe("Test Render BodyRow with data", () => {
   describe("Rendering with all fields", () => {
-    let fieldData: FetchDataArrayType<TestSchema> = fetchDataSuccess;
-    let fields: string[] = Object.keys(schema);
+    const fieldData: FetchDataArrayType<TestSchema> = fetchDataSuccess;
+    const fields: string[] = Object.keys(schema);
     beforeEach(() => {
       render(<Components.Body fields={fields} fieldData={fieldData} />);
     });
@@ -122,8 +122,8 @@ describe("Test Render BodyRow with data", () => {
   });
 
   describe(`Rendering with omitted field: ${excludedKeys}`, () => {
-    let fieldData: FetchDataArrayType<TestSchema> = fetchDataSuccess;
-    let fields: string[] = Object.keys(schema).filter(
+    const fieldData: FetchDataArrayType<TestSchema> = fetchDataSuccess;
+    const fields: string[] = Object.keys(schema).filter(
       item => !excludedKeys.includes(item),
     );
     beforeEach(() => {

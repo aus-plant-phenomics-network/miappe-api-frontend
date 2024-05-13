@@ -1,4 +1,4 @@
-import { expect, test, describe, beforeAll } from "vitest";
+import { expect, test, describe } from "vitest";
 import { SchemaElementType, SchemaType } from "../types";
 import { BaseSchema } from "./form.helpers";
 import { createInputArray } from "./factory";
@@ -317,9 +317,12 @@ const TestLabelSchema: SchemaType = {
 };
 
 describe("test createInputArray omiting BaseSchema items", () => {
-  let array: React.ReactElement[];
-  let arrayFixtureProp: Array<[React.ReactElement, TestFixture]> = [];
-  array = createInputArray(TestLabelSchema, ["id", "title", "description"]);
+  const array: React.ReactElement[] = createInputArray(TestLabelSchema, [
+    "id",
+    "title",
+    "description",
+  ]);
+  const arrayFixtureProp: Array<[React.ReactElement, TestFixture]> = [];
   for (let i = 0; i < array.length; i++) {
     arrayFixtureProp.push([array[i], FixtureArray[i]]);
   }

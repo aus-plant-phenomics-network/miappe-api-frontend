@@ -1,4 +1,4 @@
-import { SchemaType, DataType, SchemaElementType } from "../types";
+import { SchemaType } from "../types";
 
 // Set up schema and data returned by loader
 

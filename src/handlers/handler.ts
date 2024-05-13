@@ -105,6 +105,7 @@ class Handler<T extends SchemaType, Key extends string> {
       return acc;
     }, {} as any);
   };
+
   public loaderAll = async ({
     request,
   }: {

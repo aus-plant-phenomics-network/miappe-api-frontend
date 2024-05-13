@@ -1,13 +1,9 @@
-import { expect } from "vitest";
-import { screen } from "@testing-library/react";
-import { Body, BodyRow, Header, Root } from "./table";
+import { Body, Header, Root } from "./table";
 import React from "react";
 import {
   FetchDataArrayType,
   FetchDataSuccessType,
-  FetchDataType,
   SchemaElementType,
-  SchemaType,
 } from "../types";
 import { BaseSchema } from "../helpers";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";

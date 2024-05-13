@@ -1,4 +1,3 @@
-import React from "react";
 import { SchemaType, FetchDataArrayType, FetchDataSuccessType } from "../types";
 
 interface TableFields {

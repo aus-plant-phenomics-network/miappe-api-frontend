@@ -131,7 +131,7 @@ const InputField = React.memo(
       placeholder,
       ...rest
     } = props;
-    let labelName = hidden ? "" : required ? labelKey + "*" : labelKey;
+    const labelName = hidden ? "" : required ? labelKey + "*" : labelKey;
     const id = rest.id ? rest.id : React.useId();
 
     return (
