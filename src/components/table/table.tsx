@@ -90,7 +90,7 @@ const BodyRow = React.memo(
   >((props, ref) => {
     const { rowItem, fields, ...rest } = props;
     const id = rowItem.id;
-    const href = `/${id}`;
+    const href = `${id}`;
 
     return (
       <styled.tr key={id} {...rest} ref={ref}>
