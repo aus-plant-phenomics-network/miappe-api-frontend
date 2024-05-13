@@ -1,3 +1,6 @@
-export * from "./study";
-export * from "./handlers";
-export type * from "./study.types";
+import { StudySchema } from "./type";
+import { createRoutes } from "../../factory/factory";
+
+const StudyRoutes = createRoutes(StudySchema, "study");
+
+export { StudyRoutes };

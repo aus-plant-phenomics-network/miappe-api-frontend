@@ -1,7 +1,15 @@
 import React from "react";
 import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
+import {
+  BodyOwnProps,
+  BodyRowComponentOwnProps,
+  BodyRowOwnProps,
+  HeaderOwnProps,
+} from "./table.types";
+import { useSubmit, Link } from "react-router-dom";
+import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
 
-const Table = React.memo(
+const Root = React.memo(
   React.forwardRef<HTMLDivElement, TailwindComponentProps<"div">>(
     (props, ref) => {
       const { children, ...rest } = props;
@@ -10,8 +18,114 @@ const Table = React.memo(
           <styled.table themeName="Table">{children}</styled.table>
         </styled.div>
       );
-    }
-  )
+    },
+  ),
 );
 
-export { Table };
+const Header = React.memo(
+  React.forwardRef<
+    HTMLTableRowElement,
+    TailwindComponentProps<"thead"> & HeaderOwnProps
+  >((props, ref) => {
+    const { fields, ...rest } = props;
+    return (
+      <styled.thead themeName="TableHead" ref={ref} {...rest}>
+        <styled.tr themeName="TableHeadRow">
+          {fields &&
+            fields.map(field => (
+              <styled.th colSpan={1} key={field} themeName="TableHeadHeader">
+                {field}
+              </styled.th>
+            ))}
+          <styled.th themeName="TableHeadHeader">Action</styled.th>
+        </styled.tr>
+      </styled.thead>
+    );
+  }),
+);
+
+// ThemeName: TableBodyData
+const BodyRowComponent = React.memo(
+  React.forwardRef<
+    HTMLTableCellElement,
+    TailwindComponentProps<"td"> & BodyRowComponentOwnProps
+  >((props, ref) => {
+    const { href, ...rest } = props;
+    const submit = useSubmit();
+
+    const dialogOnSubmit = (e: React.MouseEvent) => {
+      e.preventDefault();
+      submit(
+        {},
+        {
+          method: "DELETE",
+          action: `${href}/delete`,
+        },
+      );
+    };
+
+    return (
+      <styled.td {...rest} ref={ref}>
+        <Link to={href}>
+          <EditButton tooltipContent="Edit Entry" />
+        </Link>
+        <DeleteAlertButton
+          tooltipContent="Delete Entry"
+          dialogTitle="Remove Entry"
+          dialogDescription="This action is PERMANENT. Are you sure you want to continue?"
+          dialogCancelButtonName="Cancel"
+          dialogSubmitButtonName="Proceed"
+          dialogOnCancel={() => {}}
+          dialogOnSubmit={dialogOnSubmit}
+        />
+      </styled.td>
+    );
+  }),
+);
+
+const BodyRow = React.memo(
+  React.forwardRef<
+    HTMLTableRowElement,
+    TailwindComponentProps<"tr"> & BodyRowOwnProps
+  >((props, ref) => {
+    const { rowItem, fields, ...rest } = props;
+    const id = rowItem.id;
+    const href = `${id}`;
+
+    return (
+      <styled.tr key={id} {...rest} ref={ref}>
+        {fields.map(field => (
+          <styled.td key={field} themeName="TableBodyData" colSpan={1}>
+            {rowItem[field] ? rowItem[field] : ""}
+          </styled.td>
+        ))}
+        <BodyRowComponent href={href} themeName="TableBodyData" />
+      </styled.tr>
+    );
+  }),
+);
+
+const Body = React.memo(
+  React.forwardRef<
+    HTMLTableSectionElement,
+    TailwindComponentProps<"tbody"> & BodyOwnProps
+  >((props, ref) => {
+    const { fields, fieldData, ...rest } = props;
+    return (
+      <styled.tbody themeName="TableBody" {...rest} ref={ref}>
+        {fieldData &&
+          fieldData.length > 0 &&
+          fieldData.map(rowItem => (
+            <BodyRow
+              key={rowItem.id}
+              fields={fields}
+              rowItem={rowItem}
+              themeName="TableBodyRow"
+            />
+          ))}
+      </styled.tbody>
+    );
+  }),
+);
+
+export { Root, Header, Body, BodyRow, BodyRowComponent };

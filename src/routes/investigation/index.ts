@@ -1,3 +1,6 @@
-export * from "./investigation";
-export * from "./handlers";
-export type * from "./investigation.types";
+import { InvestigationSchema } from "./type";
+import { createRoutes } from "../../factory/factory";
+
+const InvestigationRoutes = createRoutes(InvestigationSchema, "investigation");
+
+export { InvestigationRoutes };
