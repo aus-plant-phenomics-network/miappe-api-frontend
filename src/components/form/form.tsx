@@ -131,13 +131,12 @@ const InputField = React.memo(
       placeholder,
       ...rest
     } = props;
-    const labelName = hidden ? "" : required ? labelKey + "*" : labelKey;
     const id = rest.id ? rest.id : React.useId();
 
     return (
       <LabelGroup themeName="FormLabelGroup">
         <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
-          {labelName}
+          {labelKey}
         </Label>
         {type === "select" ? (
           <Select
