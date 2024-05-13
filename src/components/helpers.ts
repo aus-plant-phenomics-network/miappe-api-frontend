@@ -29,7 +29,7 @@ const getHiddenValue = (schema: SchemaElementType, key: string): boolean => {
  */
 const getDefaultValue = (
   schema: SchemaElementType,
-  value: string | null,
+  value: string | null | undefined,
 ): string => {
   if (value) {
     switch (schema.type) {
