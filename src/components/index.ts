@@ -1,4 +1,3 @@
-export * from "../handlers/factory";
 export * from "./helpers";
 export * from "./navbar";
 export * from "./table";
