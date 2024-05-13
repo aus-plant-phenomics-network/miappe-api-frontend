@@ -1,4 +1,4 @@
-import { SchemaElementType, TypeLiterals } from "./types";
+import { SchemaElementType, TypeLiterals, SchemaType } from "./types";
 
 /**
  * Get hidden prop value for an input/select element.
@@ -122,6 +122,26 @@ const getSubmissionValue = (
   else return rawValue;
 };
 
+/**
+ * ABC for schema type. This class can be extended to specify data schema.
+ * This is to avoid having to define a schema.json file and a schema.type.ts
+ * file with duplicated information
+ */
+class BaseSchema implements SchemaType {
+  id: SchemaElementType = { type: "text", required: true, hidden: true };
+  title: SchemaElementType = {
+    type: "text",
+    required: true,
+    placeholder: "Enter Title",
+  };
+  description: SchemaElementType = {
+    type: "text",
+    required: false,
+    placeholder: "Enter Description",
+  };
+  [k: string]: SchemaElementType;
+}
+
 export {
   getDefaultValue,
   getLabelKey,
@@ -129,4 +149,5 @@ export {
   getSubmissionValue,
   getHiddenValue,
   removeId,
+  BaseSchema,
 };
