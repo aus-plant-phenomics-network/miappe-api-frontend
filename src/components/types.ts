@@ -26,6 +26,15 @@ type DataType<T extends SchemaType> = {
   [k in keyof T]: string;
 };
 
+type FetchDataSuccessType<T extends SchemaType> = {
+  [k in keyof T]: string | null;
+};
+
+type FetchDataType<T extends SchemaType> = FetchDataSuccessType<T> | null;
+type FetchDataArrayType<T extends SchemaType> = Array<
+  FetchDataSuccessType<T>
+> | null;
+
 interface HandlerType<T extends SchemaType> {
   getAllData: (title?: string | null) => Promise<Array<DataType<T> | null>>;
   getDataById: (id: string) => Promise<DataType<T> | null>;
@@ -40,4 +49,7 @@ export type {
   SchemaType,
   HandlerType,
   TypeLiterals,
+  FetchDataType,
+  FetchDataSuccessType,
+  FetchDataArrayType,
 };
