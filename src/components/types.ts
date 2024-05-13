@@ -40,14 +40,6 @@ type FetchDataArrayType<T extends SchemaType> = Array<
   FetchDataSuccessType<T>
 > | null;
 
-interface HandlerType<T extends SchemaType> {
-  getAllData: (title?: string | null) => Promise<Array<DataType<T> | null>>;
-  getDataById: (id: string) => Promise<DataType<T> | null>;
-  createData: (data: T) => Promise<DataType<T>>;
-  updateData: (data: T, id: string) => Promise<DataType<T>>;
-  deleteData: (id: string) => Promise<Response>;
-}
-
 type SubmissionElementType = string | Date | File | null;
 
 type SubmissionFormType<T extends SchemaType> = {
@@ -58,7 +50,6 @@ export type {
   DataType,
   SchemaElementType,
   SchemaType,
-  HandlerType,
   TypeLiterals,
   FetchDataType,
   FetchDataSuccessType,
