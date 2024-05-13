@@ -4,10 +4,9 @@ import React from "react";
 import { Form, FormProps, useFetcher, Link } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
-import { capitalise, removeId } from "../helpers";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
-import { DataType } from "../../handlers";
+import { DataType, SchemaType } from "../../handlers";
 
 const useFetcherData = (url: string) => {
   const fetcher = useFetcher({ key: url });
@@ -62,20 +61,22 @@ const Input = styled("input");
  */
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    const { name, ...rest } = props;
-    const url = removeId(name);
-    const fetcher = useFetcherData(url);
+    const { name, required, hidden, defaultValue, fetcherKey, ...rest } = props;
+    const fetcher = useFetcherData(fetcherKey);
     const data = fetcher.data
-      ? (fetcher.data as unknown as Array<DataType> | null)
+      ? (fetcher.data as unknown as Array<DataType<SchemaType>> | null)
       : [];
 
     return (
       <styled.div themeName="FormSelectContainer">
         <styled.select
-          {...rest}
-          name={name}
           aria-label={`${name}-select`}
           ref={ref}
+          {...rest}
+          name={name}
+          required={required}
+          hidden={hidden}
+          defaultValue={defaultValue}
         >
           <option value="" hidden label="Select from dropdown" />
           {data &&
@@ -87,7 +88,7 @@ const Select = React.memo(
               />
             ))}
         </styled.select>
-        <Link to={`../${url}/create`} aria-label={`${name}-create-link`}>
+        <Link to={`../${fetcherKey}/create`} aria-label={`${name}-create-link`}>
           <AddButton
             tooltipContent="Add"
             type="button"
@@ -112,37 +113,46 @@ const InputField = React.memo(
     HTMLInputElement | HTMLSelectElement,
     InputProps | SelectProps
   >((props, ref) => {
-    const { name, required, hidden, type, ...rest } = props;
+    const {
+      name,
+      required,
+      hidden,
+      type,
+      defaultValue,
+      fetcherKey,
+      labelKey,
+      ...rest
+    } = props;
+    let labelName = hidden ? "" : required ? labelKey + "*" : labelKey;
     const id = rest.id ? rest.id : React.useId();
-
-    // Process label name and input name
-    let labelName = removeId(capitalise(name));
-    if (required) labelName = labelName + "*";
 
     return (
       <LabelGroup themeName="FormLabelGroup">
         <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
-          {hidden ? "" : labelName}
+          {labelName}
         </Label>
         {type === "select" ? (
           <Select
-            {...(rest as SelectProps)}
-            hidden={hidden}
-            name={name}
             id={id}
             ref={ref as React.Ref<HTMLSelectElement>}
+            {...(rest as SelectProps)}
+            name={name}
             required={required}
+            hidden={hidden}
+            defaultValue={defaultValue}
+            fetcherKey={fetcherKey}
             themeName="FormSelect"
           />
         ) : (
           <Input
-            {...(rest as InputProps)}
-            type={type}
-            hidden={hidden}
-            name={name}
             id={id}
+            {...(rest as InputProps)}
             ref={ref}
+            name={name}
             required={required}
+            hidden={hidden}
+            type={type}
+            defaultValue={defaultValue}
             themeName="FormInput"
           />
         )}
