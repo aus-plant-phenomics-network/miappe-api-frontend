@@ -5,9 +5,11 @@ import {
   BodyRowComponentOwnProps,
   BodyRowOwnProps,
   HeaderOwnProps,
+  TableOwnProps,
 } from "./table.types";
 import { useSubmit, Link } from "react-router-dom";
 import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
+import { getLabelKey } from "../helpers";
 
 const Root = React.memo(
   React.forwardRef<HTMLDivElement, TailwindComponentProps<"div">>(
@@ -128,4 +130,23 @@ const Body = React.memo(
   }),
 );
 
-export { Root, Header, Body, BodyRow, BodyRowComponent };
+const Table = React.memo(
+  React.forwardRef<
+    HTMLTableElement,
+    TailwindComponentProps<"table"> & TableOwnProps
+  >((props, ref) => {
+    const { fieldData, fields, schema, ...rest } = props;
+    const tableFields = React.useMemo(
+      () => fields.map(item => getLabelKey(schema[item], item)),
+      [...fields],
+    );
+    return (
+      <Root {...rest} ref={ref}>
+        <Header fields={tableFields} />
+        <Body fields={fields} fieldData={fieldData} />
+      </Root>
+    );
+  }),
+);
+
+export { Root, Header, Body, BodyRow, BodyRowComponent, Table };
