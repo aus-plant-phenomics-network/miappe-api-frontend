@@ -5,7 +5,7 @@ interface SchemaElementType {
   /** Type of form entry element */
   type: TypeLiterals;
   /** Whether users are required to fill form value */
-  required: boolean;
+  required?: boolean;
   /** Place holder value or guide */
   placeholder?: string;
   /** Key to be used for fetcher - for id related key only */
