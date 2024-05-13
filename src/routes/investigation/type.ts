@@ -1,12 +1,12 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class InvestigationType extends BaseSchema {
-  submissionDate: SchemaElementType = { type: "date", required: false };
-  publicReleaseDate: SchemaElementType = { type: "date", required: false };
-  license: SchemaElementType = { type: "text", required: false };
-  publicationDoi: SchemaElementType = { type: "text", required: false };
-  website: SchemaElementType = { type: "text", required: false };
-  funding: SchemaElementType = { type: "text", required: false };
+  submissionDate: SchemaElementType = { type: "date" };
+  publicReleaseDate: SchemaElementType = { type: "date" };
+  license: SchemaElementType = { type: "text" };
+  publicationDoi: SchemaElementType = { type: "text" };
+  website: SchemaElementType = { type: "text" };
+  funding: SchemaElementType = { type: "text" };
 }
 
 const InvestigationSchema = new InvestigationType();
