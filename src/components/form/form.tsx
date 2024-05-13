@@ -1,4 +1,4 @@
-import { FormComponentOwnProp, SelectProps } from "./form.types";
+import { SelectProps } from "./form.types";
 import { TailwindProps } from "@ailiyah-ui/utils";
 import React from "react";
 import { Form, FormProps, useFetcher, Link } from "react-router-dom";
@@ -172,7 +172,7 @@ const InputField = React.memo(
 
 const FormComponent = React.forwardRef<
   HTMLFormElement,
-  Omit<FormProps, "children"> & TailwindProps & FormComponentOwnProp
+  FormProps & TailwindProps
 >((props, ref) => {
   const { children, ...rest } = props;
   return (

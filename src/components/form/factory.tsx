@@ -1,6 +1,6 @@
 import React from "react";
 import { InputField } from "./form";
-import { SchemaType, DataType } from "../types";
+import { SchemaType, FetchDataType } from "../types";
 import {
   getDefaultValue,
   getFetcherKey,
@@ -21,7 +21,7 @@ import {
 const createInputArray = <T extends SchemaType>(
   schema: T,
   exclude: Array<string> = [],
-  data?: DataType<T> | null,
+  data?: FetchDataType<T>,
 ): Array<React.ReactElement> => {
   return (
     Object.entries(schema)

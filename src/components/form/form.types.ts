@@ -1,10 +1,5 @@
 import { TailwindComponentProps } from "@ailiyah-ui/factory";
-import React from "react";
 import { TypeLiterals } from "../types";
-
-interface FormComponentOwnProp {
-  children: React.ReactElement;
-}
 
 interface InputSelectOwnProps {
   name: string;
@@ -31,4 +26,4 @@ interface SelectProps
     >,
     InputSelectOwnProps {}
 
-export type { FormComponentOwnProp, InputProps, SelectProps };
+export type { InputProps, SelectProps };
