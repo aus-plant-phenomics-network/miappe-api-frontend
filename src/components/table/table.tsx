@@ -9,7 +9,8 @@ import {
 } from "./table.types";
 import { useSubmit, Link } from "react-router-dom";
 import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
-import { getTableDisplayKey } from "../helpers";
+import { getDefaultValue, getTableDisplayKey } from "../helpers";
+import { FetchDataSuccessType, SchemaType } from "../types";
 
 const Root = React.memo(
   React.forwardRef<HTMLDivElement, TailwindComponentProps<"div">>(
@@ -136,14 +137,37 @@ const Table = React.memo(
     TailwindComponentProps<"table"> & TableOwnProps
   >((props, ref) => {
     const { fieldData, fields, schema, ...rest } = props;
+    // Process table display fields
     const tableFields = React.useMemo(
       () => fields.map(item => getTableDisplayKey(schema[item], item)),
       [...fields],
     );
+
+    /** TODO: update this method to allow for reference field value replacement
+     * TODO: profile to see at what level is JSON.stringify table data to avoid
+     * rerendering worth it/not worth it
+     */
+    // Process display value
+    const tableData = React.useMemo(
+      () =>
+        fieldData
+          ? fieldData.map(
+              dataItem =>
+                Object.fromEntries(
+                  fields.map(field => [
+                    field,
+                    getDefaultValue(schema[field], dataItem[field]),
+                  ]),
+                ) as FetchDataSuccessType<SchemaType>,
+            )
+          : null,
+      [JSON.stringify(fieldData)],
+    );
+
     return (
       <Root {...rest} ref={ref}>
         <Header fields={tableFields} />
-        <Body fields={fields} fieldData={fieldData} />
+        <Body fields={fields} fieldData={tableData} />
       </Root>
     );
   }),

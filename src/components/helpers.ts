@@ -71,7 +71,7 @@ const getTableDisplayKey = (schema: SchemaElementType, key: string): string => {
 };
 
 const getFormDisplayKey = (schema: SchemaElementType, key: string): string => {
-  let retVal = getTableDisplayKey(schema, key);
+  const retVal = getTableDisplayKey(schema, key);
   return schema.hidden ? "" : schema.required ? retVal + "*" : retVal;
 };
 
