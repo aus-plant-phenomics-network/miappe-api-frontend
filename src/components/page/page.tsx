@@ -5,7 +5,7 @@ import { styled } from "@ailiyah-ui/factory";
 import React from "react";
 import { FormComponent } from "../form";
 import { useLoaderData, Link as _Link, Form as _Form } from "react-router-dom";
-import * as Table from "../table";
+import { Table } from "../table";
 
 const Link = styled(_Link);
 const Form = styled(_Form);
@@ -31,10 +31,7 @@ function DetailPage({ schema, title }: { schema: SchemaType; title: string }) {
           </Link>
         </styled.div>
       </Form>
-      <Table.Root>
-        <Table.Header fields={fields} />
-        <Table.Body fieldData={fieldData} fields={fields} />
-      </Table.Root>
+      <Table fields={fields} fieldData={fieldData} schema={schema} />
     </styled.div>
   );
 }

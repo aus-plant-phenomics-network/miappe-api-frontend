@@ -4,8 +4,10 @@ import { SchemaType, FetchDataType } from "../types";
 import {
   getDefaultValue,
   getFetcherKey,
+  getFormDisplayKey,
   getHiddenValue,
-  getLabelKey,
+  getPlaceHolderValue,
+  getRequired,
 } from "../helpers";
 
 /**
@@ -29,12 +31,12 @@ const createInputArray = <T extends SchemaType>(
       .filter(key => !exclude.includes(key[0]))
       .map(([key, schema]) => {
         const type = schema.type;
-        const required = schema.required;
-        const placeholder = schema.placeholder ? schema.placeholder : "";
+        const required = getRequired(schema);
+        const placeholder = getPlaceHolderValue(schema, key);
         const hidden = getHiddenValue(schema, key);
         const defaultValue = getDefaultValue(schema, data?.[key]);
         const fetcherKey = getFetcherKey(schema, key);
-        const labelKey = getLabelKey(schema, key);
+        const labelKey = getFormDisplayKey(schema, key);
         return (
           <InputField
             key={key}

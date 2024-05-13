@@ -48,12 +48,12 @@ const getDefaultValue = (
 };
 
 /**
- * Get the string to be display as label for input/select element. If
+ * Get the string to be display as table header field. If
  * provided in schema, the schema value will be used. Otherwise, capitalise
  * the key associated with the schema and return it, or additionally remove
  * the trailing Id if schema type is select.
  *
- * The main use case of this is when label key is different from submission key
+ * The main use case of this is when header field is different from submission key
  * (the key param or the name of corresponding input/select). For instance, `Study`
  * references `Investigation` with `investigation_id` attribute in the backend.
  * Key or input name is thus set as `investigationId`. If labelKey is not provided,
@@ -63,11 +63,29 @@ const getDefaultValue = (
  * @param key - key of an entry in Schema
  * @returns string display value of label
  */
-const getLabelKey = (schema: SchemaElementType, key: string): string => {
+const getTableDisplayKey = (schema: SchemaElementType, key: string): string => {
   if (schema.labelKey) return schema.labelKey;
   const capitalisedKey =
     key.length >= 1 ? key[0].toUpperCase() + key.slice(1) : key;
   return removeId(schema.type, capitalisedKey);
+};
+
+const getFormDisplayKey = (schema: SchemaElementType, key: string): string => {
+  const retVal = getTableDisplayKey(schema, key);
+  return schema.hidden ? "" : schema.required ? retVal + "*" : retVal;
+};
+
+const getPlaceHolderValue = (
+  schema: SchemaElementType,
+  key: string,
+): string => {
+  if (schema.placeholder) return schema.placeholder;
+  return "Enter " + getTableDisplayKey(schema, key);
+};
+
+const getRequired = (schema: SchemaElementType): boolean => {
+  if (schema.required) return true;
+  return false;
 };
 
 /**
@@ -149,10 +167,13 @@ class BaseSchema implements SchemaType {
 
 export {
   getDefaultValue,
-  getLabelKey,
+  getTableDisplayKey,
   getFetcherKey,
   getSubmissionValue,
   getHiddenValue,
+  getFormDisplayKey,
+  getPlaceHolderValue,
+  getRequired,
   removeId,
   BaseSchema,
 };

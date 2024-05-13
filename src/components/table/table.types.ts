@@ -10,6 +10,10 @@ interface BodyOwnProps extends TableFields {
   fieldData: FetchDataArrayType<SchemaType>;
 }
 
+interface TableOwnProps extends BodyOwnProps {
+  schema: SchemaType;
+}
+
 interface BodyRowOwnProps extends TableFields {
   rowItem: FetchDataSuccessType<SchemaType>;
 }
@@ -23,4 +27,5 @@ export type {
   BodyOwnProps,
   BodyRowOwnProps,
   BodyRowComponentOwnProps,
+  TableOwnProps,
 };

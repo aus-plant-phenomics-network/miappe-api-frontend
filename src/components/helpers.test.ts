@@ -1,6 +1,6 @@
 import {
   removeId,
-  getLabelKey,
+  getTableDisplayKey,
   getFetcherKey,
   getSubmissionValue,
   getDefaultValue,
@@ -25,7 +25,7 @@ describe.each(removeIdFixture)(
   },
 );
 
-const getLabelKeyFixture = [
+const getTableDisplayKeyFixture = [
   {
     inputValue: "",
     schema: { required: true, type: "select" },
@@ -104,12 +104,12 @@ const getLabelKeyFixture = [
   },
 ];
 
-describe.each(getLabelKeyFixture)(
+describe.each(getTableDisplayKeyFixture)(
   "given key %s, schema: %o",
   ({ inputValue, schema, expValue }) => {
-    test(`getLabelKey returns ${expValue}`, () => {
+    test(`getTableDisplayKey returns ${expValue}`, () => {
       expect(
-        getLabelKey(schema as SchemaElementType, inputValue as string),
+        getTableDisplayKey(schema as SchemaElementType, inputValue as string),
       ).toEqual(expValue);
     });
   },

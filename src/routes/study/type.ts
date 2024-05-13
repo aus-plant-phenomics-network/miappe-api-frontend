@@ -1,9 +1,9 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class StudyType extends BaseSchema {
-  objective: SchemaElementType = { type: "text", required: false };
+  objective: SchemaElementType = { type: "text", required: true };
   startDate: SchemaElementType = { type: "date", required: true };
-  endDate: SchemaElementType = { type: "date", required: false };
+  endDate: SchemaElementType = { type: "date" };
   investigationId: SchemaElementType = {
     type: "select",
     required: true,

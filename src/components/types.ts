@@ -5,7 +5,7 @@ interface SchemaElementType {
   /** Type of form entry element */
   type: TypeLiterals;
   /** Whether users are required to fill form value */
-  required: boolean;
+  required?: boolean;
   /** Place holder value or guide */
   placeholder?: string;
   /** Key to be used for fetcher - for id related key only */
@@ -40,14 +40,6 @@ type FetchDataArrayType<T extends SchemaType> = Array<
   FetchDataSuccessType<T>
 > | null;
 
-interface HandlerType<T extends SchemaType> {
-  getAllData: (title?: string | null) => Promise<Array<DataType<T> | null>>;
-  getDataById: (id: string) => Promise<DataType<T> | null>;
-  createData: (data: T) => Promise<DataType<T>>;
-  updateData: (data: T, id: string) => Promise<DataType<T>>;
-  deleteData: (id: string) => Promise<Response>;
-}
-
 type SubmissionElementType = string | Date | File | null;
 
 type SubmissionFormType<T extends SchemaType> = {
@@ -58,7 +50,6 @@ export type {
   DataType,
   SchemaElementType,
   SchemaType,
-  HandlerType,
   TypeLiterals,
   FetchDataType,
   FetchDataSuccessType,
