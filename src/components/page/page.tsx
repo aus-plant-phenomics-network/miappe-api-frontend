@@ -4,7 +4,12 @@ import { FetchDataArrayType, FetchDataType, SchemaType } from "../types";
 import { styled } from "@ailiyah-ui/factory";
 import React from "react";
 import { FormComponent } from "../form";
-import { useLoaderData, Link as _Link, Form as _Form } from "react-router-dom";
+import {
+  useLoaderData,
+  Link as _Link,
+  Form as _Form,
+  useNavigate,
+} from "react-router-dom";
 import { Table } from "../table";
 
 const Link = styled(_Link);
@@ -43,13 +48,20 @@ function CreatePage({
   children: React.ReactElement[];
   title: string;
 }) {
+  const navigate = useNavigate();
+  const onSubmit = React.useCallback(() => {
+    navigate(-1);
+  }, []);
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
       <styled.p themeName="PageDescription">
         Create a new {title} entry by filling out the form below.
       </styled.p>
-      <FormComponent method="POST">{children}</FormComponent>;
+      <FormComponent method="POST" navigate={false} onSubmit={onSubmit}>
+        {children}
+      </FormComponent>
+      ;
     </styled.div>
   );
 }
@@ -60,13 +72,20 @@ function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
     () => createInputArray(schema, [], data),
     [JSON.stringify(data)],
   );
+  const navigate = useNavigate();
+  const onSubmit = React.useCallback(() => {
+    navigate(-1);
+  }, []);
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
       <styled.p themeName="PageDescription">
         Update the current {title} entry by filling out the form below.
       </styled.p>
-      <FormComponent method="PUT">{updateComponents}</FormComponent>;
+      <FormComponent method="PUT" navigate={false} onSubmit={onSubmit}>
+        {updateComponents}
+      </FormComponent>
+      ;
     </styled.div>
   );
 }
