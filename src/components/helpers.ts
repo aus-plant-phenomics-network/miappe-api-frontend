@@ -64,9 +64,11 @@ const getDefaultValue = (
  * @returns string display value of label
  */
 const getTableDisplayKey = (schema: SchemaElementType, key: string): string => {
-  if (schema.labelKey) return schema.labelKey;
+  const labelKey = schema.labelKey ? schema.labelKey : key;
   const capitalisedKey =
-    key.length >= 1 ? key[0].toUpperCase() + key.slice(1) : key;
+    labelKey.length >= 1
+      ? labelKey[0].toUpperCase() + labelKey.slice(1)
+      : labelKey;
   return removeId(schema.type, capitalisedKey);
 };
 
@@ -161,6 +163,16 @@ class BaseSchema implements SchemaType {
     type: "text",
     required: false,
     placeholder: "Enter Description",
+  };
+  createdAt: SchemaElementType = {
+    type: "date",
+    required: false,
+    hidden: true,
+  };
+  updatedAt: SchemaElementType = {
+    type: "date",
+    required: false,
+    hidden: true,
   };
   [k: string]: SchemaElementType;
 }

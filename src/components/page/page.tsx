@@ -4,41 +4,56 @@ import { FetchDataArrayType, FetchDataType, SchemaType } from "../types";
 import { styled } from "@ailiyah-ui/factory";
 import React from "react";
 import { FormComponent } from "../form";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import {
-  useLoaderData,
-  Link as _Link,
-  Form as _Form,
-  useNavigate,
-} from "react-router-dom";
+  PageSearchForm,
+  NewItemButton,
+  FieldSelection,
+  SelectFieldsDropDown,
+} from "./widget";
 import { Table } from "../table";
 
-const Link = styled(_Link);
-const Form = styled(_Form);
-
-function DetailPage({ schema, title }: { schema: SchemaType; title: string }) {
+function DetailPage({
+  fields,
+  schema,
+  title,
+  children,
+}: {
+  fields: string[];
+  schema: SchemaType;
+  title: string;
+  children: React.ReactElement[];
+}) {
   const fieldData = useLoaderData() as FetchDataArrayType<SchemaType>;
-  const fields = Object.keys(schema);
+
+  // Props for field selection component
+  const [displayFields, setDisplayFields] = React.useState<FieldSelection>(() =>
+    Object.fromEntries(
+      fields.map(field => {
+        return [field, ["title", "description"].includes(field)];
+      }),
+    ),
+  );
+
+  // Get fields to be displayed for table
+  const tableFields = Object.entries(displayFields)
+    .filter(item => item[1])
+    .map(item => item[0]);
+
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
-      <Form id="search-form" role="search" themeName="PageComponent">
-        <styled.div themeName="PageComponentContent">
-          <styled.input
-            id="title"
-            aria-label="Search title"
-            placeholder="Search"
-            type="search"
-            name="title"
-            themeName="PageSearchInput"
-          />
-          <Link to={`/${title}/create`} themeName="PageNewButton">
-            New Item
-          </Link>
-        </styled.div>
-      </Form>
+      <styled.div themeName="PageComponent">
+        {children}
+        <SelectFieldsDropDown
+          fields={displayFields}
+          setFields={setDisplayFields}
+          schema={schema}
+        />
+      </styled.div>
       <Table
         key={title}
-        fields={fields}
+        fields={tableFields}
         fieldData={fieldData}
         schema={schema}
       />
@@ -66,7 +81,6 @@ function CreatePage({
       <FormComponent method="POST" navigate={false} onSubmit={onSubmit}>
         {children}
       </FormComponent>
-      ;
     </styled.div>
   );
 }
@@ -90,7 +104,6 @@ function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
       <FormComponent method="PUT" navigate={false} onSubmit={onSubmit}>
         {updateComponents}
       </FormComponent>
-      ;
     </styled.div>
   );
 }
@@ -99,24 +112,42 @@ class Page<T extends SchemaType, Key extends string> {
   schema: T;
   handler: Handler<T, Key>;
   title: string;
+  fields: string[];
 
   constructor(title: string, schema: T, handler: Handler<T, Key>) {
     this.schema = schema;
     this.handler = handler;
     this.title = title;
+    this.fields = Object.keys(schema);
   }
 
   getCreatePage() {
     const components = createInputArray(this.schema);
-    return <CreatePage title={this.title}>{components}</CreatePage>;
+    return (
+      <CreatePage key={this.title} title={this.title}>
+        {components}
+      </CreatePage>
+    );
   }
 
   getUpdatePage() {
-    return <UpdatePage title={this.title} schema={this.schema} />;
+    return (
+      <UpdatePage key={this.title} title={this.title} schema={this.schema} />
+    );
   }
 
   getDetailsPage() {
-    return <DetailPage title={this.title} schema={this.schema} />;
+    return (
+      <DetailPage
+        title={this.title}
+        schema={this.schema}
+        fields={this.fields}
+        key={this.title}
+      >
+        <PageSearchForm />
+        <NewItemButton title={this.title} />
+      </DetailPage>
+    );
   }
 }
 

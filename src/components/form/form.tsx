@@ -61,7 +61,7 @@ const Input = styled("input");
  */
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    const { name, required, hidden, defaultValue, fetcherKey, ...rest } = props;
+    const { name, required, defaultValue, fetcherKey, ...rest } = props;
     const fetcher = useFetcherData(fetcherKey);
     const data = (fetcher.data as FetchDataArrayType<SchemaType>)
       ? (fetcher.data as FetchDataArrayType<SchemaType>)
@@ -75,7 +75,6 @@ const Select = React.memo(
           {...rest}
           name={name}
           required={required}
-          hidden={hidden}
           defaultValue={defaultValue}
         >
           <option value="" hidden label="Select from dropdown" />
@@ -134,8 +133,10 @@ const InputField = React.memo(
     const id = rest.id ? rest.id : React.useId();
 
     return (
-      <LabelGroup themeName="FormLabelGroup">
-        <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
+      <LabelGroup
+        themeName={hidden ? "FormLabelGroupHidden" : "FormLabelGroup"}
+      >
+        <Label htmlFor={id} themeName="FormLabel">
           {labelKey}
         </Label>
         {type === "select" ? (
@@ -145,7 +146,6 @@ const InputField = React.memo(
             {...(rest as SelectProps)}
             name={name}
             required={required}
-            hidden={hidden}
             defaultValue={defaultValue}
             fetcherKey={fetcherKey}
             themeName="FormSelect"
@@ -157,7 +157,6 @@ const InputField = React.memo(
             ref={ref}
             name={name}
             required={required}
-            hidden={hidden}
             type={type}
             defaultValue={defaultValue}
             placeholder={placeholder}
