@@ -81,7 +81,6 @@ function CreatePage({
       <FormComponent method="POST" navigate={false} onSubmit={onSubmit}>
         {children}
       </FormComponent>
-      ;
     </styled.div>
   );
 }
@@ -105,7 +104,6 @@ function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
       <FormComponent method="PUT" navigate={false} onSubmit={onSubmit}>
         {updateComponents}
       </FormComponent>
-      ;
     </styled.div>
   );
 }
