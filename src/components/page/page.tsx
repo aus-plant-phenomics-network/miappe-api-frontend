@@ -36,7 +36,12 @@ function DetailPage({ schema, title }: { schema: SchemaType; title: string }) {
           </Link>
         </styled.div>
       </Form>
-      <Table fields={fields} fieldData={fieldData} schema={schema} />
+      <Table
+        key={title}
+        fields={fields}
+        fieldData={fieldData}
+        schema={schema}
+      />
     </styled.div>
   );
 }
