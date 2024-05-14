@@ -19,30 +19,6 @@ const pageTheme: PresetTheme = {
     twMinHeight: "min-h-9",
     twGap: "gap-x-3",
   },
-  PageSearchForm: {
-    twFlex: "flex",
-    twJustifyContent: "justify-center",
-    twAlignItems: "item-center",
-    twBorderWidth: "border-2",
-    twBorderColor: "border-neutral-300",
-    twBorderRadius: "rounded-md",
-    twPadding: "px-2",
-  },
-  PageSearchInput: {
-    twPadding: "pl-2 py-1",
-    twOutlineStyle: "outline-none",
-  },
-  PageSearchButton: {
-    twPadding: "py-1",
-  },
-  PageNewButton: {
-    twBorderWidth: "border-2",
-    twBorderRadius: "rounded-md",
-    twPadding: "px-2 py-1",
-    twBackgroundColor: "bg-neutral-400 hover:bg-neutral-300",
-    twTextColor: "text-neutral-700",
-    twFontWeight: "font-medium",
-  },
 };
 
 const widgetTheme: PresetTheme = {
@@ -60,6 +36,30 @@ const widgetTheme: PresetTheme = {
   },
   WidgetCheckBoxLabel: {
     twTextColor: "text-neutral-500",
+  },
+  WidgetSearchForm: {
+    twFlex: "flex",
+    twJustifyContent: "justify-center",
+    twAlignItems: "item-center",
+    twBorderWidth: "border-2",
+    twBorderColor: "border-neutral-300",
+    twBorderRadius: "rounded-md",
+    twPadding: "px-2",
+  },
+  WidgetSearchInput: {
+    twPadding: "pl-2 py-1",
+    twOutlineStyle: "outline-none",
+  },
+  WidgetSearchButton: {
+    twPadding: "py-1",
+  },
+  WidgetNewButton: {
+    twBorderWidth: "border-2",
+    twBorderRadius: "rounded-md",
+    twPadding: "px-2 py-1",
+    twBackgroundColor: "bg-neutral-400 hover:bg-neutral-300",
+    twTextColor: "text-neutral-700",
+    twFontWeight: "font-medium",
   },
 };
 

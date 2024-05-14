@@ -18,7 +18,7 @@ const SearchButton = createButton(
 
 function NewItemButton({ title }: { title: string }) {
   return (
-    <Link to={`/${title}/create`} themeName="PageNewButton">
+    <Link to={`/${title}/create`} themeName="WidgetNewButton">
       New Item
     </Link>
   );
@@ -26,15 +26,15 @@ function NewItemButton({ title }: { title: string }) {
 
 function PageSearchForm() {
   return (
-    <Form id="search-form" role="search" themeName="PageSearchForm">
-      <SearchButton tooltipContent="Search" themeName="PageSearchButton" />
+    <Form id="search-form" role="search" themeName="WidgetSearchForm">
+      <SearchButton tooltipContent="Search" themeName="WidgetSearchButton" />
       <styled.input
         id="title"
         aria-label="Search title"
         placeholder="Search"
         type="search"
         name="title"
-        themeName="PageSearchInput"
+        themeName="WidgetSearchInput"
       />
     </Form>
   );
@@ -96,7 +96,7 @@ function SelectFieldsDropDown({
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <styled.button themeName="PageNewButton">Fields</styled.button>
+        <styled.button themeName="WidgetNewButton">Fields</styled.button>
       </Popover.Trigger>
       <Popover.Portal>
         <Content

@@ -51,6 +51,7 @@ const formTheme: PresetTheme = {
   },
   FormSelect: {
     twFlexGrow: "flex-1",
+    twBackgroundColor: "bg-inherit",
   },
   FormCreateButton: {
     twWidth: "w-full",
