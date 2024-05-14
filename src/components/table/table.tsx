@@ -152,15 +152,15 @@ const Table = React.memo(
     const tableData = React.useMemo(
       () =>
         fieldData
-          ? fieldData.map(
-              dataItem =>
-                Object.fromEntries(
-                  fields.map(field => [
-                    field,
-                    getDefaultValue(schema[field], dataItem[field]),
-                  ]),
-                ) as FetchDataSuccessType<SchemaType>,
-            )
+          ? fieldData.map(dataItem => {
+              const reNamedFields = Object.fromEntries(
+                fields.map(field => [
+                  field,
+                  getDefaultValue(schema[field], dataItem[field]),
+                ]),
+              ) as FetchDataSuccessType<SchemaType>;
+              return { ...dataItem, ...reNamedFields };
+            })
           : null,
       [JSON.stringify(fieldData)],
     );
