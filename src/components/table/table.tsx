@@ -54,8 +54,8 @@ const BodyRowComponent = React.memo(
     TailwindComponentProps<"td"> & BodyRowComponentOwnProps
   >((props, ref) => {
     const { href, ...rest } = props;
+    
     const submit = useSubmit();
-
     const dialogOnSubmit = (e: React.MouseEvent) => {
       e.preventDefault();
       submit(
