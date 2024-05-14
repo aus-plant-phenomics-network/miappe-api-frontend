@@ -54,7 +54,7 @@ const BodyRowComponent = React.memo(
     TailwindComponentProps<"td"> & BodyRowComponentOwnProps
   >((props, ref) => {
     const { href, ...rest } = props;
-    
+
     const submit = useSubmit();
     const dialogOnSubmit = (e: React.MouseEvent) => {
       e.preventDefault();
@@ -141,7 +141,7 @@ const Table = React.memo(
     // Process table display fields
     const tableFields = React.useMemo(
       () => fields.map(item => getTableDisplayKey(schema[item], item)),
-      [...fields],
+      [JSON.stringify(fields)],
     );
 
     /** TODO: update this method to allow for reference field value replacement
