@@ -10,60 +10,50 @@ import {
   Form as _Form,
   useNavigate,
 } from "react-router-dom";
+import {
+  PageSearchForm,
+  NewItemButton,
+  FieldSelection,
+  SelectFieldsDropDown,
+} from "./widget";
 import { Table } from "../table";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { createButton } from "@ailiyah-ui/button";
-
-const Link = styled(_Link);
-const Form = styled(_Form);
-const SearchIcon = styled(MagnifyingGlassIcon);
-const SearchButton = createButton(
-  "Search Button",
-  <SearchIcon themeName="Icons" />,
-);
-
-function NewItemButton({ title }: { title: string }) {
-  return (
-    <Link to={`/${title}/create`} themeName="PageNewButton">
-      New Item
-    </Link>
-  );
-}
-
-function PageSearchForm() {
-  return (
-    <Form id="search-form" role="search" themeName="PageSearchForm">
-      <SearchButton tooltipContent="Search" themeName="PageSearchButton" />
-      <styled.input
-        id="title"
-        aria-label="Search title"
-        placeholder="Search"
-        type="search"
-        name="title"
-        themeName="PageSearchInput"
-      />
-    </Form>
-  );
-}
 
 function DetailPage({
+  fields,
   schema,
   title,
   children,
 }: {
+  fields: string[];
   schema: SchemaType;
   title: string;
   children: React.ReactElement[];
 }) {
   const fieldData = useLoaderData() as FetchDataArrayType<SchemaType>;
-  const fields = Object.keys(schema);
+  const [displayFields, setDisplayFields] = React.useState<FieldSelection>(() =>
+    Object.fromEntries(
+      fields.map(field => {
+        return [field, true];
+      }),
+    ),
+  );
+  const tableFields = Object.entries(displayFields)
+    .filter(item => item[1])
+    .map(item => item[0]);
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
-      <styled.div themeName="PageComponent">{children}</styled.div>
+      <styled.div themeName="PageComponent">
+        {children}
+        <SelectFieldsDropDown
+          fields={displayFields}
+          setFields={setDisplayFields}
+          schema={schema}
+        />
+      </styled.div>
       <Table
         key={title}
-        fields={fields}
+        fields={tableFields}
         fieldData={fieldData}
         schema={schema}
       />
@@ -124,25 +114,45 @@ class Page<T extends SchemaType, Key extends string> {
   schema: T;
   handler: Handler<T, Key>;
   title: string;
+  fields: string[];
 
-  constructor(title: string, schema: T, handler: Handler<T, Key>) {
+  constructor(
+    title: string,
+    schema: T,
+    handler: Handler<T, Key>,
+    excludeKeys: string[] = ["createdAt", "updatedAt"],
+  ) {
     this.schema = schema;
     this.handler = handler;
     this.title = title;
+    this.fields = Object.keys(schema).filter(
+      item => !excludeKeys.includes(item),
+    );
   }
 
   getCreatePage() {
     const components = createInputArray(this.schema);
-    return <CreatePage title={this.title}>{components}</CreatePage>;
+    return (
+      <CreatePage key={this.title} title={this.title}>
+        {components}
+      </CreatePage>
+    );
   }
 
   getUpdatePage() {
-    return <UpdatePage title={this.title} schema={this.schema} />;
+    return (
+      <UpdatePage key={this.title} title={this.title} schema={this.schema} />
+    );
   }
 
   getDetailsPage() {
     return (
-      <DetailPage title={this.title} schema={this.schema}>
+      <DetailPage
+        title={this.title}
+        schema={this.schema}
+        fields={this.fields}
+        key={this.title}
+      >
         <PageSearchForm />
         <NewItemButton title={this.title} />
       </DetailPage>
