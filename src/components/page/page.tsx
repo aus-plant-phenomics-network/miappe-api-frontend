@@ -30,6 +30,8 @@ function DetailPage({
   children: React.ReactElement[];
 }) {
   const fieldData = useLoaderData() as FetchDataArrayType<SchemaType>;
+
+  // Props for field selection component
   const [displayFields, setDisplayFields] = React.useState<FieldSelection>(() =>
     Object.fromEntries(
       fields.map(field => {
@@ -37,6 +39,8 @@ function DetailPage({
       }),
     ),
   );
+
+  // Get fields to be displayed for table
   const tableFields = Object.entries(displayFields)
     .filter(item => item[1])
     .map(item => item[0]);
