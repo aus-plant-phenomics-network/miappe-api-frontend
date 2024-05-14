@@ -13,21 +13,29 @@ const pageTheme: PresetTheme = {
   },
   PageComponent: {
     twWidth: "w-full",
-  },
-  PageComponentContent: {
     twFlex: "flex",
     twJustifyContent: "justify-center",
     twAlignItems: "item-center",
     twMinHeight: "min-h-9",
     twGap: "gap-x-3",
   },
-  PageSearchInput: {
+  PageSearchForm: {
+    twFlex: "flex",
+    twJustifyContent: "justify-center",
+    twAlignItems: "item-center",
     twBorderWidth: "border-2",
+    twBorderColor: "border-neutral-300",
     twBorderRadius: "rounded-md",
-    twPadding: "px-2 py-1",
+    twPadding: "px-2",
+  },
+  PageSearchInput: {
+    twPadding: "pl-2 py-1",
+    twOutlineStyle: "outline-none",
+  },
+  PageSearchButton: {
+    twPadding: "py-1",
   },
   PageNewButton: {
-    twHeight: "h-full",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-md",
     twPadding: "px-2 py-1",
