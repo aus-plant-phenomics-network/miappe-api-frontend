@@ -45,4 +45,27 @@ const pageTheme: PresetTheme = {
   },
 };
 
-export { pageTheme };
+const widgetTheme: PresetTheme = {
+  WidgetCheckBox: {
+    twBackgroundColor: "bg-neutral-100",
+  },
+  WidgetCheckBoxItem: {
+    twFlex: "flex",
+    twFlexDirection: "flex-row",
+    twGap: "gap-x-2",
+    twPadding: "p-2",
+  },
+  WidgetCheckBoxInput: {
+    twAccentColor: "accent-lime-400",
+  },
+  WidgetCheckBoxLabel: {
+    twTextColor: "text-neutral-500",
+  },
+};
+
+const theme: PresetTheme = {
+  ...pageTheme,
+  ...widgetTheme,
+};
+
+export { theme as pageTheme };
