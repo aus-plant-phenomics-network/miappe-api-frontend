@@ -35,7 +35,7 @@ function DetailPage({
   const [displayFields, setDisplayFields] = React.useState<FieldSelection>(() =>
     Object.fromEntries(
       fields.map(field => {
-        return [field, true];
+        return [field, ["title", "description"].includes(field)];
       }),
     ),
   );
@@ -44,6 +44,7 @@ function DetailPage({
   const tableFields = Object.entries(displayFields)
     .filter(item => item[1])
     .map(item => item[0]);
+
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
@@ -118,18 +119,11 @@ class Page<T extends SchemaType, Key extends string> {
   title: string;
   fields: string[];
 
-  constructor(
-    title: string,
-    schema: T,
-    handler: Handler<T, Key>,
-    excludeKeys: string[] = ["createdAt", "updatedAt"],
-  ) {
+  constructor(title: string, schema: T, handler: Handler<T, Key>) {
     this.schema = schema;
     this.handler = handler;
     this.title = title;
-    this.fields = Object.keys(schema).filter(
-      item => !excludeKeys.includes(item),
-    );
+    this.fields = Object.keys(schema);
   }
 
   getCreatePage() {

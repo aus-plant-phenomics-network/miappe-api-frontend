@@ -164,6 +164,16 @@ class BaseSchema implements SchemaType {
     required: false,
     placeholder: "Enter Description",
   };
+  createdAt: SchemaElementType = {
+    type: "date",
+    required: false,
+    hidden: true,
+  };
+  updatedAt: SchemaElementType = {
+    type: "date",
+    required: false,
+    hidden: true,
+  };
   [k: string]: SchemaElementType;
 }
 
