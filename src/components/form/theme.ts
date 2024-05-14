@@ -29,6 +29,9 @@ const formTheme: PresetTheme = {
     twFlex: "flex",
     twGap: "gap-x-4",
   },
+  FormLabelGroupHidden: {
+    twDisplay: "hidden",
+  },
   FormLabel: {
     twFontWeight: "font-bold",
     twFlexGrow: "flex-1",

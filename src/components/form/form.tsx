@@ -134,7 +134,9 @@ const InputField = React.memo(
     const id = rest.id ? rest.id : React.useId();
 
     return (
-      <LabelGroup themeName="FormLabelGroup">
+      <LabelGroup
+        themeName={hidden ? "FormLabelGroupHidden" : "FormLabelGroup"}
+      >
         <Label htmlFor={id} hidden={hidden} themeName="FormLabel">
           {labelKey}
         </Label>
