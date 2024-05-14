@@ -63,6 +63,7 @@ const BodyRowComponent = React.memo(
         {
           method: "DELETE",
           action: `${href}/delete`,
+          navigate: false,
         },
       );
     };
