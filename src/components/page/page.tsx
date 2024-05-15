@@ -12,6 +12,7 @@ import {
   SelectFieldsDropDown,
 } from "./widget";
 import { Table } from "../table";
+import { usePrevious } from "../hooks";
 
 function DetailPage({
   fields,
@@ -68,10 +69,7 @@ function CreatePage({
   children: React.ReactElement[];
   title: string;
 }) {
-  const navigate = useNavigate();
-  const onSubmit = React.useCallback(() => {
-    navigate(-1);
-  }, []);
+  const onSubmit = usePrevious();
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
@@ -91,10 +89,7 @@ function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
     () => createInputArray(schema, [], data),
     [JSON.stringify(data)],
   );
-  const navigate = useNavigate();
-  const onSubmit = React.useCallback(() => {
-    navigate(-1);
-  }, []);
+  const onSubmit = usePrevious();
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>

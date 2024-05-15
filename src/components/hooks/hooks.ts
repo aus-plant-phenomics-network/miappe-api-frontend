@@ -1,5 +1,10 @@
-import { useSubmit, useFetcher } from "react-router-dom";
+import { useSubmit, useFetcher, useNavigate } from "react-router-dom";
 import React from "react";
+
+const usePrevious = () => {
+  const navigate = useNavigate();
+  return () => navigate(-1);
+};
 
 const useDelete = (href: string) => {
   const submit = useSubmit();
@@ -25,4 +30,4 @@ const useFetcherData = (url: string) => {
   return fetcher;
 };
 
-export { useDelete, useFetcherData };
+export { useDelete, useFetcherData, usePrevious };
