@@ -11,7 +11,7 @@ class InstitutionType extends BaseSchema {
     type: "select",
     required: false,
     labelKey: "parentInstitution",
-    fetcherKey: "institutiton",
+    fetcherKey: "institution",
     selfReferencing: true,
     selfReferencingRelationship: "parent",
   };
