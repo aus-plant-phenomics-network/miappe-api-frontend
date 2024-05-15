@@ -28,7 +28,9 @@ const createInputArray = <T extends SchemaType>(
   return (
     Object.entries(schema)
       // Remove schema entries that are in exclude
-      .filter(key => !exclude.includes(key[0]))
+      .filter(
+        key => !exclude.includes(key[0]) && key[0] !== "_constructor-name_",
+      )
       .map(([key, schema]) => {
         const type = schema.type;
         const required = getRequired(schema);
