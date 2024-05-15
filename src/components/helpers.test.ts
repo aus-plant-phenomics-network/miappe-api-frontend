@@ -210,9 +210,9 @@ const getRequiredFixture = [
 ];
 
 describe.each(getRequiredFixture)(
-  "given key %s, schema: %o",
+  "given %o",
   ({ inputValue, schema, expValue }) => {
-    test(`getRequired returns ${expValue}`, () => {
+    test(`${inputValue} getRequired returns ${expValue}`, () => {
       expect(getRequired(schema as SchemaElementType)).toEqual(expValue);
     });
   },
