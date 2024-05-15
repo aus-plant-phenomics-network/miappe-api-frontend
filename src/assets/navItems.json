@@ -1,10 +1,10 @@
 {
   "Study Definition": {
-    "Institution": "institution",
     "Investigation": "investigation",
+    "Study": "study",
+    "Institution": "institution",
     "Staff": "staff",
     "Data File": "dataFile",
-    "Study": "study",
     "Experiment": "experiment"
   },
   "Data Collection Setup": {
