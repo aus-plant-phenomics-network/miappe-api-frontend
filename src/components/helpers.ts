@@ -47,11 +47,14 @@ const getDefaultValue = (
   return "";
 };
 
+const capitalise = (key: string) => {
+  return key.length >= 1 ? key[0].toUpperCase() + key.slice(1) : key;
+};
+
 /**
  * Get the string to be display as table header field. If
- * provided in schema, the schema value will be used. Otherwise, capitalise
- * the key associated with the schema and return it, or additionally remove
- * the trailing Id if schema type is select.
+ * provided in schema, the capitalised schema value will be used. Otherwise,
+ * return the original key capitalised with trailing Id removed
  *
  * The main use case of this is when header field is different from submission key
  * (the key param or the name of corresponding input/select). For instance, `Study`
@@ -64,19 +67,31 @@ const getDefaultValue = (
  * @returns string display value of label
  */
 const getTableDisplayKey = (schema: SchemaElementType, key: string): string => {
-  const labelKey = schema.labelKey ? schema.labelKey : key;
-  const capitalisedKey =
-    labelKey.length >= 1
-      ? labelKey[0].toUpperCase() + labelKey.slice(1)
-      : labelKey;
-  return removeId(schema.type, capitalisedKey);
+  if (schema.labelKey) return capitalise(schema.labelKey);
+  return removeId(schema.type, capitalise(key));
 };
 
+/**
+ * Get the string to be display as form header field. Use the result of getTableDisplayKey + *
+ * if required
+ *
+ * @param schema - schema correspond to given key.
+ * @param key - key of an entry in Schema
+ * @returns string display value of label
+ */
 const getFormDisplayKey = (schema: SchemaElementType, key: string): string => {
   const retVal = getTableDisplayKey(schema, key);
-  return schema.hidden ? "" : schema.required ? retVal + "*" : retVal;
+  return schema.required ? retVal + "*" : retVal;
 };
 
+/**
+ * Get the value to be set as placeholder for a form input. If placeholder value is provided in
+ * schema, returns it. Otherwise use Enter + getTableDisplayKey result
+ *
+ * @param schema - schema correspond to given key.
+ * @param key - key of an entry in Schema
+ * @returns string display value of label
+ */
 const getPlaceHolderValue = (
   schema: SchemaElementType,
   key: string,
@@ -85,6 +100,12 @@ const getPlaceHolderValue = (
   return "Enter " + getTableDisplayKey(schema, key);
 };
 
+/** Get schema required value. Returns true only if required: true is provided in the schema
+ *
+ * @param schema - schema correspond to given key.
+ * @param key - key of an entry in Schema
+ * @returns whether the value is required
+ */
 const getRequired = (schema: SchemaElementType): boolean => {
   if (schema.required) return true;
   return false;
@@ -153,25 +174,20 @@ const getSubmissionValue = (
  * file with duplicated information
  */
 class BaseSchema implements SchemaType {
-  id: SchemaElementType = { type: "text", required: false, hidden: true };
+  id: SchemaElementType = { type: "text" };
   title: SchemaElementType = {
     type: "text",
     required: true,
-    placeholder: "Enter Title",
   };
   description: SchemaElementType = {
     type: "text",
-    required: false,
-    placeholder: "Enter Description",
   };
   createdAt: SchemaElementType = {
     type: "date",
-    required: false,
     hidden: true,
   };
   updatedAt: SchemaElementType = {
     type: "date",
-    required: false,
     hidden: true,
   };
   [k: string]: SchemaElementType;
@@ -187,5 +203,6 @@ export {
   getPlaceHolderValue,
   getRequired,
   removeId,
+  capitalise,
   BaseSchema,
 };

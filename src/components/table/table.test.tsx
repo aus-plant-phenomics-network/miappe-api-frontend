@@ -11,6 +11,7 @@ import {
 import { Root } from "./table";
 import React from "react";
 import { FetchDataArrayType } from "../types";
+import { getDefaultValue, getTableDisplayKey } from "../helpers";
 
 const Validator = {
   header: {
@@ -161,6 +162,66 @@ describe("Test Render BodyRow with no data", () => {
       />,
     );
   });
+  test("No data is rendered", () => {
+    expect(document.querySelector(".TableBody")?.children.length).toBe(0);
+  });
+});
+
+describe("Test Render Table with data", () => {
+  const fieldData = fetchDataSuccess;
+  const fields = Object.keys(schema);
+  beforeEach(() => {
+    render(
+      <Components.Table
+        schema={schema}
+        fields={fields}
+        fieldData={fieldData}
+      />,
+    );
+  });
+  test.each(Object.keys(schema))(
+    "expect header with value %s to be visible",
+    key => Validator.header.isRendered(getTableDisplayKey(schema[key], key)),
+  );
+  test("expect Action to be visible", () =>
+    Validator.header.isRendered("Action"));
+  describe.each(fieldData!)("For each row", fieldItem => {
+    for (const field of fields) {
+      if (fieldItem[field] !== null) {
+        test(`field ${field} with value ${fieldItem[field]} is rendered`, () => {
+          Validator.bodyRow.data.isRendered(
+            getDefaultValue(schema[field], fieldItem[field]),
+          );
+        });
+      }
+    }
+    test("Components are rendered", () => {
+      Validator.bodyRow.component.isRendered();
+    });
+    test("Components have correct HRef", () => {
+      Validator.bodyRow.component.hasCorrectLinkHRef(fieldItem.id!);
+    });
+  });
+});
+
+describe("Test Render Table with no data", () => {
+  const fieldData = fetchDataFailure;
+  const fields = Object.keys(schema);
+  beforeEach(() => {
+    render(
+      <Components.Table
+        schema={schema}
+        fields={fields}
+        fieldData={fieldData}
+      />,
+    );
+  });
+  test.each(Object.keys(schema))(
+    "expect header with value %s to be visible",
+    key => Validator.header.isRendered(getTableDisplayKey(schema[key], key)),
+  );
+  test("expect Action to be visible", () =>
+    Validator.header.isRendered("Action"));
   test("No data is rendered", () => {
     expect(document.querySelector(".TableBody")?.children.length).toBe(0);
   });

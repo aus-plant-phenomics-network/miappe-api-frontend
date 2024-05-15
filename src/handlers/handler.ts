@@ -45,7 +45,6 @@ class Handler<T extends SchemaType, Key extends string> {
   protected createData = async (
     data: SubmissionFormType<T>,
   ): Promise<FetchDataType<T>> => {
-    console.log(data);
     const response = await fetch(this.url, {
       method: "POST",
       headers: {

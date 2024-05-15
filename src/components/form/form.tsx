@@ -11,7 +11,6 @@ import { FetchDataArrayType, SchemaType } from "../types";
 const useFetcherData = (url: string) => {
   const fetcher = useFetcher({ key: url });
   React.useEffect(() => {
-    console.log("Fetcher load " + url);
     fetcher.load(`../${url}`);
   }, []);
   return fetcher;
@@ -66,7 +65,6 @@ const Select = React.memo(
     const data = (fetcher.data as FetchDataArrayType<SchemaType>)
       ? (fetcher.data as FetchDataArrayType<SchemaType>)
       : [];
-
     return (
       <styled.div themeName="FormSelectContainer">
         <styled.select
@@ -77,7 +75,9 @@ const Select = React.memo(
           required={required}
           defaultValue={defaultValue}
         >
-          <option value="" hidden label="Select from dropdown" />
+          {!defaultValue && (
+            <option value="" hidden label="Select from dropdown" />
+          )}
           {data &&
             data.length > 0 &&
             data.map(dataItem => (

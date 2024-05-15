@@ -34,6 +34,7 @@ export const FetchedSuccess: Story = {
   args: {
     fields: Object.keys(schema),
     fieldData: fetchDataSuccess,
+    schema: schema,
   },
 };
 
@@ -41,6 +42,7 @@ export const FetchedSuccessOmitDescription: Story = {
   args: {
     fields: Object.keys(schema).filter(item => !excludedKeys.includes(item)),
     fieldData: fetchDataSuccess,
+    schema: schema,
   },
 };
 
@@ -48,5 +50,6 @@ export const FetchFailure: Story = {
   args: {
     fields: Object.keys(schema),
     fieldData: fetchDataFailure,
+    schema: schema,
   },
 };
