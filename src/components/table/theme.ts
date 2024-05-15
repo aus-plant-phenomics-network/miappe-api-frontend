@@ -16,14 +16,15 @@ const tableTheme: PresetTheme = {
     twTextColor: "text-neutral-500",
     twOverflow: "overflow-x-auto",
     twTableLayout: "table-auto md:table-fixed",
+    twFontSize: "text-base"
   },
   TableHead: {
     twWidth: "w-full",
-    twFontSize: "text-md",
     twBackgroundColor: "bg-neutral-400",
   },
   TableHeadRow: {
-    twTextColor: "text-neutral-700",
+    twTextColor: "text-neutral-100",
+    twFontSize: "text-md",
     twTextTransform: "capitalize",
   },
   TableHeadHeader: {

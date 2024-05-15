@@ -23,19 +23,28 @@ const pageTheme: PresetTheme = {
 
 const widgetTheme: PresetTheme = {
   WidgetCheckBox: {
-    twBackgroundColor: "bg-neutral-100",
+    twBackgroundColor: "bg-neutral-400",
+    twBorderRadius: "rounded-md",
+  },
+  Icons: {
+    twWidth: "w-5",
+    twHeight: "h-5",
+  },
+  WidgetPopoverContent: {
+    twBorderRadius: "rounded-md",
   },
   WidgetCheckBoxItem: {
     twFlex: "flex",
     twFlexDirection: "flex-row",
-    twGap: "gap-x-2",
+    twGap: "gap-x-3",
     twPadding: "p-2",
+    twBackgroundColor: "hover:bg-neutral-500",
   },
   WidgetCheckBoxInput: {
     twAccentColor: "accent-lime-400",
   },
   WidgetCheckBoxLabel: {
-    twTextColor: "text-neutral-500",
+    twTextColor: "text-neutral-100",
   },
   WidgetSearchForm: {
     twFlex: "flex",
@@ -58,8 +67,12 @@ const widgetTheme: PresetTheme = {
     twBorderRadius: "rounded-md",
     twPadding: "px-2 py-1",
     twBackgroundColor: "bg-neutral-400 hover:bg-neutral-300",
-    twTextColor: "text-neutral-700",
+    twTextColor: "text-neutral-100",
     twFontWeight: "font-medium",
+    twFlex: "flex",
+    twJustifyContent: "justify-center",
+    twAlignItems: "items-center",
+    twGap: "gap-x-1",
   },
 };
 
