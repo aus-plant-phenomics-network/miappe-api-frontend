@@ -67,7 +67,7 @@ const Validator = {
         expect(component).not.toBeNull();
 
         expect(component?.getAttribute("value")).toEqual(
-          // @ts-ignore
+          // @ts-expect-error test was not annotated to be of SchemaType so this can be ignored until Fixture data is refactored
           getDefaultValue(schemaValue, FixtureData.test[key]),
         );
       }

@@ -6,7 +6,6 @@ import * as Form from "./form";
 import React from "react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@ailiyah-ui/context";
-// import   { vi } from "vitest";
 
 class TestSchema extends BaseSchema {
   studyId: SchemaElementType = { type: "select", required: true };
@@ -17,10 +16,6 @@ class TestSchema extends BaseSchema {
     labelKey: "type",
   };
 }
-
-class StudySchema extends BaseSchema {}
-
-class VocabularySchema extends BaseSchema {}
 
 const FixtureData = {
   test: {
