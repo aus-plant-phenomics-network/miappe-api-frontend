@@ -654,10 +654,10 @@ describe.each(getHiddenValueFixture)(
  */
 describe("Test BaseSchema default value", () => {
   const schema = new BaseSchema();
-  test("id is text, hidden and required by default", () => {
+  test("id is text, hidden and  not required by default", () => {
     expect(schema.id.type).toBe("text");
     expect(getHiddenValue(schema.id, "id")).toBeTruthy();
-    expect(getRequired(schema.id)).toBeTruthy();
+    expect(getRequired(schema.id)).toBeFalsy();
   });
   test("createdAt, updatedAt are date, hidden and not required", () => {
     expect(schema.createdAt.type).toBe("date");

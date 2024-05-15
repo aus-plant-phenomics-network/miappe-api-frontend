@@ -174,7 +174,7 @@ const getSubmissionValue = (
  * file with duplicated information
  */
 class BaseSchema implements SchemaType {
-  id: SchemaElementType = { type: "text", required: true };
+  id: SchemaElementType = { type: "text" };
   title: SchemaElementType = {
     type: "text",
     required: true,
