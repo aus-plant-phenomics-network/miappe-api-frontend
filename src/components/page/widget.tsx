@@ -1,7 +1,7 @@
 import React from "react";
 import { Link as _Link, Form as _Form } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { createButton } from "@ailiyah-ui/button";
 const Content = styled(Popover.Content);
 import * as Popover from "@radix-ui/react-popover";
@@ -96,12 +96,15 @@ function SelectFieldsDropDown({
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <styled.button themeName="WidgetNewButton">Fields</styled.button>
+        <styled.button themeName="WidgetNewButton">
+          Columns
+          <ChevronDownIcon />
+        </styled.button>
       </Popover.Trigger>
       <Popover.Portal>
         <Content
           className="PopoverContent"
-          themeName="TooltipPopoverContent"
+          themeName="WidgetPopoverContent"
           sideOffset={5}
           align="start"
           hideWhenDetached={true}

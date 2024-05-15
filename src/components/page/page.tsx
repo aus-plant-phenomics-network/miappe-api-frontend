@@ -44,12 +44,12 @@ function DetailPage({
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
       <styled.div themeName="PageComponent">
-        {children}
         <SelectFieldsDropDown
           fields={displayFields}
           setFields={setDisplayFields}
           schema={schema}
         />
+        {children}
       </styled.div>
       <Table
         key={title}
