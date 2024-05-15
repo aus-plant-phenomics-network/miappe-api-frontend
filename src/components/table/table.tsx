@@ -11,6 +11,7 @@ import { useSubmit, Link } from "react-router-dom";
 import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
 import { getDefaultValue, getTableDisplayKey } from "../helpers";
 import { FetchDataSuccessType, SchemaType } from "../types";
+import { useDelete } from "../hooks";
 
 const Root = React.memo(
   React.forwardRef<HTMLDivElement, TailwindComponentProps<"div">>(
@@ -55,18 +56,7 @@ const BodyRowComponent = React.memo(
   >((props, ref) => {
     const { href, ...rest } = props;
 
-    const submit = useSubmit();
-    const dialogOnSubmit = (e: React.MouseEvent) => {
-      e.preventDefault();
-      submit(
-        {},
-        {
-          method: "DELETE",
-          action: `${href}/delete`,
-          navigate: false,
-        },
-      );
-    };
+    const dialogOnSubmit = useDelete(href);
 
     return (
       <styled.td {...rest} ref={ref}>

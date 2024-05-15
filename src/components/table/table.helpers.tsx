@@ -24,6 +24,7 @@ const dataWithNoSubmissionDate: FixtureType = {
   submissionDate: null,
   createdAt: "2020-01-01T00:00:01",
   updatedAt: "2020-02-01T00:00:02",
+  unknownField: "2021-01-01T00:00:00",
 };
 
 const dataWithSubmissionDate: FixtureType = {

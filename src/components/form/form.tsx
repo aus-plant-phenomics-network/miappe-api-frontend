@@ -1,20 +1,13 @@
 import { SelectProps } from "./form.types";
 import { TailwindProps } from "@ailiyah-ui/utils";
 import React from "react";
-import { Form, FormProps, useFetcher, Link } from "react-router-dom";
+import { Form, FormProps, Link } from "react-router-dom";
 import { styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
 import { FetchDataArrayType, SchemaType } from "../types";
-
-const useFetcherData = (url: string) => {
-  const fetcher = useFetcher({ key: url });
-  React.useEffect(() => {
-    fetcher.load(`../${url}`);
-  }, []);
-  return fetcher;
-};
+import { useFetcherData } from "../hooks";
 
 /**
  * Renders a div that contains the created form.
