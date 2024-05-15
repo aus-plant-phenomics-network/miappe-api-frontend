@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { TestComponent, schema, FixtureData } from "./form.helper";
+import { userEvent } from "@testing-library/user-event";
 import React from "react";
 import {
   getDefaultValue,
@@ -15,6 +16,14 @@ const Action = {
     },
     PUT: () => {
       render(<TestComponent schema={schema} data={FixtureData.test} />);
+    },
+  },
+  clickOnDropDown: {
+    study: async () => {
+      await userEvent.click(document.querySelector("select")!);
+    },
+    select: async () => {
+      await userEvent.click(document.querySelectorAll("select")[1]);
     },
   },
 };
@@ -39,6 +48,28 @@ const Validator = {
       expect(
         screen.queryByText(getFormDisplayKey(schema.id, "id")),
       ).not.toBeVisible();
+    },
+    selectOptionsAreRendered: async () => {
+      const StudyData = FixtureData.study;
+      const VocabularyData = FixtureData.vocabulary;
+
+      await Action.clickOnDropDown.study();
+      for (const study of StudyData) {
+        const element = document.querySelector(
+          `option[label="${study.title}"]`,
+        );
+        expect(element).toBeInTheDocument();
+        expect(element?.getAttribute("value")).toBe(study.id);
+      }
+
+      await Action.clickOnDropDown.select();
+      for (const vocab of VocabularyData) {
+        const element = document.querySelector(
+          `option[label="${vocab.title}"]`,
+        );
+        expect(element).toBeInTheDocument();
+        expect(element?.getAttribute("value")).toBe(vocab.id);
+      }
     },
   },
   data: {
@@ -72,12 +103,24 @@ const Validator = {
         );
       }
     },
+    selectDefaultValuesAreSet: () => {
+      expect(document.querySelector(`select[name="studyId"]`)).toEqual(
+        FixtureData.test.studyId,
+      );
+      expect(document.querySelector(`select[name="deviceTypeId"]`)).toEqual(
+        FixtureData.test.deviceTypeId,
+      );
+    },
   },
 };
 
 describe("Test POST form", () => {
   beforeEach(Action.render.POST);
   test("Labels are rendered correctly", Validator.label.isRendered);
+  test(
+    "Options are rendered correctly",
+    Validator.label.selectOptionsAreRendered,
+  );
   test(
     "Data are initially placeholders",
     Validator.data.isRenderedWithPlaceHolderValue,
@@ -87,5 +130,9 @@ describe("Test POST form", () => {
 describe("Test PUT form", () => {
   beforeEach(Action.render.PUT);
   test("Labels are rendered correctly", Validator.label.isRendered);
+  test(
+    "Options are rendered correctly",
+    Validator.label.selectOptionsAreRendered,
+  );
   test("Data are test data value", Validator.data.isRenderedWithDefaultValue);
 });
