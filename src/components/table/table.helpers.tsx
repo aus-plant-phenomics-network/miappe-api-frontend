@@ -1,4 +1,4 @@
-import { Body, Header, Root } from "./table";
+import { Body, Header, Root, Table } from "./table";
 import React from "react";
 import {
   FetchDataArrayType,
@@ -22,13 +22,17 @@ const dataWithNoSubmissionDate: FixtureType = {
   title: "first_title",
   description: "first_description",
   submissionDate: null,
+  createdAt: "2020-01-01T00:00:01",
+  updatedAt: "2020-02-01T00:00:02",
 };
 
 const dataWithSubmissionDate: FixtureType = {
   id: "1",
   title: "second_title",
   description: "second_description",
-  submissionDate: "2020-01-01T00:00:00",
+  submissionDate: "2020-01-05T00:00:00",
+  createdAt: "2020-01-03T00:00:03",
+  updatedAt: "2020-01-04T00:00:04",
 };
 
 const fetchDataFailure: FetchDataArrayType<TestSchema> = null;
@@ -64,9 +68,11 @@ const Components = {
     return <RouterProvider router={routes} />;
   },
   Table: ({
+    schema,
     fields,
     fieldData,
   }: {
+    schema: TestSchema;
     fields: string[];
     fieldData: FetchDataArrayType<TestSchema>;
   }) => {
@@ -74,10 +80,7 @@ const Components = {
       {
         path: "/",
         element: (
-          <Root>
-            <Header fields={fields} />
-            <Body fieldData={fieldData} fields={fields} />
-          </Root>
+          <Table schema={schema} fields={fields} fieldData={fieldData} />
         ),
       },
     ]);

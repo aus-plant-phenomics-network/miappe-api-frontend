@@ -11,7 +11,6 @@ import { FetchDataArrayType, SchemaType } from "../types";
 const useFetcherData = (url: string) => {
   const fetcher = useFetcher({ key: url });
   React.useEffect(() => {
-    console.log("Fetcher load " + url);
     fetcher.load(`../${url}`);
   }, []);
   return fetcher;
