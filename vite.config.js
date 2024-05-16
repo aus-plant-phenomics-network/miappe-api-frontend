@@ -34,11 +34,5 @@ export default defineConfig({
     setupFiles: "./setupTest",
     css: true,
   },
-  plugins: [
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
-      },
-    }),
-  ],
+  plugins: [react()],
 });

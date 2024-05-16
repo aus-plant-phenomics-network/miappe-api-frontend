@@ -2,12 +2,14 @@ import { SelectProps } from "./form.types";
 import { TailwindProps } from "@ailiyah-ui/utils";
 import React from "react";
 import { Form, FormProps, Link } from "react-router-dom";
-import { styled } from "@ailiyah-ui/factory";
+import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
 import { FetchDataArrayType, SchemaType } from "../types";
 import { useFetcherData } from "../hooks";
+import * as Popover from "@radix-ui/react-popover";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 /**
  * Renders a div that contains the created form.
@@ -47,40 +49,198 @@ const Label = styled("label");
  */
 const Input = styled("input");
 
+const PopoverContent = styled(Popover.Content);
+
+interface SelectSimpleProps {
+  fetchedData: FetchDataArrayType<SchemaType>;
+  name: string;
+  required: boolean;
+}
+
+interface SelectMultipleProps extends SelectSimpleProps {
+  defaultValue: Array<string>;
+}
+
+const SelectSimple = React.memo(
+  React.forwardRef<
+    HTMLSelectElement,
+    SelectSimpleProps & TailwindComponentProps<"select">
+  >((props, ref) => {
+    const { name, required, defaultValue, fetchedData, ...rest } = props;
+    return (
+      <styled.select
+        aria-label={`${name}-select`}
+        ref={ref}
+        {...rest}
+        name={name}
+        required={required}
+        defaultValue={defaultValue}
+      >
+        {!defaultValue && (
+          <option value="" hidden label="Select from dropdown" />
+        )}
+        {fetchedData &&
+          fetchedData.length > 0 &&
+          fetchedData.map(dataItem => (
+            <option
+              key={dataItem.id}
+              value={dataItem.id as string}
+              label={dataItem.title as string}
+            />
+          ))}
+      </styled.select>
+    );
+  }),
+);
+
+interface SelectMultipleItemProps {
+  selectState: boolean;
+  setSelectState: (value: boolean) => void;
+  selectLabel: string;
+}
+
+interface SelectStateType {
+  [k: string]: boolean;
+}
+
+const SelectMultipleItem = React.memo(
+  React.forwardRef<
+    HTMLLabelElement,
+    TailwindComponentProps<"label"> & SelectMultipleItemProps
+  >((props, ref) => {
+    const { selectState, setSelectState, selectLabel, ...rest } = props;
+    return (
+      <styled.label {...rest} ref={ref}>
+        <styled.input
+          type="checkbox"
+          themeName="SelectCheckBox"
+          checked={selectState}
+          onChange={e => setSelectState(e.currentTarget.checked)}
+        />
+        {selectLabel}
+      </styled.label>
+    );
+  }),
+);
+
+const SelectMultiple = React.memo(
+  React.forwardRef<
+    HTMLSelectElement,
+    SelectMultipleProps & TailwindComponentProps<"select">
+  >((props, ref) => {
+    const { name, required, defaultValue, fetchedData, ...rest } = props;
+    const [selectStates, setSelectStates] = React.useState<SelectStateType>(
+      () => {
+        return fetchedData
+          ? Object.fromEntries(
+              fetchedData.map(dataItem => [
+                dataItem.id,
+                defaultValue.includes(dataItem.id!),
+              ]),
+            )
+          : {};
+      },
+    );
+    const setSelectStateFn = React.useMemo(
+      () =>
+        fetchedData
+          ? Object.fromEntries(
+              fetchedData.map(dataItem => [
+                dataItem.id!,
+                (value: boolean) => {
+                  setSelectStates(prevValue => {
+                    return { ...prevValue, [dataItem.id!]: value };
+                  });
+                },
+              ]),
+            )
+          : {},
+      [JSON.stringify(fetchedData?.map(item => item.id))],
+    );
+
+    const selectValue: string[] = Object.keys(selectStates).filter(
+      item => selectStates[item],
+    );
+
+    return (
+      <>
+        <styled.select
+          multiple
+          value={selectValue}
+          name={name}
+          required={required}
+          ref={ref}
+          themeName="FormSelectMultiple"
+        >
+          {fetchedData &&
+            fetchedData.map(dataItem => (
+              <option
+                key={dataItem.id}
+                label={dataItem.title!}
+                value={dataItem.id!}
+              ></option>
+            ))}
+        </styled.select>
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <styled.button themeName="WidgetNewButton">
+              Select from dropdown
+              <ChevronDownIcon />
+            </styled.button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <PopoverContent
+              className="PopoverContent"
+              themeName="WidgetPopoverContent"
+              sideOffset={5}
+              align="start"
+              hideWhenDetached={true}
+            >
+              <styled.div themeName="SelectMultipleContainer">
+                {fetchedData &&
+                  fetchedData.map(dataItem => (
+                    <SelectMultipleItem
+                      themeName="SelectMultipleItem"
+                      key={dataItem.id}
+                      selectState={selectStates[dataItem.id!]}
+                      selectLabel={dataItem.title!}
+                      setSelectState={setSelectStateFn[dataItem.id!]}
+                    />
+                  ))}
+              </styled.div>
+            </PopoverContent>
+          </Popover.Portal>
+        </Popover.Root>
+      </>
+    );
+  }),
+);
+
 /**
  * Renders a regular select component that accepts tailwind props
  * Styled via themeName = FormSelect
  */
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    const { name, required, defaultValue, fetcherKey, ...rest } = props;
+    const { name, required, defaultValue, multiple, fetcherKey, ...rest } =
+      props;
     const fetcher = useFetcherData(fetcherKey);
     const data = (fetcher.data as FetchDataArrayType<SchemaType>)
       ? (fetcher.data as FetchDataArrayType<SchemaType>)
       : [];
     return (
       <styled.div themeName="FormSelectContainer">
-        <styled.select
-          aria-label={`${name}-select`}
-          ref={ref}
-          {...rest}
-          name={name}
-          required={required}
-          defaultValue={defaultValue}
-        >
-          {!defaultValue && (
-            <option value="" hidden label="Select from dropdown" />
-          )}
-          {data &&
-            data.length > 0 &&
-            data.map(dataItem => (
-              <option
-                key={dataItem.id}
-                value={dataItem.id as string}
-                label={dataItem.title as string}
-              />
-            ))}
-        </styled.select>
+        {multiple ? (
+          <></>
+        ) : (
+          <SelectSimple
+            name={name}
+            required={required}
+            defaultValue={defaultValue}
+            fetchedData={data}
+            {...rest}
+          />
+        )}
         <Link to={`../${fetcherKey}/create`} aria-label={`${name}-create-link`}>
           <AddButton
             tooltipContent="Add"
@@ -182,4 +342,4 @@ const FormComponent = React.forwardRef<
 
 FormComponent.displayName = "FormComponent";
 
-export { InputField, FormComponent, useFetcherData };
+export { InputField, FormComponent, SelectMultiple };

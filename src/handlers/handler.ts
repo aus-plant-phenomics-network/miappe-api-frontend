@@ -92,12 +92,16 @@ class Handler<T extends SchemaType, Key extends string> {
     request: Request,
   ): Promise<SubmissionFormType<T>> => {
     const formData = await request.formData();
-    const formDataObj = Object.fromEntries(formData.entries());
 
-    return Object.entries(formDataObj).reduce((acc, dataEntry) => {
+    return Object.entries(formData).reduce((acc, dataEntry) => {
       const [key, value] = dataEntry;
       if (key in this.schema) {
-        acc[key] = getSubmissionValue(this.schema[key], value);
+        const fValue = getSubmissionValue(this.schema[key], value);
+        if (key in acc) {
+          acc[key].push(fValue);
+        } else {
+          acc[key] = fValue;
+        }
       } else {
         throw new Error("Key cannot be found in schema: " + key);
       }
