@@ -166,6 +166,7 @@ const SelectMultiple = React.memo(
       <>
         <styled.select
           multiple
+          onChange={e => console.log(e.currentTarget.value)}
           value={selectValue}
           name={name}
           required={required}

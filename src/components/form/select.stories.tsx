@@ -18,7 +18,15 @@ const SelectMultipleForm = ({
 }) => {
   return (
     <ThemeProvider value={theme}>
-      <form>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          for (const pair of formData.entries()) {
+            console.log(pair);
+          }
+        }}
+      >
         <SelectMultiple
           name={name}
           required={required}
