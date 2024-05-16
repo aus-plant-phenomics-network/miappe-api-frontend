@@ -4,7 +4,7 @@ import { FetchDataArrayType, FetchDataType, SchemaType } from "../types";
 import { styled } from "@ailiyah-ui/factory";
 import React from "react";
 import { FormComponent } from "../form";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import {
   PageSearchForm,
   NewItemButton,

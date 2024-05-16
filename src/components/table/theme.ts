@@ -16,7 +16,7 @@ const tableTheme: PresetTheme = {
     twTextColor: "text-neutral-500",
     twOverflow: "overflow-x-auto",
     twTableLayout: "table-auto md:table-fixed",
-    twFontSize: "text-base"
+    twFontSize: "text-base",
   },
   TableHead: {
     twWidth: "w-full",
