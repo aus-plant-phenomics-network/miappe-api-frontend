@@ -10,9 +10,11 @@ import {
   capitalise,
   BaseSchema,
   getMultipleValue,
+  parseFormData,
 } from "./helpers";
 import { describe, expect, test } from "vitest";
-import { SchemaElementType } from "./types";
+import { SchemaElementType, SchemaType } from "./types";
+import { Form } from "react-router-dom";
 
 const getMultipleFixture = [
   {
@@ -633,4 +635,60 @@ describe("Test Extended Schema", () => {
       "Enter ReleaseDate",
     );
   });
+});
+
+/**
+ * ==================================================================================================================================================================
+ * Test parseFormData
+ * ==================================================================================================================================================================
+ */
+
+class ExtendedSchema extends BaseSchema {
+  stringField: SchemaElementType = { type: "text" };
+  dateField: SchemaElementType = { type: "date" };
+  stringArrField: SchemaElementType = { type: "select", multiple: true };
+  nullTextField: SchemaElementType = { type: "text" };
+  nullDateField: SchemaElementType = { type: "date" };
+  nullSelectField: SchemaElementType = { type: "select" };
+  nullSelectMultipleField: SchemaElementType = {
+    type: "select",
+    multiple: true,
+  };
+}
+
+const Fixture = {
+  stringField: "stringField",
+  dateField: "2021-01-01",
+  stringArrField: ["first", "second"],
+  nullTextField: "",
+  nullDateField: "",
+  nullSelectField: "",
+  nullSelectMultipleField: "",
+  keyNotInSchema: "value",
+};
+
+const extendedSchema = new ExtendedSchema();
+
+describe("Test parse formData method", () => {
+  const formData = new FormData();
+  Object.entries(Fixture).forEach(item => {
+    const [k, v] = item;
+    if (Array.isArray(v)) {
+      v.forEach(vItem => formData.append(k, vItem));
+    } else {
+      formData.append(k, v);
+    }
+  });
+  const parsedData = parseFormData(extendedSchema, formData);
+  for (const key of Object.keys(extendedSchema)) {
+    test(`Key ${key} should return the correct value`, () => {
+      if (key.startsWith("null")) {
+        console.log(parsedData[key]);
+        expect(parsedData[key]).toBeNull();
+      }
+    });
+    test("Key not in schema is not in final parsed value", () => {
+      expect("keyNotInSchema" in parsedData).toBeFalsy();
+    });
+  }
 });
