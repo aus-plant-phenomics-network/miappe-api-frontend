@@ -19,7 +19,7 @@ class Handler<T extends SchemaType, Key extends string> {
   }
   protected getAllData = async (
     title?: string | null,
-  ): Promise<FetchDataArrayType<T>> => {
+  ): Promise<FetchDataArrayType> => {
     const response = await fetch(
       title ? this.url + "?" + new URLSearchParams({ title: title }) : this.url,
     );
@@ -30,9 +30,9 @@ class Handler<T extends SchemaType, Key extends string> {
     }
 
     const result = await response.json();
-    return result as FetchDataArrayType<T>;
+    return result as FetchDataArrayType;
   };
-  protected getDataById = async (id: string): Promise<FetchDataType<T>> => {
+  protected getDataById = async (id: string): Promise<FetchDataType> => {
     const response = await fetch(`${this.url}/${id}`);
     if (!response.ok) {
       console.error(response);
@@ -43,8 +43,8 @@ class Handler<T extends SchemaType, Key extends string> {
     return result as FetchDataType<T>;
   };
   protected createData = async (
-    data: SubmissionFormType<T>,
-  ): Promise<FetchDataType<T>> => {
+    data: SubmissionFormType,
+  ): Promise<FetchDataType> => {
     const response = await fetch(this.url, {
       method: "POST",
       headers: {
@@ -57,7 +57,7 @@ class Handler<T extends SchemaType, Key extends string> {
     }
 
     const result = await response.json();
-    return result as FetchDataType<T>;
+    return result as FetchDataType;
   };
   protected updateData = async (
     data: SubmissionFormType<T>,

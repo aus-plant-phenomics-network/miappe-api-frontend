@@ -7,7 +7,7 @@ interface TableFields {
 type HeaderOwnProps = TableFields;
 
 interface BodyOwnProps extends TableFields {
-  fieldData: FetchDataArrayType<SchemaType>;
+  fieldData: FetchDataArrayType;
 }
 
 interface TableOwnProps extends BodyOwnProps {
@@ -15,7 +15,7 @@ interface TableOwnProps extends BodyOwnProps {
 }
 
 interface BodyRowOwnProps extends TableFields {
-  rowItem: FetchDataSuccessType<SchemaType>;
+  rowItem: FetchDataSuccessType;
 }
 
 interface BodyRowComponentOwnProps {

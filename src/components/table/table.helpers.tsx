@@ -12,7 +12,7 @@ class TestSchema extends BaseSchema {
   submissionDate: SchemaElementType = { type: "date", required: false };
 }
 
-type FixtureType = FetchDataSuccessType<TestSchema>;
+type FixtureType = FetchDataSuccessType;
 
 const schema = new TestSchema();
 const excludedKeys = ["description"];
@@ -36,9 +36,9 @@ const dataWithSubmissionDate: FixtureType = {
   updatedAt: "2020-01-04T00:00:04",
 };
 
-const fetchDataFailure: FetchDataArrayType<TestSchema> = null;
+const fetchDataFailure: FetchDataArrayType = null;
 
-const fetchDataSuccess: FetchDataArrayType<TestSchema> = [
+const fetchDataSuccess: FetchDataArrayType = [
   dataWithNoSubmissionDate,
   dataWithSubmissionDate,
 ];
@@ -54,7 +54,7 @@ const Components = {
     fieldData,
   }: {
     fields: string[];
-    fieldData: FetchDataArrayType<TestSchema>;
+    fieldData: FetchDataArrayType;
   }) => {
     const routes = createMemoryRouter([
       {
@@ -75,7 +75,7 @@ const Components = {
   }: {
     schema: TestSchema;
     fields: string[];
-    fieldData: FetchDataArrayType<TestSchema>;
+    fieldData: FetchDataArrayType;
   }) => {
     const routes = createMemoryRouter([
       {

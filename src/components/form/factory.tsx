@@ -20,10 +20,10 @@ import {
  * @params - data - data to initialise field value
  * @returns Array<InputField>
  */
-const createInputArray = <T extends SchemaType>(
-  schema: T,
+const createInputArray = (
+  schema: SchemaType,
   exclude: Array<string> = [],
-  data?: FetchDataType<T>,
+  data?: FetchDataType,
 ): Array<React.ReactElement> => {
   return (
     Object.entries(schema)
@@ -35,8 +35,8 @@ const createInputArray = <T extends SchemaType>(
         const type = schema.type;
         const required = getRequired(schema);
         const placeholder = getPlaceHolderValue(schema, key);
-        const hidden = getHiddenValue(schema, key);
-        const defaultValue = getDefaultValue(schema, data?.[key]);
+        const hidden = getHiddenValue(schema);
+        const defaultValue = getDefaultValue(schema, data?.[key] );
         const fetcherKey = getFetcherKey(schema, key);
         const labelKey = getFormDisplayKey(schema, key);
         return (

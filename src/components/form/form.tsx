@@ -52,7 +52,7 @@ const Input = styled("input");
 const PopoverContent = styled(Popover.Content);
 
 interface SelectSimpleProps {
-  fetchedData: FetchDataArrayType<SchemaType>;
+  fetchedData: FetchDataArrayType;
   name: string;
   required: boolean;
 }
@@ -83,7 +83,7 @@ const SelectSimple = React.memo(
           fetchedData.length > 0 &&
           fetchedData.map(dataItem => (
             <option
-              key={dataItem.id}
+              key={dataItem.id as string}
               value={dataItem.id as string}
               label={dataItem.title as string}
             />
@@ -135,7 +135,7 @@ const SelectMultiple = React.memo(
           ? Object.fromEntries(
               fetchedData.map(dataItem => [
                 dataItem.id,
-                defaultValue.includes(dataItem.id!),
+                defaultValue.includes(dataItem.id as string),
               ]),
             )
           : {};
@@ -149,7 +149,7 @@ const SelectMultiple = React.memo(
                 dataItem.id!,
                 (value: boolean) => {
                   setSelectStates(prevValue => {
-                    return { ...prevValue, [dataItem.id!]: value };
+                    return { ...prevValue, [dataItem.id as string]: value };
                   });
                 },
               ]),
@@ -176,8 +176,8 @@ const SelectMultiple = React.memo(
           {fetchedData &&
             fetchedData.map(dataItem => (
               <option
-                key={dataItem.id}
-                label={dataItem.title!}
+                key={dataItem.id as string}
+                label={dataItem.title as string}
                 value={dataItem.id!}
               ></option>
             ))}
@@ -202,10 +202,10 @@ const SelectMultiple = React.memo(
                   fetchedData.map(dataItem => (
                     <SelectMultipleItem
                       themeName="SelectMultipleItem"
-                      key={dataItem.id}
-                      selectState={selectStates[dataItem.id!]}
-                      selectLabel={dataItem.title!}
-                      setSelectState={setSelectStateFn[dataItem.id!]}
+                      key={dataItem.id as string}
+                      selectState={selectStates[dataItem.id as string]}
+                      selectLabel={dataItem.title as string}
+                      setSelectState={setSelectStateFn[dataItem.id as string]}
                     />
                   ))}
               </styled.div>
@@ -226,8 +226,8 @@ const Select = React.memo(
     const { name, required, defaultValue, multiple, fetcherKey, ...rest } =
       props;
     const fetcher = useFetcherData(fetcherKey);
-    const data = (fetcher.data as FetchDataArrayType<SchemaType>)
-      ? (fetcher.data as FetchDataArrayType<SchemaType>)
+    const data = (fetcher.data as FetchDataArrayType)
+      ? (fetcher.data as FetchDataArrayType)
       : [];
     return (
       <styled.div themeName="FormSelectContainer">

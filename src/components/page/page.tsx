@@ -25,7 +25,7 @@ function DetailPage({
   title: string;
   children: React.ReactElement[];
 }) {
-  const fieldData = useLoaderData() as FetchDataArrayType<SchemaType>;
+  const fieldData = useLoaderData() as FetchDataArrayType;
 
   // Props for field selection component
   const [displayFields, setDisplayFields] = React.useState<FieldSelection>(() =>
@@ -84,7 +84,7 @@ function CreatePage({
 }
 
 function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
-  const data = useLoaderData() as FetchDataType<typeof schema>;
+  const data = useLoaderData() as FetchDataType;
   const updateComponents = React.useMemo(
     () => createInputArray(schema, [], data),
     [JSON.stringify(data)],

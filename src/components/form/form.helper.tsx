@@ -69,7 +69,7 @@ const TestComponent = ({
   data,
 }: {
   schema: BaseSchema;
-  data: FetchDataType<BaseSchema>;
+  data: FetchDataType;
 }) => {
   const components = createInputArray(schema, [], data);
   const routes = createMemoryRouter([

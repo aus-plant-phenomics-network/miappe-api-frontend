@@ -14,7 +14,7 @@ const SelectMultipleForm = ({
   name: string;
   required: boolean;
   defaultValue: string[];
-  fetchedData: FetchDataArrayType<SchemaType>;
+  fetchedData: FetchDataArrayType;
 }) => {
   return (
     <ThemeProvider value={theme}>
@@ -48,7 +48,7 @@ export default meta;
 
 type Story = StoryObj<typeof SelectMultipleForm>;
 
-const fetchData: FetchDataArrayType<SchemaType> = [
+const fetchData: FetchDataArrayType = [
   { id: "facility0", title: "firstFacility", description: "first facility" },
   { id: "facility1", title: "secondFacility", description: "second facility" },
   { id: "facility2", title: "thirdFacility", description: "third facility" },
@@ -59,7 +59,7 @@ const defaultValueEmpty: string[] = [];
 
 const defaultValue: string[] = ["facility0", "facility1"];
 
-const defaultValueAll: string[] = fetchData.map(item => item.id!);
+// const defaultValueAll: string[] = fetchData.map(item => item.id!);
 
 const FIXTURE = {
   fetchData: fetchData,
