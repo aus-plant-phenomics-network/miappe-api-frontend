@@ -1,4 +1,12 @@
-import { SchemaElementType, SchemaType, SubmissionElementType } from "./types";
+import {
+  FetchDataArrayType,
+  FetchDataSuccessType,
+  FetchDataType,
+  SchemaElementType,
+  SchemaType,
+  SubmissionElementType,
+  SubmissionFormType,
+} from "./types";
 
 const getMultipleValue = (schema: SchemaElementType): boolean => {
   return schema.multiple ? true : false;
@@ -148,6 +156,34 @@ const getSubmissionValue = (
   else return rawValue;
 };
 
+const parseFormData = (
+  schema: SchemaType,
+  formData: FormData,
+): SubmissionFormType => {
+  const submitData: SubmissionFormType = {};
+  for (const pair of formData.entries()) {
+    const [key, value] = pair;
+    // Not in schema -> skip
+    if (key in schema) {
+      const elementSchema = schema[key];
+      if (getMultipleValue(elementSchema) && elementSchema.type == "select") {
+        if (value == "") {
+          submitData[key] = null;
+          continue;
+        }
+        if (key in submitData) {
+          (submitData[key] as string[]).push(value as string);
+        } else {
+          submitData[key] = [value as string];
+        }
+      } else {
+        submitData[key] = getSubmissionValue(elementSchema, value);
+      }
+    }
+  }
+  return submitData;
+};
+
 /**
  * ABC for schema type. This class can be extended to specify data schema.
  * This is to avoid having to define a schema.json file and a schema.type.ts
@@ -183,6 +219,7 @@ export {
   getPlaceHolderValue,
   getRequired,
   getMultipleValue,
+  parseFormData,
   capitalise,
   BaseSchema,
 };
