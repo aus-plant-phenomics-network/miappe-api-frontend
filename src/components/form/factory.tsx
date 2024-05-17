@@ -20,6 +20,7 @@ import {
  * @params - data - data to initialise field value
  * @returns Array<InputField>
  */
+
 const createInputArray = (
   schema: SchemaType,
   exclude: Array<string> = [],

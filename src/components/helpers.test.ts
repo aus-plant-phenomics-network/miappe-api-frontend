@@ -683,7 +683,6 @@ describe("Test parse formData method", () => {
   for (const key of Object.keys(extendedSchema)) {
     test(`Key ${key} should return the correct value`, () => {
       if (key.startsWith("null")) {
-        console.log(parsedData[key]);
         expect(parsedData[key]).toBeNull();
       }
     });
