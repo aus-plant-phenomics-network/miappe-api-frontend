@@ -32,7 +32,7 @@ type FetchDataType = FetchDataSuccessType | null;
 
 type FetchDataArrayType = Array<FetchDataSuccessType> | null;
 
-type SubmissionElementType = string | string[] | Date | Date[] | File | null;
+type SubmissionElementType = string | string[] | Date | File | null;
 
 type SubmissionFormType = {
   [k: string]: SubmissionElementType;
