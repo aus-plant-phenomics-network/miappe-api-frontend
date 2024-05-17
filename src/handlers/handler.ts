@@ -3,6 +3,7 @@ import {
   FetchDataArrayType,
   FetchDataType,
   SubmissionFormType,
+  parseFormData,
 } from "../components";
 import { Params } from "react-router-dom";
 import { getSubmissionValue } from "../components";
@@ -40,7 +41,7 @@ class Handler<T extends SchemaType, Key extends string> {
     }
 
     const result = await response.json();
-    return result as FetchDataType<T>;
+    return result as FetchDataType;
   };
   protected createData = async (
     data: SubmissionFormType,
@@ -60,9 +61,9 @@ class Handler<T extends SchemaType, Key extends string> {
     return result as FetchDataType;
   };
   protected updateData = async (
-    data: SubmissionFormType<T>,
+    data: SubmissionFormType,
     id: string,
-  ): Promise<FetchDataType<T>> => {
+  ): Promise<FetchDataType> => {
     const response = await fetch(`${this.url}/${id}`, {
       method: "PUT",
       headers: {
@@ -76,7 +77,7 @@ class Handler<T extends SchemaType, Key extends string> {
     }
 
     const result = await response.json();
-    return result as FetchDataType<T>;
+    return result as FetchDataType;
   };
   protected deleteData = async (id: string): Promise<Response> => {
     const response = await fetch(`${this.url}/${id}`, {
@@ -90,30 +91,17 @@ class Handler<T extends SchemaType, Key extends string> {
   };
   protected parseData = async (
     request: Request,
-  ): Promise<SubmissionFormType<T>> => {
+  ): Promise<SubmissionFormType> => {
     const formData = await request.formData();
 
-    return Object.entries(formData).reduce((acc, dataEntry) => {
-      const [key, value] = dataEntry;
-      if (key in this.schema) {
-        const fValue = getSubmissionValue(this.schema[key], value);
-        if (key in acc) {
-          acc[key].push(fValue);
-        } else {
-          acc[key] = fValue;
-        }
-      } else {
-        throw new Error("Key cannot be found in schema: " + key);
-      }
-      return acc;
-    }, {} as any);
+    return parseFormData(this.schema, formData);
   };
 
   public loaderAll = async ({
     request,
   }: {
     request: Request;
-  }): Promise<FetchDataArrayType<T>> => {
+  }): Promise<FetchDataArrayType> => {
     try {
       const url = new URL(request.url);
       const title = url.searchParams.get("title");
@@ -126,7 +114,7 @@ class Handler<T extends SchemaType, Key extends string> {
     params,
   }: {
     params: Params<Key>;
-  }): Promise<FetchDataType<T>> => {
+  }): Promise<FetchDataType> => {
     try {
       return await this.getDataById(params[this.idKey]!);
     } catch (error) {
