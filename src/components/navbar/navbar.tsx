@@ -10,61 +10,70 @@ const StyledLink = styled(NavLink);
 const defaultData: NavDefinition = (await import("../../assets/navItems.json"))
   .default;
 
+const Content: React.FC<{ value: FieldDefinition; useLink: boolean }> =
+  React.memo(({ value, useLink }) => {
+    return value ? (
+      Object.entries(value).map(entry => {
+        const [name, link] = entry;
+        return (
+          <Accordion.Content themeName="NavBarAccordionContent" key={name}>
+            {useLink ? (
+              <StyledLink to={link}>
+                {({ isActive }) => {
+                  const [state, setState] = React.useState(false);
+                  const dataState = state || isActive ? "active" : "inactive";
+                  return (
+                    <styled.p
+                      data-state={dataState}
+                      onMouseEnter={() => setState(true)}
+                      onMouseLeave={() => setState(false)}
+                      themeName="NavBarAccordionContentLink"
+                    >
+                      {name}
+                    </styled.p>
+                  );
+                }}
+              </StyledLink>
+            ) : (
+              <styled.p
+                data-state="inactive"
+                themeName="NavBarAccordionContentLink"
+              >
+                {name}
+              </styled.p>
+            )}
+          </Accordion.Content>
+        );
+      })
+    ) : (
+      <></>
+    );
+  });
+
+const NavItems: React.FC<{
+  entry: [string, FieldDefinition];
+  useLink: boolean;
+}> = React.memo(({ entry, useLink }) => {
+  const [key, value] = entry;
+  const Icon = styled(ChevronDownIcon);
+  return (
+    <Accordion.Item value={key} key={key} themeName="NavBarAccordionItem">
+      <Accordion.Trigger themeName="NavBarAccordionTrigger">
+        {key}
+        <Icon data-rotate="180" themeName="Icons" />
+      </Accordion.Trigger>
+      <hr />
+      <styled.div themeName="NavBarAccordionContentContainer">
+        <Content useLink={useLink} value={value} />
+      </styled.div>
+    </Accordion.Item>
+  );
+});
+
 const NavBar: React.FC<{
   useLink: boolean;
   parsedData?: NavDefinition | null;
-}> = ({ useLink, parsedData = defaultData }) => {
-  const Content = (value: FieldDefinition) =>
-    Object.entries(value).map((entry) => {
-      const [name, link] = entry;
-      return (
-        <Accordion.Content themeName="NavBarAccordionContent" key={name}>
-          {useLink ? (
-            <StyledLink to={link}>
-              {({ isActive }) => {
-                const [state, setState] = React.useState(false);
-                const dataState = state || isActive ? "active" : "inactive";
-                return (
-                  <styled.p
-                    data-state={dataState}
-                    onMouseEnter={() => setState(true)}
-                    onMouseLeave={() => setState(false)}
-                    themeName="NavBarAccordionContentLink"
-                  >
-                    {name}
-                  </styled.p>
-                );
-              }}
-            </StyledLink>
-          ) : (
-            <styled.p
-              data-state="inactive"
-              themeName="NavBarAccordionContentLink"
-            >
-              {name}
-            </styled.p>
-          )}
-        </Accordion.Content>
-      );
-    });
-
-  const NavItems = (entry: [string, FieldDefinition]) => {
-    const [key, value] = entry;
-    const Icon = styled(ChevronDownIcon);
-    return (
-      <Accordion.Item value={key} key={key} themeName="NavBarAccordionItem">
-        <Accordion.Trigger themeName="NavBarAccordionTrigger">
-          {key}
-          <Icon data-rotate="180" themeName="Icons" />
-        </Accordion.Trigger>
-        <hr />
-        <styled.div themeName="NavBarAccordionContentContainer">
-          {value && Content(value)}
-        </styled.div>
-      </Accordion.Item>
-    );
-  };
-
+}> = React.memo(({ useLink, parsedData = defaultData }) => {
   return (
     <PNavBar.Root themeName="NavBarRoot">
       <PNavBar.Trigger themeName="NavBarTrigger" />
@@ -72,12 +81,14 @@ const NavBar: React.FC<{
         <PNavBar.Body themeName="NavBarContentBody">
           <Accordion.Root type="multiple">
             {parsedData &&
-              Object.entries(parsedData).map((entry) => NavItems(entry))}
+              Object.entries(parsedData).map(entry => (
+                <NavItems entry={entry} useLink={useLink} />
+              ))}
           </Accordion.Root>
         </PNavBar.Body>
       </PNavBar.Content>
     </PNavBar.Root>
   );
-};
+});
 
 export { NavBar, defaultData };
