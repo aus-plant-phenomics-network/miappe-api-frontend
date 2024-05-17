@@ -1,5 +1,4 @@
 import {
-  removeId,
   getTableDisplayKey,
   getFetcherKey,
   getSubmissionValue,
@@ -10,32 +9,37 @@ import {
   getPlaceHolderValue,
   capitalise,
   BaseSchema,
+  getMultipleValue,
 } from "./helpers";
 import { describe, expect, test } from "vitest";
-import { SchemaElementType, TypeLiterals } from "./types";
+import { SchemaElementType } from "./types";
 
-/**
- * ==================================================================================================================================================================
- * Test removeId
- * ==================================================================================================================================================================
- */
-
-const removeIdFixture = [
-  ["text", "investigation", "investigation"],
-  ["text", "investigationId", "investigationId"],
-  ["date", "investigationId", "investigationId"],
-  ["select", "investigationId", "investigation"],
+const getMultipleFixture = [
+  {
+    inputValue: "studyId",
+    schema: { type: "select", multiple: true },
+    expValue: true,
+  },
+  {
+    inputValue: "studyId",
+    schema: { type: "select", multiple: false },
+    expValue: false,
+  },
+  {
+    inputValue: "studyId",
+    schema: { type: "select" },
+    expValue: false,
+  },
 ];
 
-describe.each(removeIdFixture)(
-  "given type %s and input %s",
-  (inputType, inputValue, expValue) => {
-    test(`removeId returns ${expValue}`, () => {
-      expect(removeId(inputType as TypeLiterals, inputValue)).toEqual(expValue);
+describe.each(getMultipleFixture)(
+  "given %o",
+  ({ inputValue, schema, expValue }) => {
+    test(`${inputValue} getMultiple returns ${expValue}`, () => {
+      expect(getMultipleValue(schema as SchemaElementType)).toEqual(expValue);
     });
   },
 );
-
 /**
  * ==================================================================================================================================================================
  * Test capitalise
@@ -64,64 +68,16 @@ describe.each(capitaliseFixture)("given input %s", (inputValue, expValue) => {
 const getFetcherKeyFixture = [
   {
     inputValue: "investigationId",
-    schema: { type: "text" },
-    expValue: "investigationId",
-  },
-  {
-    inputValue: "investigationId",
-    schema: { type: "date" },
-    expValue: "investigationId",
-  },
-  {
-    inputValue: "investigationId",
     schema: { type: "select" },
-    expValue: "investigation",
-  },
-
-  {
-    inputValue: "investigation",
-    schema: { type: "text" },
-    expValue: "investigation",
-  },
-  {
-    inputValue: "investigation",
-    schema: { type: "date" },
-    expValue: "investigation",
+    expValue: "investigationId",
   },
   {
     inputValue: "investigation",
     schema: { type: "select" },
     expValue: "investigation",
   },
-
   {
     inputValue: "institutionType",
-    schema: { fetcherKey: "vocabulary", type: "text" },
-    expValue: "vocabulary",
-  },
-  {
-    inputValue: "institutionType",
-    schema: { fetcherKey: "vocabulary", type: "date" },
-    expValue: "vocabulary",
-  },
-  {
-    inputValue: "institutionType",
-    schema: { fetcherKey: "vocabulary", type: "select" },
-    expValue: "vocabulary",
-  },
-
-  {
-    inputValue: "investigationId",
-    schema: { fetcherKey: "vocabulary", type: "text" },
-    expValue: "vocabulary",
-  },
-  {
-    inputValue: "investigationId",
-    schema: { fetcherKey: "vocabulary", type: "date" },
-    expValue: "vocabulary",
-  },
-  {
-    inputValue: "investigationId",
     schema: { fetcherKey: "vocabulary", type: "select" },
     expValue: "vocabulary",
   },
@@ -312,7 +268,7 @@ const getTableDisplayKeyFixture = [
   {
     inputValue: "investigationId",
     schema: { type: "select" },
-    expValue: "Investigation",
+    expValue: "InvestigationId",
   },
   {
     inputValue: "investigationId",
@@ -328,7 +284,7 @@ const getTableDisplayKeyFixture = [
   {
     inputValue: "InvestigationId",
     schema: { type: "select" },
-    expValue: "Investigation",
+    expValue: "InvestigationId",
   },
   {
     inputValue: "InvestigationId",
@@ -390,13 +346,13 @@ const getFormDisplayKeyFixture = [
   {
     inputValue: "investigationId",
     schema: { type: "select", required: true },
-    expValue: "Investigation*",
+    expValue: "InvestigationId*",
   },
   // Non required
   {
     inputValue: "investigationId",
     schema: { type: "select" },
-    expValue: "Investigation",
+    expValue: "InvestigationId",
   },
 ];
 
@@ -416,13 +372,13 @@ const getPlaceholderFixture = [
   {
     inputValue: "investigationId",
     schema: { type: "select" },
-    expValue: "Enter Investigation",
+    expValue: "Enter InvestigationId",
   },
   // With Id and capitalised
   {
     inputValue: "InvestigationId",
     schema: { type: "select" },
-    expValue: "Enter Investigation",
+    expValue: "Enter InvestigationId",
   },
   // Without Id and uncapitalised
   {
@@ -537,102 +493,17 @@ const getHiddenValueFixture = [
   {
     inputValue: "id",
     schema: { type: "text" },
-    expValue: true,
-  },
-  {
-    inputValue: "id",
-    schema: { type: "text" },
-    expValue: true,
-  },
-  {
-    inputValue: "id",
-    schema: { type: "text" },
-    expValue: true,
-  },
-
-  /** Non id with no hidden value => expect to be false  */
-  {
-    inputValue: "studyId",
-    schema: { type: "text" },
-    expValue: false,
-  },
-  {
-    inputValue: "studyId",
-    schema: { type: "text" },
-    expValue: false,
-  },
-  {
-    inputValue: "studyId",
-    schema: { type: "text" },
-    expValue: false,
-  },
-
-  /** Id with hidden value set to false => expect to be false  */
-  {
-    inputValue: "id",
-    schema: { hidden: false, type: "text" },
     expValue: false,
   },
   {
     inputValue: "id",
-    schema: { hidden: false, type: "text" },
-    expValue: false,
-  },
-  {
-    inputValue: "id",
-    schema: { hidden: false, type: "text" },
-    expValue: false,
-  },
-
-  /** Id with hidden value set to true => expect to be true  */
-  {
-    inputValue: "id",
-    schema: { hidden: true, type: "text" },
+    schema: { type: "text", hidden: true },
     expValue: true,
   },
   {
     inputValue: "id",
-    schema: { hidden: true, type: "text" },
-    expValue: true,
-  },
-  {
-    inputValue: "id",
-    schema: { hidden: true, type: "text" },
-    expValue: true,
-  },
-
-  /** Non-id with hidden set to false => expect to be false  */
-  {
-    inputValue: "studyId",
-    schema: { hidden: false, type: "text" },
+    schema: { type: "text", hidden: false },
     expValue: false,
-  },
-  {
-    inputValue: "studyId",
-    schema: { hidden: false, type: "text" },
-    expValue: false,
-  },
-  {
-    inputValue: "studyId",
-    schema: { hidden: false, type: "text" },
-    expValue: false,
-  },
-
-  /** Non-id with hidden set to true => expect to be true  */
-  {
-    inputValue: "studyId",
-    schema: { hidden: true, type: "text" },
-    expValue: true,
-  },
-  {
-    inputValue: "studyId",
-    schema: { hidden: true, type: "text" },
-    expValue: true,
-  },
-  {
-    inputValue: "studyId",
-    schema: { hidden: true, type: "text" },
-    expValue: true,
   },
 ];
 
@@ -640,9 +511,7 @@ describe.each(getHiddenValueFixture)(
   "given %o",
   ({ inputValue, schema, expValue }) => {
     test(`getHiddenValue returns ${expValue}`, () => {
-      expect(
-        getHiddenValue(schema as SchemaElementType, inputValue as string),
-      ).toEqual(expValue);
+      expect(getHiddenValue(schema as SchemaElementType)).toEqual(expValue);
     });
   },
 );
@@ -656,15 +525,15 @@ describe("Test BaseSchema default value", () => {
   const schema = new BaseSchema();
   test("id is text, hidden and  not required by default", () => {
     expect(schema.id.type).toBe("text");
-    expect(getHiddenValue(schema.id, "id")).toBeTruthy();
+    expect(getHiddenValue(schema.id)).toBeTruthy();
     expect(getRequired(schema.id)).toBeFalsy();
   });
   test("createdAt, updatedAt are date, hidden and not required", () => {
     expect(schema.createdAt.type).toBe("date");
     expect(schema.updatedAt.type).toBe("date");
 
-    expect(getHiddenValue(schema.createdAt, "createdAt")).toBeTruthy();
-    expect(getHiddenValue(schema.updatedAt, "updatedAt")).toBeTruthy();
+    expect(getHiddenValue(schema.createdAt)).toBeTruthy();
+    expect(getHiddenValue(schema.updatedAt)).toBeTruthy();
 
     expect(getRequired(schema.createdAt)).not.toBeTruthy();
     expect(getRequired(schema.updatedAt)).not.toBeTruthy();
@@ -672,7 +541,7 @@ describe("Test BaseSchema default value", () => {
   test("title is text, required, not hidden with FormLabel being Title*, table header being Title, placeholder value being Enter Title", () => {
     expect(schema.title.type).toBe("text");
     expect(getRequired(schema.title)).toBeTruthy();
-    expect(getHiddenValue(schema.title, "title")).toBeFalsy();
+    expect(getHiddenValue(schema.title)).toBeFalsy();
     expect(getFormDisplayKey(schema.title, "title")).toBe("Title*");
     expect(getTableDisplayKey(schema.title, "title")).toBe("Title");
     expect(getPlaceHolderValue(schema.title, "title")).toBe("Enter Title");
@@ -680,7 +549,7 @@ describe("Test BaseSchema default value", () => {
   test("description is text, not required, not hidden with FormLabel and TableHeader being Description, placeholder value being Enter Description", () => {
     expect(schema.description.type).toBe("text");
     expect(getRequired(schema.description)).toBeFalsy();
-    expect(getHiddenValue(schema.description, "description")).toBeFalsy();
+    expect(getHiddenValue(schema.description)).toBeFalsy();
     expect(getFormDisplayKey(schema.description, "description")).toBe(
       "Description",
     );
@@ -709,7 +578,12 @@ describe("Test BaseSchema default value", () => {
  */
 describe("Test Extended Schema", () => {
   class ExtendedSchema extends BaseSchema {
-    studyId: SchemaElementType = { type: "select", required: true };
+    studyId: SchemaElementType = {
+      type: "select",
+      required: true,
+      fetcherKey: "study",
+      labelKey: "study",
+    };
     releaseDate: SchemaElementType = { type: "date" };
     deviceTypeId: SchemaElementType = {
       type: "select",
@@ -722,7 +596,7 @@ describe("Test Extended Schema", () => {
   test("studyId is select, required, not hidden, FormKey is Study*, TableKey is Study, fetcherKey is study, placeholder is Enter Study", () => {
     expect(schema.studyId.type).toBe("select");
     expect(getRequired(schema.studyId)).toBeTruthy();
-    expect(getHiddenValue(schema.studyId, "studyId")).toBeFalsy();
+    expect(getHiddenValue(schema.studyId)).toBeFalsy();
     expect(getFormDisplayKey(schema.studyId, "studyId")).toBe("Study*");
     expect(getTableDisplayKey(schema.studyId, "studyId")).toBe("Study");
     expect(getPlaceHolderValue(schema.studyId, "studyId")).toBe("Enter Study");
@@ -732,7 +606,7 @@ describe("Test Extended Schema", () => {
   test("deviceTypeId is select, not required, not hidden, FormKey is Type, TableKey is Type, fetcherKey is vocabulary, placeholder is Enter Type", () => {
     expect(schema.deviceTypeId.type).toBe("select");
     expect(getRequired(schema.deviceTypeId)).not.toBeTruthy();
-    expect(getHiddenValue(schema.deviceTypeId, "deviceTypeId")).toBeFalsy();
+    expect(getHiddenValue(schema.deviceTypeId)).toBeFalsy();
     expect(getFormDisplayKey(schema.deviceTypeId, "deviceTypeId")).toBe("Type");
     expect(getTableDisplayKey(schema.deviceTypeId, "deviceTypeId")).toBe(
       "Type",
@@ -748,7 +622,7 @@ describe("Test Extended Schema", () => {
   test("releaseDate is date, not required, not hidden, FormKey is ReleaseDate, TableKey is ReleaseDate, placeholder is Enter ReleaseDate", () => {
     expect(schema.releaseDate.type).toBe("date");
     expect(getRequired(schema.releaseDate)).not.toBeTruthy();
-    expect(getHiddenValue(schema.releaseDate, "releaseDate")).toBeFalsy();
+    expect(getHiddenValue(schema.releaseDate)).toBeFalsy();
     expect(getFormDisplayKey(schema.releaseDate, "releaseDate")).toBe(
       "ReleaseDate",
     );
