@@ -4,6 +4,7 @@ import {
   SimpleSelect,
   SimpleSelectProps,
   MultipleSelect,
+  SelectPortalContent,
 } from "./select";
 import React from "react";
 
@@ -42,7 +43,9 @@ const MultipleSelectTestComponent: React.FC<MultipleSelectTestProps> = ({
 }) => {
   return (
     <form onSubmit={onSubmit} className="flex gap-x-4 w-1/2">
-      <MultipleSelect {...rest} themeName="FormSelect" />
+      <MultipleSelect {...rest} multiple={false} themeName="FormSelect">
+        <SelectPortalContent fetchedData={fetchData} />
+      </MultipleSelect>
       <button type="submit" className="border-w-2 p-4 bg-neutral-500">
         Submit
       </button>
