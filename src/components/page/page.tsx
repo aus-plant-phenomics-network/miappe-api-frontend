@@ -4,7 +4,7 @@ import { FetchDataArrayType, FetchDataType, SchemaType } from "../types";
 import { styled } from "@ailiyah-ui/factory";
 import React from "react";
 import { FormComponent } from "../form";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import {
   PageSearchForm,
   NewItemButton,
@@ -12,6 +12,7 @@ import {
   SelectFieldsDropDown,
 } from "./widget";
 import { Table } from "../table";
+import { usePrevious } from "../hooks";
 
 function DetailPage({
   fields,
@@ -24,7 +25,7 @@ function DetailPage({
   title: string;
   children: React.ReactElement[];
 }) {
-  const fieldData = useLoaderData() as FetchDataArrayType<SchemaType>;
+  const fieldData = useLoaderData() as FetchDataArrayType;
 
   // Props for field selection component
   const [displayFields, setDisplayFields] = React.useState<FieldSelection>(() =>
@@ -68,10 +69,7 @@ function CreatePage({
   children: React.ReactElement[];
   title: string;
 }) {
-  const navigate = useNavigate();
-  const onSubmit = React.useCallback(() => {
-    navigate(-1);
-  }, []);
+  const onSubmit = usePrevious();
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>
@@ -86,15 +84,12 @@ function CreatePage({
 }
 
 function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
-  const data = useLoaderData() as FetchDataType<typeof schema>;
+  const data = useLoaderData() as FetchDataType;
   const updateComponents = React.useMemo(
     () => createInputArray(schema, [], data),
     [JSON.stringify(data)],
   );
-  const navigate = useNavigate();
-  const onSubmit = React.useCallback(() => {
-    navigate(-1);
-  }, []);
+  const onSubmit = usePrevious();
   return (
     <styled.div themeName="PageRoot">
       <styled.h1 themeName="PageTitle">{title}</styled.h1>

@@ -7,7 +7,7 @@ import {
   HeaderOwnProps,
   TableOwnProps,
 } from "./table.types";
-import { useSubmit, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
 import { getDefaultValue, getTableDisplayKey } from "../helpers";
 import { FetchDataSuccessType, SchemaType } from "../types";

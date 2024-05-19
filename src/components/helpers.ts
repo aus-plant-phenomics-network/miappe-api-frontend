@@ -1,24 +1,28 @@
 import {
+  FetchDataArrayType,
+  FetchDataSuccessType,
+  FetchDataType,
   SchemaElementType,
-  TypeLiterals,
   SchemaType,
   SubmissionElementType,
+  SubmissionFormType,
 } from "./types";
+
+const getMultipleValue = (schema: SchemaElementType): boolean => {
+  return schema.multiple ? true : false;
+};
 
 /**
  * Get hidden prop value for an input/select element.
  *
- * If schema.hidden is provided, this value will be used. Otherwise,
- * returns true if key is id, false otherwise.
+ * If schema.hidden is provided, this value will be used.
  *
  * @param schema - schema of given field
  * @param key - name prop of input/select
  * @returns - boolean results on whether the input/select element should be hidden
  */
-const getHiddenValue = (schema: SchemaElementType, key: string): boolean => {
-  if (schema.hidden !== null && schema.hidden !== undefined)
-    return schema.hidden;
-  return key === "id" ? true : false;
+const getHiddenValue = (schema: SchemaElementType): boolean => {
+  return schema.hidden ? true : false;
 };
 
 /**
@@ -67,8 +71,7 @@ const capitalise = (key: string) => {
  * @returns string display value of label
  */
 const getTableDisplayKey = (schema: SchemaElementType, key: string): string => {
-  if (schema.labelKey) return capitalise(schema.labelKey);
-  return removeId(schema.type, capitalise(key));
+  return capitalise(schema.labelKey ? schema.labelKey : key);
 };
 
 /**
@@ -107,8 +110,7 @@ const getPlaceHolderValue = (
  * @returns whether the value is required
  */
 const getRequired = (schema: SchemaElementType): boolean => {
-  if (schema.required) return true;
-  return false;
+  return schema.required ? true : false;
 };
 
 /**
@@ -129,21 +131,7 @@ const getRequired = (schema: SchemaElementType): boolean => {
  * @returns - fetcherKey value
  */
 const getFetcherKey = (schema: SchemaElementType, key: string): string => {
-  if (schema.fetcherKey) return schema.fetcherKey;
-  return removeId(schema.type, key);
-};
-
-/**
- * Utility method to remove trailing Id
- *
- * @param schema - provide type info. If type is not select, do nothing
- * @param key - key value
- * @returns - key with Id removed (if possible)
- */
-const removeId = (type: TypeLiterals, key: string): string => {
-  if (type === "select" && key.endsWith("Id"))
-    return key.substring(0, key.length - 2);
-  return key;
+  return schema.fetcherKey ? schema.fetcherKey : key;
 };
 
 /**
@@ -168,13 +156,41 @@ const getSubmissionValue = (
   else return rawValue;
 };
 
+const parseFormData = (
+  schema: SchemaType,
+  formData: FormData,
+): SubmissionFormType => {
+  const submitData: SubmissionFormType = {};
+  for (const pair of formData.entries()) {
+    const [key, value] = pair;
+    // Not in schema -> skip
+    if (key in schema) {
+      const elementSchema = schema[key];
+      if (getMultipleValue(elementSchema) && elementSchema.type == "select") {
+        if (value == "") {
+          submitData[key] = null;
+          continue;
+        }
+        if (key in submitData) {
+          (submitData[key] as string[]).push(value as string);
+        } else {
+          submitData[key] = [value as string];
+        }
+      } else {
+        submitData[key] = getSubmissionValue(elementSchema, value);
+      }
+    }
+  }
+  return submitData;
+};
+
 /**
  * ABC for schema type. This class can be extended to specify data schema.
  * This is to avoid having to define a schema.json file and a schema.type.ts
  * file with duplicated information
  */
 class BaseSchema implements SchemaType {
-  id: SchemaElementType = { type: "text" };
+  id: SchemaElementType = { type: "text", hidden: true };
   title: SchemaElementType = {
     type: "text",
     required: true,
@@ -202,7 +218,8 @@ export {
   getFormDisplayKey,
   getPlaceHolderValue,
   getRequired,
-  removeId,
+  getMultipleValue,
+  parseFormData,
   capitalise,
   BaseSchema,
 };

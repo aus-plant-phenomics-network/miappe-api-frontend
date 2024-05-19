@@ -1,5 +1,4 @@
 type TypeLiterals = "text" | "select" | "date";
-type RelationshipLiterals = "parent" | "children";
 
 interface SchemaElementType {
   /** Type of form entry element */
@@ -12,12 +11,10 @@ interface SchemaElementType {
   fetcherKey?: string;
   /** Key to be displayed as label for form data */
   labelKey?: string;
-  /** Whether data should be hidden */
+  /** Whether select is single or multiple */
+  multiple?: boolean;
+  /** Whether to display form value */
   hidden?: boolean;
-  /** Whether this is a self-referencing field */
-  selfReferencing?: boolean;
-  /** Only holds for self-referencing fields - relationship between the form entry and the current entry */
-  selfReferencingRelationship?: RelationshipLiterals;
 }
 
 interface SchemaType {
@@ -27,30 +24,24 @@ interface SchemaType {
   [k: string]: SchemaElementType;
 }
 
-type DataType<T extends SchemaType> = {
-  [k in keyof T]: string;
+type FetchDataSuccessType = {
+  [k: string]: string | null | string[];
 };
 
-type FetchDataSuccessType<T extends SchemaType> = {
-  [k in keyof T]: string | null;
-};
+type FetchDataType = FetchDataSuccessType | null;
 
-type FetchDataType<T extends SchemaType> = FetchDataSuccessType<T> | null;
-type FetchDataArrayType<T extends SchemaType> = Array<
-  FetchDataSuccessType<T>
-> | null;
+type FetchDataArrayType = Array<FetchDataSuccessType> | null;
 
-type SubmissionElementType = string | Date | File | null;
+type SubmissionElementType = string | string[] | Date | File | null;
 
-type SubmissionFormType<T extends SchemaType> = {
-  [k in keyof T]: SubmissionElementType;
+type SubmissionFormType = {
+  [k: string]: SubmissionElementType;
 };
 
 export type {
-  DataType,
   SchemaElementType,
-  SchemaType,
   TypeLiterals,
+  SchemaType,
   FetchDataType,
   FetchDataSuccessType,
   FetchDataArrayType,

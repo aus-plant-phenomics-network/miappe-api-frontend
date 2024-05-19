@@ -1,5 +1,7 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
 
+const selectTheme: PresetTheme = {};
+
 const formTheme: PresetTheme = {
   FormRoot: {
     twMaxWidth: "max-w-[600px]",
@@ -55,6 +57,22 @@ const formTheme: PresetTheme = {
   FormSelect: {
     twFlexGrow: "flex-1",
     twBackgroundColor: "bg-inherit",
+  },
+  FormSelectMultiple: {
+    twDisplay: "hidden",
+  },
+  SelectMultipleContainer: {
+    twFlex: "flex",
+    twFlexDirection: "flex-col",
+    twBorderRadius: "rounded-md",
+    twBorderWidth: "border-2",
+    twBackgroundColor: "bg-neutral-300",
+  },
+  SelectMultipleItem: {
+    twFlex: "flex",
+    twGap: "gap-x-2",
+
+    twPadding: "p-2",
   },
   FormCreateButton: {
     twWidth: "w-full",

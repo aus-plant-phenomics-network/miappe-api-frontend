@@ -5,7 +5,7 @@ import { RouteObject } from "react-router-dom";
 
 const BASE_URL = "http://127.0.0.1:8000/";
 
-const createRoutes = <T extends SchemaType>(schema: T, title: string) => {
+const createRoutes = (schema: SchemaType, title: string) => {
   const url = `${BASE_URL}/${title}`;
   const idKey = `${title}Id`;
   const handlers = new Handler(schema, url, idKey);

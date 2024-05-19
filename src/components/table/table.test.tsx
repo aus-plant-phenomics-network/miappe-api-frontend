@@ -3,14 +3,11 @@ import { expect, test, describe, beforeEach } from "vitest";
 import {
   TestSchema,
   schema,
-  excludedKeys,
   Components,
   fetchDataSuccess,
   fetchDataFailure,
 } from "./table.helpers";
-import { Root } from "./table";
 import React from "react";
-import { FetchDataArrayType } from "../types";
 import { getDefaultValue, getTableDisplayKey } from "../helpers";
 
 const Validator = {
