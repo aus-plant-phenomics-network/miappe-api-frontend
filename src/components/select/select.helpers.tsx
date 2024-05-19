@@ -52,6 +52,7 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
             hideWhenDetached={true}
             twWidth="w-[var(--radix-popover-trigger-width)]"
           >
+            <Select.Search themeName="SelectSearch" />
             {fetchedData &&
               fetchedData.map(dataItem => (
                 <Select.Item

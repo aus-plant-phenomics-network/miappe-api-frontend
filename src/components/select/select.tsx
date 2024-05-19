@@ -4,6 +4,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { createContext } from "@ailiyah-ui/context";
 import { TailwindProps } from "@ailiyah-ui/utils";
+import { matchSorter } from "match-sorter";
 
 interface SelectContextValue {
   value: Set<string> | string;
@@ -221,7 +222,59 @@ const Icon = React.forwardRef<HTMLSpanElement, TailwindComponentProps<"span">>(
 
 const Portal = styled(Popover.Portal);
 
-const Content = styled(Popover.Content, { themeName: "SelectContent" });
+const _Content = styled(Popover.Content);
+
+type ContentContextValue = {
+  query: string;
+  setQuery: (value: string) => void;
+  queryMatch: Set<string>;
+};
+
+const [ContentContextProvider, useContentContext] =
+  createContext<ContentContextValue>("Content");
+
+const Content = React.memo(
+  React.forwardRef<
+    HTMLDivElement,
+    TailwindComponentProps<"div"> & Popover.PopperContentProps
+  >((props, ref) => {
+    const { children, ...rest } = props;
+    const [query, setQuery] = React.useState<string>("");
+    const { valueMap } = useSelectContext();
+    const searchSpace = Array.from(valueMap.values());
+    const queryMatch =
+      query === "" ? searchSpace : matchSorter(searchSpace, query);
+    const contentContextValue = {
+      query: query,
+      setQuery: setQuery,
+      queryMatch: new Set(queryMatch),
+    };
+
+    return (
+      <ContentContextProvider value={contentContextValue}>
+        <_Content ref={ref} {...rest} themeName="SelectContent">
+          {children}
+        </_Content>
+      </ContentContextProvider>
+    );
+  }),
+);
+
+const Search = React.memo(
+  React.forwardRef<HTMLInputElement, TailwindComponentProps<"input">>(
+    (props, ref) => {
+      const { query, setQuery } = useContentContext();
+      return (
+        <styled.input
+          {...props}
+          ref={ref}
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+        />
+      );
+    },
+  ),
+);
 
 const Arrow = styled(Popover.Arrow);
 
@@ -232,6 +285,8 @@ const Item = React.memo(
   >((props, ref) => {
     const { selectValue, textValue, disabled, ...rest } = props;
     const { setValue, value, multiple, onOptionAdd } = useSelectContext();
+    const { queryMatch } = useContentContext();
+    const visible = queryMatch.has(textValue);
 
     const checked = multiple
       ? (value as Set<string>).has(selectValue)
@@ -247,7 +302,11 @@ const Item = React.memo(
     }, [onOptionAdd, textValue, selectValue, disabledValue]);
 
     return (
-      <styled.label {...rest} ref={ref} themeName="SelectItem">
+      <styled.label
+        {...rest}
+        ref={ref}
+        themeName={visible ? "SelectItem" : "SelectItemHidden"}
+      >
         <styled.input
           type="checkbox"
           themeName="SelectCheckBox"
@@ -260,4 +319,4 @@ const Item = React.memo(
   }),
 );
 
-export { Root, Trigger, Value, Icon, Portal, Content, Arrow, Item };
+export { Root, Trigger, Value, Icon, Portal, Content, Arrow, Item, Search };
