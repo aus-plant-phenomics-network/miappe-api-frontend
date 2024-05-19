@@ -47,3 +47,32 @@ export const SingleWithDefaultData: Story = {
     defaultValue: fetchData![0].id as string,
   },
 };
+
+export const MultipleNoFetchedData: Story = {
+  args: {
+    multiple: true,
+  },
+};
+
+export const MultipleNoDefaultData: Story = {
+  args: {
+    multiple: true,
+    fetchedData: fetchData,
+  },
+};
+
+export const MultipleWithOneDefaultData: Story = {
+  args: {
+    multiple: true,
+    fetchedData: fetchData,
+    defaultValue: fetchData![0].id as string,
+  },
+};
+
+export const MultipleWithMultipleDefaultData: Story = {
+  args: {
+    multiple: true,
+    fetchedData: fetchData,
+    defaultValue: [fetchData![0].id as string, fetchData![1].id as string],
+  },
+};

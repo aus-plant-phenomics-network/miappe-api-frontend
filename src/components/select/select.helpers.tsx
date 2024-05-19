@@ -26,6 +26,10 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
   name,
   required,
 }) => {
+  const defaultValueMap = fetchData.reduce((acc, dataItem) => {
+    acc.set(dataItem.id as string, dataItem.title as string);
+    return acc;
+  }, new Map<string, string>());
   return (
     <form onSubmit={onSubmit} className="flex gap-x-4 w-1/2">
       <Select.Root
@@ -34,6 +38,7 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
         multiple={multiple}
         placeholder="Select from dropdown"
         defaultValue={defaultValue}
+        defaultValueMap={defaultValueMap}
       >
         <Select.Trigger>
           <Select.Value />
