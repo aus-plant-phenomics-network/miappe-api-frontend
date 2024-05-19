@@ -7,6 +7,7 @@ import { TailwindProps } from "@ailiyah-ui/utils";
 
 interface SelectContextValue {
   value: Set<string> | string;
+  valueMap: Map<string, string>;
   setValue: (value: string) => void;
   multiple?: boolean;
   onOptionAdd: (option: SelectItemProps) => void;
@@ -29,6 +30,7 @@ interface SelectProps {
   required: boolean;
   placeholder?: string;
   defaultValue?: string | string[];
+  defaultValueMap?: Map<string, string>;
 }
 
 interface SelectItemProps {
@@ -45,16 +47,36 @@ const CrossIcon = styled(Cross2Icon);
 
 const Root = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    const { defaultValue, placeholder, multiple, children, ...rest } = props;
+    const {
+      defaultValue,
+      defaultValueMap,
+      placeholder,
+      multiple,
+      children,
+      ...rest
+    } = props;
 
     const [optionMap, setOptionMap] = React.useState(
       new Map<string, NativeOption>(),
     );
+
+    const [valueMap, setValueMap] = React.useState(() => {
+      if (defaultValueMap) {
+        return defaultValueMap;
+      }
+      return new Map<string, string>();
+    });
+
     const onOptionAdd = React.useCallback((option: SelectItemProps) => {
       setOptionMap(prev => {
         if (option.selectValue in prev) {
           return prev;
         }
+        setValueMap(prevMap => {
+          const newMap = new Map(prevMap);
+          newMap.set(option.selectValue, option.textValue);
+          return newMap;
+        });
         const newOption = (
           <option
             key={option.selectValue}
@@ -99,6 +121,7 @@ const Root = React.memo(
 
     const selectContextValue: SelectContextValue = {
       value: stateValue,
+      valueMap: valueMap,
       setValue: setStateFn,
       multiple: multiple,
       onOptionAdd: onOptionAdd,
@@ -128,17 +151,25 @@ const Trigger = styled(Popover.Trigger, { themeName: "SelectTrigger" });
 const Value = React.memo(
   React.forwardRef<HTMLSpanElement, TailwindComponentProps<"span">>(
     (props, ref) => {
-      const { multiple, value, setValue, placeholder } = useSelectContext();
+      const { multiple, value, valueMap, setValue, placeholder } =
+        useSelectContext();
       let displayContent;
       if (multiple) {
         displayContent =
           Array.from(value).length !== 0
             ? Array.from(value).map(item => (
-                <ValueItem key={item} value={item} onClick={setValue} />
+                <ValueItem
+                  key={item}
+                  value={valueMap.get(item)!}
+                  onClick={setValue}
+                />
               ))
             : placeholder;
       } else {
-        displayContent = value !== "" ? value : placeholder;
+        displayContent =
+          value !== "" && valueMap.get(value as string)
+            ? valueMap.get(value as string)
+            : placeholder;
       }
 
       return (
