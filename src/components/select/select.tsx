@@ -1,90 +1,70 @@
 import React from "react";
-import { FetchDataArrayType } from "../types";
 import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
 import * as Popover from "@radix-ui/react-popover";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { createContext } from "@ailiyah-ui/context";
-
-type NativeOption = React.ReactElement<React.ComponentProps<"option">>;
-
-interface SimpleSelectProps {
-  name: string;
-  required: boolean;
-  defaultValue?: string;
-  fetchedData: FetchDataArrayType;
-}
-
-const PopoverContent = styled(Popover.Content);
-
-const SimpleSelect = React.memo(
-  React.forwardRef<
-    HTMLSelectElement,
-    SimpleSelectProps & Omit<TailwindComponentProps<"select">, "defaultValue">
-  >((props, ref) => {
-    const { name, required, defaultValue, fetchedData, ...rest } = props;
-    return (
-      <styled.select
-        aria-label={`${name}-select`}
-        ref={ref}
-        {...rest}
-        name={name}
-        required={required}
-        defaultValue={defaultValue}
-      >
-        {!defaultValue && (
-          <option value="" hidden label="Select from dropdown" />
-        )}
-        {fetchedData &&
-          fetchedData.length > 0 &&
-          fetchedData.map(dataItem => (
-            <option
-              key={dataItem.id as string}
-              value={dataItem.id as string}
-              label={dataItem.title as string}
-            />
-          ))}
-      </styled.select>
-    );
-  }),
-);
-
-interface MultipleSelectProps extends Omit<SimpleSelectProps, "defaultValue"> {
-  defaultValue?: string[];
-}
-
-interface SelectItemProps {
-  selectValue: string;
-  selectLabel: string;
-}
+import { TailwindProps } from "@ailiyah-ui/utils";
 
 interface SelectContextValue {
   value: Set<string> | string;
   setValue: (value: string) => void;
   multiple?: boolean;
-  onOptionAdd: (label: string, value: string) => void;
+  onOptionAdd: (option: SelectItemProps) => void;
+  placeholder?: string;
 }
 
 const [SelectContextProvider, useSelectContext] =
   createContext<SelectContextValue>("ContextProvider");
 
-const MultipleSelect = React.memo(
-  React.forwardRef<
-    HTMLSelectElement,
-    MultipleSelectProps & Omit<TailwindComponentProps<"select">, "defaultValue">
-  >((props, ref) => {
-    const { name, required, defaultValue, multiple, children, ...rest } = props;
+type NativeOption = React.ReactElement<React.ComponentProps<"option">>;
+
+interface SelectProps {
+  autoComplete?: string;
+  autoFocus?: boolean;
+  children?: React.ReactNode;
+  disabled?: boolean;
+  form?: string;
+  multiple?: boolean;
+  name: string;
+  required: boolean;
+  placeholder?: string;
+  defaultValue?: string | string[];
+}
+
+interface SelectItemProps {
+  selectValue: string;
+  textValue: string;
+  disabled?: boolean;
+}
+
+// const Item
+// const ItemText
+// const ItemIndicator
+
+const CrossIcon = styled(Cross2Icon);
+
+const Root = React.memo(
+  React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
+    const { defaultValue, placeholder, multiple, children, ...rest } = props;
 
     const [optionMap, setOptionMap] = React.useState(
       new Map<string, NativeOption>(),
     );
 
-    const onOptionAdd = React.useCallback((label: string, value: string) => {
+    const onOptionAdd = React.useCallback((option: SelectItemProps) => {
       setOptionMap(prev => {
-        if (value in prev) {
+        if (option.selectValue in prev) {
           return prev;
         }
-        const newOption = <option key={value} label={label} value={value} />;
-        return { ...prev, [value]: newOption };
+        const newOption = (
+          <option
+            key={option.selectValue}
+            label={option.textValue}
+            value={option.selectValue}
+            disabled={option.disabled}
+          />
+        );
+        return { ...prev, [option.selectValue]: newOption };
       });
     }, []);
 
@@ -121,94 +101,131 @@ const MultipleSelect = React.memo(
       setValue: setStateFn,
       multiple: multiple,
       onOptionAdd: onOptionAdd,
+      placeholder: placeholder,
     };
 
     return (
       <SelectContextProvider value={selectContextValue}>
         <styled.select
-          name={name}
-          required={required}
           multiple={multiple}
           onChange={e => console.log(e.currentTarget.value)}
           value={multiple ? Array.from(stateValue) : (stateValue as string)}
           ref={ref}
+          themeName="SelectRoot"
           {...rest}
         >
           {Array.from(Object.values(optionMap))}
         </styled.select>
-        {children}
+        <Popover.Root>{children}</Popover.Root>
       </SelectContextProvider>
     );
   }),
 );
 
-function SelectPortalContent({
-  fetchedData,
-}: {
-  fetchedData: FetchDataArrayType;
-}) {
-  return (
-    <Popover.Root>
-      <Popover.Trigger asChild>
-        <styled.button themeName="WidgetNewButton">
-          Select from dropdown
-          <ChevronDownIcon />
-        </styled.button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <PopoverContent
-          themeName="WidgetPopoverContent"
-          sideOffset={5}
-          align="start"
-          hideWhenDetached={true}
-          twWidth="w-[var(--radix-popover-trigger-width)]"
-        >
-          <styled.div themeName="SelectMultipleContainer">
-            {fetchedData &&
-              fetchedData.map(dataItem => (
-                <SelectItem
-                  themeName="SelectItem"
-                  key={dataItem.id as string}
-                  selectValue={dataItem.id as string}
-                  selectLabel={dataItem.title as string}
-                />
-              ))}
-          </styled.div>
-        </PopoverContent>
-      </Popover.Portal>
-    </Popover.Root>
-  );
-}
+const Trigger = styled(Popover.Trigger, { themeName: "SelectTrigger" });
 
-const SelectItem = React.memo(
+const Value = React.memo(
+  React.forwardRef<HTMLSpanElement, TailwindComponentProps<"span">>(
+    (props, ref) => {
+      const { multiple, value, setValue, placeholder } = useSelectContext();
+      let displayContent;
+      if (multiple) {
+        displayContent =
+          Array.from(value).length !== 0
+            ? Array.from(value).map(item => (
+                <ValueItem key={item} value={item} onClick={setValue} />
+              ))
+            : placeholder;
+      } else {
+        displayContent = value !== "" ? value : placeholder;
+      }
+
+      return (
+        <styled.span {...props} ref={ref} themeName="SelectValue">
+          {displayContent}
+        </styled.span>
+      );
+    },
+  ),
+);
+
+type ValueItemProps = {
+  value: string;
+  onClick: (value: string) => void;
+};
+
+const ValueItem = React.memo(
+  React.forwardRef<HTMLSpanElement, ValueItemProps & TailwindProps>(
+    (props, ref) => {
+      const { value, onClick, ...rest } = props;
+      return (
+        <styled.span
+          ref={ref}
+          {...rest}
+          onClick={e => {
+            e.preventDefault();
+            onClick(value);
+          }}
+          themeName="SelectValueItem"
+        >
+          <CrossIcon themeName="SelectValueItemIcon" />
+          {value}
+        </styled.span>
+      );
+    },
+  ),
+);
+
+const Icon = React.forwardRef<HTMLSpanElement, TailwindComponentProps<"span">>(
+  (props, ref) => {
+    const { children, ...rest } = props;
+    return (
+      <styled.span aria-hidden {...rest} ref={ref}>
+        {children || "▼"}
+      </styled.span>
+    );
+  },
+);
+
+const Portal = styled(Popover.Portal);
+
+const Content = styled(Popover.Content, { themeName: "SelectContent" });
+
+const Arrow = styled(Popover.Arrow);
+
+const Item = React.memo(
   React.forwardRef<
     HTMLLabelElement,
     TailwindComponentProps<"label"> & SelectItemProps
   >((props, ref) => {
-    const { selectValue, selectLabel, ...rest } = props;
+    const { selectValue, textValue, disabled, ...rest } = props;
     const { setValue, value, multiple, onOptionAdd } = useSelectContext();
+
     const checked = multiple
       ? (value as Set<string>).has(selectValue)
       : selectValue === (value as string);
 
+    const disabledValue = disabled ? true : false;
     React.useEffect(() => {
-      onOptionAdd(selectLabel, selectValue);
-    }, [onOptionAdd, selectLabel, selectValue]);
+      onOptionAdd({
+        selectValue: selectValue,
+        textValue: textValue,
+        disabled: disabledValue,
+      });
+    }, [onOptionAdd, textValue, selectValue, disabledValue]);
 
     return (
-      <styled.label {...rest} ref={ref}>
+      <styled.label {...rest} ref={ref} themeName="SelectItem">
         <styled.input
           type="checkbox"
           themeName="SelectCheckBox"
           checked={checked}
-          onChange={() => setValue(selectValue)}
+          onChange={() => (disabled ? {} : setValue(selectValue))}
         />
-        {selectLabel}
+        {textValue}
       </styled.label>
     );
   }),
 );
 
-export { SimpleSelect, MultipleSelect, SelectPortalContent };
-
-export type { SimpleSelectProps, MultipleSelectProps };
+export { Root, Trigger, Value, Icon, Portal, Content, Arrow, Item };
