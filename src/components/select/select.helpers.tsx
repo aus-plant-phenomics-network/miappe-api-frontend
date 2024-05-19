@@ -1,12 +1,6 @@
 import { FetchDataArrayType } from "../types";
-import {
-  MultipleSelectProps,
-  SimpleSelect,
-  SimpleSelectProps,
-  MultipleSelect,
-  SelectPortalContent,
-} from "./select";
 import React from "react";
+import * as Select from "./select";
 
 const fetchData: FetchDataArrayType = [
   { id: "facility0", title: "firstFacility", description: "first facility" },
@@ -15,21 +9,56 @@ const fetchData: FetchDataArrayType = [
   { id: "facility3", title: "fourthFacility", description: "fourth facility" },
 ];
 
-interface SimpleSelectTestProps extends SimpleSelectProps {
+interface SelectTestProps {
+  name: string;
+  required: boolean;
   onSubmit: (e: React.FormEvent) => void;
+  fetchedData: FetchDataArrayType;
+  multiple?: boolean;
+  defaultValue?: string | string[];
 }
 
-interface MultipleSelectTestProps extends MultipleSelectProps {
-  onSubmit: (e: React.FormEvent) => void;
-}
-
-const SimpleSelectTestComponent: React.FC<SimpleSelectTestProps> = ({
+const TestSelectComponent: React.FC<SelectTestProps> = ({
   onSubmit,
-  ...rest
+  fetchedData,
+  defaultValue,
+  multiple,
+  name,
+  required,
 }) => {
   return (
     <form onSubmit={onSubmit} className="flex gap-x-4 w-1/2">
-      <SimpleSelect {...rest} themeName="FormSelect" />
+      <Select.Root
+        name={name}
+        required={required}
+        multiple={multiple}
+        placeholder="Select from dropdown"
+        defaultValue={defaultValue}
+      >
+        <Select.Trigger>
+          <Select.Value />
+          <Select.Icon />
+        </Select.Trigger>
+
+        <Select.Portal>
+          <Select.Content
+            sideOffset={5}
+            align="start"
+            hideWhenDetached={true}
+            twWidth="w-[var(--radix-popover-trigger-width)]"
+          >
+            {fetchedData &&
+              fetchedData.map(dataItem => (
+                <Select.Item
+                  themeName="SelectItem"
+                  key={dataItem.id as string}
+                  selectValue={dataItem.id as string}
+                  textValue={dataItem.title as string}
+                />
+              ))}
+          </Select.Content>
+        </Select.Portal>
+      </Select.Root>
       <button type="submit" className="border-w-2 p-4 bg-neutral-500">
         Submit
       </button>
@@ -37,20 +66,4 @@ const SimpleSelectTestComponent: React.FC<SimpleSelectTestProps> = ({
   );
 };
 
-const MultipleSelectTestComponent: React.FC<MultipleSelectTestProps> = ({
-  onSubmit,
-  ...rest
-}) => {
-  return (
-    <form onSubmit={onSubmit} className="flex gap-x-4 w-1/2">
-      <MultipleSelect {...rest} multiple={false} themeName="FormSelect">
-        <SelectPortalContent fetchedData={fetchData} />
-      </MultipleSelect>
-      <button type="submit" className="border-w-2 p-4 bg-neutral-500">
-        Submit
-      </button>
-    </form>
-  );
-};
-
-export { fetchData, SimpleSelectTestComponent, MultipleSelectTestComponent };
+export { fetchData, TestSelectComponent };
