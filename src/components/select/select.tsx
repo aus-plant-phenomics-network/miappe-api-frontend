@@ -50,7 +50,6 @@ const Root = React.memo(
     const [optionMap, setOptionMap] = React.useState(
       new Map<string, NativeOption>(),
     );
-
     const onOptionAdd = React.useCallback((option: SelectItemProps) => {
       setOptionMap(prev => {
         if (option.selectValue in prev) {
@@ -64,7 +63,9 @@ const Root = React.memo(
             disabled={option.disabled}
           />
         );
-        return { ...prev, [option.selectValue]: newOption };
+        const newMap = new Map(prev);
+        newMap.set(option.selectValue, newOption);
+        return newMap;
       });
     }, []);
 
