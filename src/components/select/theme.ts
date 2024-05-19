@@ -1,4 +1,5 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
+import { Select, SelectItem } from "@radix-ui/react-select";
 
 const theme: PresetTheme = {
   SelectRoot: {
@@ -44,10 +45,18 @@ const theme: PresetTheme = {
   SelectItem: {
     twBackgroundColor: "bg-white hover:bg-neutral-200",
     twBorderRadius: "rounded-md",
-    twPadding: "px-2",
+    twPadding: "px-2 py-1",
     twFlex: "flex",
-    twGap: "gap-x-2"
-  }
+    twGap: "gap-x-2",
+  },
+  SelectItemHidden: {
+    twDisplay: "hidden",
+  },
+  SelectSearch: {
+    twPadding: "px-2 py-1",
+    twBorderWidth: "border-2",
+    twBorderRadius: "rounded-md",
+  },
 };
 
 export { theme as selectTheme };
