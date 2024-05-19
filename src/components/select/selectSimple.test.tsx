@@ -1,7 +1,7 @@
 import { screen, render } from "@testing-library/react";
 import { expect, describe, test, vi, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { SimpleSelectTestComponent, fetchData } from "./select.helpers";
+import { TestSelectComponent, fetchData } from "./select.helpers";
 import React from "react";
 import { BaseSchema, parseFormData } from "../helpers";
 
@@ -28,7 +28,7 @@ const Validator = {
       expect(document.querySelector("select")).toBeVisible();
     },
     hasNoChildren: () => {
-      expect(document.querySelector("select")?.children.length).toBe(1);
+      expect(document.querySelector("select")?.children.length).toBe(0);
     },
   },
   option: {
@@ -51,7 +51,7 @@ const Validator = {
 describe("Test simmple select no data", () => {
   beforeEach(() => {
     render(
-      <SimpleSelectTestComponent
+      <TestSelectComponent
         name="facility"
         required={true}
         fetchedData={null}
@@ -74,7 +74,7 @@ describe("Test simple select with data no label", () => {
   });
   beforeEach(() => {
     render(
-      <SimpleSelectTestComponent
+      <TestSelectComponent
         name={name}
         required={true}
         fetchedData={fetchData}
@@ -126,7 +126,7 @@ describe("Test simple select with data and label", () => {
   const defaultValue = fetchData![0].id;
   beforeEach(() => {
     render(
-      <SimpleSelectTestComponent
+      <TestSelectComponent
         name={name}
         required={true}
         fetchedData={fetchData}
