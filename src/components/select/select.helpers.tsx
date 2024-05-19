@@ -1,5 +1,10 @@
 import { FetchDataArrayType } from "../types";
-import { SimpleSelect, SimpleSelectProps } from "./select";
+import {
+  MultipleSelectProps,
+  SimpleSelect,
+  SimpleSelectProps,
+  MultipleSelect,
+} from "./select";
 import React from "react";
 
 const fetchData: FetchDataArrayType = [
@@ -10,6 +15,10 @@ const fetchData: FetchDataArrayType = [
 ];
 
 interface SimpleSelectTestProps extends SimpleSelectProps {
+  onSubmit: (e: React.FormEvent) => void;
+}
+
+interface MultipleSelectTestProps extends MultipleSelectProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
@@ -27,4 +36,18 @@ const SimpleSelectTestComponent: React.FC<SimpleSelectTestProps> = ({
   );
 };
 
-export { fetchData, SimpleSelectTestComponent };
+const MultipleSelectTestComponent: React.FC<MultipleSelectTestProps> = ({
+  onSubmit,
+  ...rest
+}) => {
+  return (
+    <form onSubmit={onSubmit} className="flex gap-x-4 w-1/2">
+      <MultipleSelect {...rest} themeName="FormSelect" />
+      <button type="submit" className="border-w-2 p-4 bg-neutral-500">
+        Submit
+      </button>
+    </form>
+  );
+};
+
+export { fetchData, SimpleSelectTestComponent, MultipleSelectTestComponent };
