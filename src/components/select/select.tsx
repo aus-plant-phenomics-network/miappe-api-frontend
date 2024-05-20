@@ -57,9 +57,23 @@ const Root = React.memo(
       ...rest
     } = props;
 
-    const [optionMap, setOptionMap] = React.useState(
-      new Map<string, NativeOption>(),
-    );
+    const [optionMap, setOptionMap] = React.useState(() => {
+      const initMap = new Map<string, NativeOption>();
+      if (defaultValueMap) {
+        for (const pair of defaultValueMap.entries()) {
+          const newOption = (
+            <option
+              key={pair[0]}
+              value={pair[0]}
+              label={pair[1]}
+              disabled={false}
+            />
+          );
+          initMap.set(pair[0], newOption);
+        }
+      }
+      return initMap;
+    });
 
     const [valueMap, setValueMap] = React.useState(() => {
       if (defaultValueMap) {
@@ -100,7 +114,6 @@ const Root = React.memo(
         return multiple ? new Set<string>(defaultValue) : defaultValue[0];
       },
     );
-
     const setStateFn = React.useMemo(
       () =>
         multiple
@@ -139,7 +152,8 @@ const Root = React.memo(
           themeName="SelectRoot"
           {...rest}
         >
-          {Array.from(Object.values(optionMap))}
+          {stateValue === "" ? <option value="" /> : <></>}
+          {Array.from(optionMap.values())}
         </styled.select>
         <Popover.Root>{children}</Popover.Root>
       </SelectContextProvider>

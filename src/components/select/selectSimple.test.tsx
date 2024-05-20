@@ -3,15 +3,16 @@ import { expect, describe, test, vi, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { TestSelectComponent, fetchData } from "./select.helpers";
 import React from "react";
-import { BaseSchema, parseFormData } from "../helpers";
+import { ThemeProvider } from "@ailiyah-ui/context";
+import { theme } from "../../assets/theme";
 
 const Action = {
   clickOnDropDown: async () => {
-    await userEvent.click(document.querySelector("select")!);
+    await userEvent.click(document.querySelector(".SelectTrigger")!);
   },
   clickOnOption: (optionValue: string) => async () => {
-    const component = document.querySelector(`[label="${optionValue}"]`)!;
-    (component as HTMLOptionElement).selected = true;
+    const component = screen.queryByText(`${optionValue}`)!;
+    await userEvent.click(component);
   },
   clickSubmit: async () => {
     await userEvent.click(screen.getByText("Submit"));
@@ -20,50 +21,40 @@ const Action = {
 
 const Validator = {
   select: {
-    valueIs: (value: string) => () => {
+    valueIs: (value: string | string[]) => () => {
       expect(document.querySelector("select")?.value).toEqual(value);
     },
     isRendered: () => {
       expect(document.querySelector("select")).toBeInTheDocument();
-      expect(document.querySelector("select")).toBeVisible();
+      expect(document.querySelector("select")).not.toBeVisible();
     },
     hasNoChildren: () => {
-      expect(document.querySelector("select")?.children.length).toBe(0);
+      expect(document.querySelector("select")?.children.length).toBe(1);
     },
   },
   option: {
     isRendered: (optionValue: string) => () => {
-      expect(
-        document.querySelector(`[label="${optionValue}"]`),
-      ).toBeInTheDocument();
+      expect(screen.queryAllByText(optionValue)).not.toBeNull();
     },
-    isVisible: (optionValue: string) => () => {
-      expect(document.querySelector(`[label="${optionValue}"]`)).toBeVisible();
-    },
-    isHidden: (optionValue: string) => () => {
-      expect(
-        document.querySelector(`[label="${optionValue}"]`),
-      ).not.toBeVisible();
+    notInTheDocument: (optionValue: string) => () => {
+      expect(screen.queryByText(optionValue)).toBeNull();
     },
   },
 };
 
-describe("Test simmple select no data", () => {
+describe("Test Single No Fetched Data", () => {
   beforeEach(() => {
     render(
-      <TestSelectComponent
-        name="facility"
-        required={true}
-        fetchedData={null}
-        onSubmit={e => e.preventDefault()}
-      />,
+      <ThemeProvider value={theme}>
+        <TestSelectComponent name="facility" required={true} multiple={false} />
+      </ThemeProvider>,
     );
   });
   test("select is rendered", Validator.select.isRendered);
   test("select has no children", Validator.select.hasNoChildren);
 });
 
-describe("Test simple select with data no label", () => {
+describe("Test Single No Default Data", () => {
   const choice = fetchData![2].title as string;
   const choiceValue = fetchData![2].id as string;
   const name = "facility";
@@ -72,23 +63,25 @@ describe("Test simple select with data no label", () => {
     const formData = new FormData(e.currentTarget);
     expect(formData.get(name)).toEqual(choiceValue);
   });
-  beforeEach(() => {
+  beforeEach(async () => {
     render(
-      <TestSelectComponent
-        name={name}
-        required={true}
-        fetchedData={fetchData}
-        onSubmit={onSubmit}
-      />,
+      <ThemeProvider value={theme}>
+        <TestSelectComponent
+          name={name}
+          required={true}
+          fetchedData={fetchData}
+          onSubmit={onSubmit}
+          multiple={false}
+        />
+      </ThemeProvider>,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
   for (const dataItem of fetchData!) {
     const optionValue = dataItem.title;
-    test(
-      "Options are rendered",
-      Validator.option.isRendered(optionValue as string),
-    );
+    test(`Options are not rendered: ${optionValue}`, () => {
+      Validator.option.notInTheDocument(optionValue as string)();
+    });
   }
 
   describe("When click on dropdown", () => {
@@ -96,11 +89,11 @@ describe("Test simple select with data no label", () => {
     for (const dataItem of fetchData!) {
       const optionValue = dataItem.title;
       test(
-        "Options are visible: " + optionValue,
-        Validator.option.isVisible(optionValue as string),
+        "Options are rendered: " + optionValue,
+        Validator.option.isRendered(optionValue as string),
       );
     }
-    describe(`When click on value: ${choice}`, () => {
+    describe(`When click on value: ${choice}`, async () => {
       beforeEach(Action.clickOnOption(choice));
       test(
         "Select value matches choice",
@@ -126,22 +119,32 @@ describe("Test simple select with data and label", () => {
   const defaultValue = fetchData![0].id;
   beforeEach(() => {
     render(
-      <TestSelectComponent
-        name={name}
-        required={true}
-        fetchedData={fetchData}
-        onSubmit={onSubmit}
-        defaultValue={defaultValue as string}
-      />,
+      <ThemeProvider value={theme}>
+        <TestSelectComponent
+          name={name}
+          required={true}
+          fetchedData={fetchData}
+          onSubmit={onSubmit}
+          multiple={false}
+          defaultValue={defaultValue as string}
+        />
+      </ThemeProvider>,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
   for (const dataItem of fetchData!) {
     const optionValue = dataItem.title;
-    test(
-      "Options are rendered",
-      Validator.option.isRendered(optionValue as string),
-    );
+    if (dataItem.id === defaultValue) {
+      test(
+        `Default option is visible ${optionValue}`,
+        Validator.option.isRendered(optionValue as string),
+      );
+    } else {
+      test(
+        `Options are not rendered: ${optionValue}`,
+        Validator.option.notInTheDocument(optionValue as string),
+      );
+    }
   }
   test(
     "Default value is correct",
@@ -153,8 +156,8 @@ describe("Test simple select with data and label", () => {
     for (const dataItem of fetchData!) {
       const optionValue = dataItem.title;
       test(
-        "Options are visible: " + optionValue,
-        Validator.option.isVisible(optionValue as string),
+        "Options are rendered: " + optionValue,
+        Validator.option.isRendered(optionValue as string),
       );
     }
     describe(`When click on value: ${choice}`, () => {

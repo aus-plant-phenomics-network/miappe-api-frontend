@@ -12,8 +12,8 @@ const fetchData: FetchDataArrayType = [
 interface SelectTestProps {
   name: string;
   required: boolean;
-  onSubmit: (e: React.FormEvent) => void;
-  fetchedData: FetchDataArrayType;
+  onSubmit?: (e: React.FormEvent) => void;
+  fetchedData?: FetchDataArrayType;
   multiple?: boolean;
   defaultValue?: string | string[];
 }
@@ -26,7 +26,7 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
   name,
   required,
 }) => {
-  const defaultValueMap = fetchData.reduce((acc, dataItem) => {
+  const defaultValueMap = fetchedData?.reduce((acc, dataItem) => {
     acc.set(dataItem.id as string, dataItem.title as string);
     return acc;
   }, new Map<string, string>());
