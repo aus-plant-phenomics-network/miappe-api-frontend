@@ -87,7 +87,7 @@ const BodyRow = React.memo(
     const href = `${id}`;
 
     return (
-      <styled.tr key={id} {...rest} ref={ref}>
+      <styled.tr key={id as string} {...rest} ref={ref}>
         {fields.map(field => (
           <styled.td key={field} themeName="TableBodyData" colSpan={1}>
             {rowItem[field] ? rowItem[field] : ""}
@@ -111,7 +111,7 @@ const Body = React.memo(
           fieldData.length > 0 &&
           fieldData.map(rowItem => (
             <BodyRow
-              key={rowItem.id}
+              key={rowItem.id as string}
               fields={fields}
               rowItem={rowItem}
               themeName="TableBodyRow"
@@ -148,12 +148,12 @@ const Table = React.memo(
                   if (entry[0] in schema) {
                     return [
                       entry[0],
-                      getDefaultValue(schema[entry[0]], entry[1]),
+                      getDefaultValue(schema[entry[0]], entry[1] as string),
                     ];
                   }
                   return entry;
                 }),
-              ) as FetchDataSuccessType<SchemaType>;
+              ) as FetchDataSuccessType;
             })
           : null,
       [JSON.stringify(fieldData)],

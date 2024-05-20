@@ -38,6 +38,17 @@ const getHiddenValue = (schema: SchemaElementType): boolean => {
  */
 const getDefaultValue = (
   schema: SchemaElementType,
+  value: string | string[] | null | undefined,
+): string | string[] => {
+  if (!Array.isArray(value)) {
+    return _getDefaultValue(schema, value);
+  } else {
+    return value.map(item => _getDefaultValue(schema, item));
+  }
+};
+
+const _getDefaultValue = (
+  schema: SchemaElementType,
   value: string | null | undefined,
 ): string => {
   if (value) {

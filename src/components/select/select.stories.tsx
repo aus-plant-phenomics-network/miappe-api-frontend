@@ -6,6 +6,7 @@ import { TestSelectComponent, fetchData } from "./select.helpers";
 
 const meta: Meta<typeof TestSelectComponent> = {
   component: TestSelectComponent,
+  tags: ["autodocs"],
   args: {
     onSubmit: e => {
       e.preventDefault();

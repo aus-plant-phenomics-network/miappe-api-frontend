@@ -66,9 +66,9 @@ describe("Test Render Table with data", () => {
   describe.each(fieldData!)("For each row", fieldItem => {
     for (const field of fields) {
       if (fieldItem[field] !== null) {
-        test(`field ${field} with value ${getDefaultValue(schema[field], fieldItem[field])} is rendered`, () => {
+        test(`field ${field} with value ${getDefaultValue(schema[field], fieldItem[field] as string)} is rendered`, () => {
           Validator.bodyRow.data.isRendered(
-            getDefaultValue(schema[field], fieldItem[field]),
+            getDefaultValue(schema[field], fieldItem[field] as string),
           );
         });
       }
@@ -77,7 +77,7 @@ describe("Test Render Table with data", () => {
       Validator.bodyRow.component.isRendered();
     });
     test("Components have correct HRef", () => {
-      Validator.bodyRow.component.hasCorrectLinkHRef(fieldItem.id!);
+      Validator.bodyRow.component.hasCorrectLinkHRef(fieldItem.id! as string);
     });
   });
 });

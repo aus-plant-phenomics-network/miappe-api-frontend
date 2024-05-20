@@ -57,16 +57,31 @@ const Root = React.memo(
       ...rest
     } = props;
 
-    const [optionMap, setOptionMap] = React.useState(
-      new Map<string, NativeOption>(),
-    );
-
-    const [valueMap, setValueMap] = React.useState(() => {
+    const [optionMap, setOptionMap] = React.useState(() => {
+      const initMap = new Map<string, NativeOption>();
       if (defaultValueMap) {
-        return defaultValueMap;
+        for (const pair of defaultValueMap.entries()) {
+          const newOption = (
+            <option
+              key={pair[0]}
+              value={pair[0]}
+              label={pair[1]}
+              disabled={false}
+            />
+          );
+          initMap.set(pair[0], newOption);
+        }
       }
-      return new Map<string, string>();
+      return initMap;
     });
+
+    const [valueMap, setValueMap] = React.useState(new Map<string, string>());
+    const contextValueMap =
+      valueMap.size !== 0
+        ? valueMap
+        : defaultValueMap
+          ? defaultValueMap
+          : valueMap;
 
     const onOptionAdd = React.useCallback((option: SelectItemProps) => {
       setOptionMap(prev => {
@@ -100,16 +115,15 @@ const Root = React.memo(
         return multiple ? new Set<string>(defaultValue) : defaultValue[0];
       },
     );
-
     const setStateFn = React.useMemo(
       () =>
         multiple
           ? (value: string) => {
               setStateValue(prev => {
                 const prevValue = prev as Set<string>;
-                if (!prevValue.has(value))
+                if (!prevValue.has(value)) {
                   return new Set([...prevValue, value]);
-
+                }
                 const result = new Set(
                   Array.from(prevValue).filter(item => item !== value),
                 );
@@ -122,7 +136,7 @@ const Root = React.memo(
 
     const selectContextValue: SelectContextValue = {
       value: stateValue,
-      valueMap: valueMap,
+      valueMap: contextValueMap,
       setValue: setStateFn,
       multiple: multiple,
       onOptionAdd: onOptionAdd,
@@ -139,7 +153,12 @@ const Root = React.memo(
           themeName="SelectRoot"
           {...rest}
         >
-          {Array.from(Object.values(optionMap))}
+          {stateValue === "" || Array.from(stateValue).length == 0 ? (
+            <option value="" />
+          ) : (
+            <></>
+          )}
+          {Array.from(optionMap.values())}
         </styled.select>
         <Popover.Root>{children}</Popover.Root>
       </SelectContextProvider>
@@ -191,13 +210,19 @@ const ValueItem = React.memo(
   React.forwardRef<HTMLSpanElement, ValueItemProps & TailwindProps>(
     (props, ref) => {
       const { value, onClick, ...rest } = props;
+      const { valueMap } = useSelectContext();
+
+      const valueKey = Array.from(valueMap.entries()).filter(
+        item => item[1] === value,
+      )?.[0]?.[0];
+
       return (
         <styled.span
           ref={ref}
           {...rest}
           onClick={e => {
             e.preventDefault();
-            onClick(value);
+            onClick(valueKey);
           }}
           themeName="SelectValueItem"
         >
@@ -320,3 +345,5 @@ const Item = React.memo(
 );
 
 export { Root, Trigger, Value, Icon, Portal, Content, Arrow, Item, Search };
+
+export type { SelectProps, SelectItemProps };

@@ -8,7 +8,13 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@ailiyah-ui/context";
 
 class TestSchema extends BaseSchema {
-  studyId: SchemaElementType = { type: "select", required: true };
+  studyId: SchemaElementType = {
+    type: "select",
+    required: true,
+    fetcherKey: "study",
+    labelKey: "study",
+    multiple: true,
+  };
   releaseDate: SchemaElementType = { type: "date" };
   deviceTypeId: SchemaElementType = {
     type: "select",
@@ -22,7 +28,7 @@ const FixtureData = {
     id: "testId0",
     title: "First Test",
     description: "First Test Description",
-    studyId: "studyId0",
+    studyId: "studyId1",
     releaseDate: "2021-01-01T00:00:00Z",
     deviceTypeId: "vocabularyId0",
     createdAt: "2020-01-01T00:00:00",
