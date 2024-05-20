@@ -76,6 +76,7 @@ const Select = React.memo(
           defaultValue={defaultValue}
           defaultValueMap={defaultValueMap}
           {...rest}
+          ref={ref}
         >
           <PrimitiveSelect.Trigger>
             <PrimitiveSelect.Value />

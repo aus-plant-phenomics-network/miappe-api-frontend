@@ -1,5 +1,4 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
-import { Select, SelectItem } from "@radix-ui/react-select";
 
 const theme: PresetTheme = {
   SelectRoot: {

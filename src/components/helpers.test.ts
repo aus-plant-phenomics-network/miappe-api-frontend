@@ -13,8 +13,7 @@ import {
   parseFormData,
 } from "./helpers";
 import { describe, expect, test } from "vitest";
-import { SchemaElementType, SchemaType } from "./types";
-import { Form } from "react-router-dom";
+import { SchemaElementType } from "./types";
 
 const getMultipleFixture = [
   {
@@ -512,7 +511,7 @@ const getHiddenValueFixture = [
 describe.each(getHiddenValueFixture)(
   "given %o",
   ({ inputValue, schema, expValue }) => {
-    test(`getHiddenValue returns ${expValue}`, () => {
+    test(`getHiddenValue returns ${expValue} for ${inputValue}`, () => {
       expect(getHiddenValue(schema as SchemaElementType)).toEqual(expValue);
     });
   },

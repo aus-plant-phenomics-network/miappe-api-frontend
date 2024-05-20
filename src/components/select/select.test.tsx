@@ -407,7 +407,6 @@ describe("Test Multiple With Default Data", () => {
 });
 
 describe("Test Search Feature", () => {
-  const choice = fetchData![2].title as string;
   const choiceValue = fetchData![2].id as string;
   const name = "facility";
   const onSubmit = vi.fn(e => {

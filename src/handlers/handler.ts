@@ -6,7 +6,6 @@ import {
   parseFormData,
 } from "../components";
 import { Params } from "react-router-dom";
-import { getSubmissionValue } from "../components";
 
 class Handler<T extends SchemaType, Key extends string> {
   schema: T;

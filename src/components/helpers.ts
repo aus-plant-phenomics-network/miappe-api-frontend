@@ -1,7 +1,4 @@
 import {
-  FetchDataArrayType,
-  FetchDataSuccessType,
-  FetchDataType,
   SchemaElementType,
   SchemaType,
   SubmissionElementType,
