@@ -41,6 +41,7 @@ const theme: PresetTheme = {
     twBorderColor: "border-neutral-800",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-md",
+    twBackgroundColor: "bg-white",
   },
   SelectItem: {
     twBackgroundColor: "bg-white hover:bg-neutral-200",
