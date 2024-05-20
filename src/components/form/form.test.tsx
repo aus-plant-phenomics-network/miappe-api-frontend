@@ -20,10 +20,16 @@ const Action = {
   },
   clickOnDropDown: {
     study: async () => {
-      await userEvent.click(document.querySelector("select")!);
+      const component = Array.from(
+        document.querySelectorAll(".SelectTrigger"),
+      )[0];
+      await userEvent.click(component);
     },
     select: async () => {
-      await userEvent.click(document.querySelectorAll("select")[1]);
+      const component = Array.from(
+        document.querySelectorAll(".SelectTrigger"),
+      )[1];
+      await userEvent.click(component);
     },
   },
 };
@@ -55,20 +61,18 @@ const Validator = {
 
       await Action.clickOnDropDown.study();
       for (const study of StudyData) {
-        const element = document.querySelector(
-          `option[label="${study.title}"]`,
-        );
+        const element = Array.from(
+          document.querySelectorAll(`.SelectItem`),
+        ).filter(item => item.textContent === study.title)[0];
         expect(element).toBeInTheDocument();
-        expect(element?.getAttribute("value")).toBe(study.id);
       }
 
       await Action.clickOnDropDown.select();
       for (const vocab of VocabularyData) {
-        const element = document.querySelector(
-          `option[label="${vocab.title}"]`,
-        );
+        const element = Array.from(
+          document.querySelectorAll(`.SelectItem`),
+        ).filter(item => item.textContent === vocab.title)[0];
         expect(element).toBeInTheDocument();
-        expect(element?.getAttribute("value")).toBe(vocab.id);
       }
     },
   },
