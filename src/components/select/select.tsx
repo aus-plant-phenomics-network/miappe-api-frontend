@@ -212,7 +212,8 @@ const ValueItem = React.memo(
       const { valueMap } = useSelectContext();
       const valueKey = Array.from(valueMap.entries()).filter(
         item => item[1] === value,
-      )[0][0];
+      )?.[0]?.[0];
+
       return (
         <styled.span
           ref={ref}
