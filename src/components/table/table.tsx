@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
 import { getDefaultValue, getTableDisplayKey } from "../helpers";
-import { FetchDataSuccessType, SchemaType } from "../types";
+import { FetchDataSuccessType } from "../types";
 import { useDelete } from "../hooks";
 
 const Root = React.memo(
