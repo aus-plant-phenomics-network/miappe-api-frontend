@@ -1,7 +1,5 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
 
-const selectTheme: PresetTheme = {};
-
 const formTheme: PresetTheme = {
   FormRoot: {
     twMaxWidth: "max-w-[600px]",
