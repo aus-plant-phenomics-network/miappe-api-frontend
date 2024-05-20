@@ -6,6 +6,7 @@ import {
   getFetcherKey,
   getFormDisplayKey,
   getHiddenValue,
+  getMultipleValue,
   getPlaceHolderValue,
   getRequired,
 } from "../helpers";
@@ -37,9 +38,10 @@ const createInputArray = (
         const required = getRequired(schema);
         const placeholder = getPlaceHolderValue(schema, key);
         const hidden = getHiddenValue(schema);
-        const defaultValue = getDefaultValue(schema, data?.[key] );
+        const defaultValue = getDefaultValue(schema, data?.[key] as string);
         const fetcherKey = getFetcherKey(schema, key);
         const labelKey = getFormDisplayKey(schema, key);
+        const multiple = getMultipleValue(schema);
         return (
           <InputField
             key={key}
@@ -51,6 +53,7 @@ const createInputArray = (
             defaultValue={defaultValue}
             fetcherKey={fetcherKey}
             labelKey={labelKey}
+            multiple={multiple}
           />
         );
       })
