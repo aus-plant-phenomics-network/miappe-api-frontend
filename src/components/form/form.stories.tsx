@@ -3,7 +3,6 @@ import { TestComponent, schema, FixtureData } from "./form.helper";
 
 const meta: Meta<typeof TestComponent> = {
   component: TestComponent,
-  title: "Form",
   tags: ["autodocs"],
 };
 
