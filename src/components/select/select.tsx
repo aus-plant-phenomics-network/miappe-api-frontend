@@ -213,7 +213,6 @@ const ValueItem = React.memo(
       const valueKey = Array.from(valueMap.entries()).filter(
         item => item[1] === value,
       )[0][0];
-
       return (
         <styled.span
           ref={ref}
@@ -343,3 +342,5 @@ const Item = React.memo(
 );
 
 export { Root, Trigger, Value, Icon, Portal, Content, Arrow, Item, Search };
+
+export type { SelectProps, SelectItemProps };
