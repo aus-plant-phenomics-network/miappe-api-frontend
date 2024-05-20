@@ -28,7 +28,7 @@ const FixtureData = {
     id: "testId0",
     title: "First Test",
     description: "First Test Description",
-    studyId: "studyId0",
+    studyId: ["studyId0", "studyId1"],
     releaseDate: "2021-01-01T00:00:00Z",
     deviceTypeId: "vocabularyId0",
     createdAt: "2020-01-01T00:00:00",

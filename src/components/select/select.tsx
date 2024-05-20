@@ -75,12 +75,13 @@ const Root = React.memo(
       return initMap;
     });
 
-    const [valueMap, setValueMap] = React.useState(() => {
-      if (defaultValueMap) {
-        return defaultValueMap;
-      }
-      return new Map<string, string>();
-    });
+    const [valueMap, setValueMap] = React.useState(new Map<string, string>());
+    const contextValueMap =
+      valueMap.size !== 0
+        ? valueMap
+        : defaultValueMap
+          ? defaultValueMap
+          : valueMap;
 
     const onOptionAdd = React.useCallback((option: SelectItemProps) => {
       setOptionMap(prev => {
@@ -135,7 +136,7 @@ const Root = React.memo(
 
     const selectContextValue: SelectContextValue = {
       value: stateValue,
-      valueMap: valueMap,
+      valueMap: contextValueMap,
       setValue: setStateFn,
       multiple: multiple,
       onOptionAdd: onOptionAdd,
@@ -210,6 +211,7 @@ const ValueItem = React.memo(
     (props, ref) => {
       const { value, onClick, ...rest } = props;
       const { valueMap } = useSelectContext();
+
       const valueKey = Array.from(valueMap.entries()).filter(
         item => item[1] === value,
       )?.[0]?.[0];

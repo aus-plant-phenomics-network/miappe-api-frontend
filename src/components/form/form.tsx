@@ -67,7 +67,6 @@ const Select = React.memo(
     }, new Map<string, string>());
 
     console.log(defaultValueMap);
-
     return (
       <styled.div themeName="FormSelectContainer">
         <PrimitiveSelect.Root
