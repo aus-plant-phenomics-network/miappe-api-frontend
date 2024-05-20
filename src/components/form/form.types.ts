@@ -1,13 +1,9 @@
 import { TailwindComponentProps } from "@ailiyah-ui/factory";
 import { TypeLiterals } from "../types";
+import { SelectProps as PrivimitiveSelectProps } from "../select";
 
-interface InputSelectOwnProps {
-  name: string;
+interface InputSelectOwnProps extends PrivimitiveSelectProps {
   type: TypeLiterals;
-  required: boolean;
-  placeholder: string;
-  hidden: boolean;
-  defaultValue: string;
   fetcherKey: string;
   labelKey: string;
 }
@@ -15,14 +11,24 @@ interface InputSelectOwnProps {
 interface InputProps
   extends Omit<
       TailwindComponentProps<"input">,
-      "name" | "hidden" | "required" | "type" | "placeholder" | "defaultValue"
+      | "name"
+      | "required"
+      | "type"
+      | "placeholder"
+      | "defaultValue"
+      | "autoComplete"
     >,
     InputSelectOwnProps {}
 
 interface SelectProps
   extends Omit<
       TailwindComponentProps<"select">,
-      "name" | "hidden" | "required" | "type" | "placeholder" | "defaultValue"
+      | "name"
+      | "required"
+      | "type"
+      | "placeholder"
+      | "defaultValue"
+      | "autoComplete"
     >,
     InputSelectOwnProps {}
 
