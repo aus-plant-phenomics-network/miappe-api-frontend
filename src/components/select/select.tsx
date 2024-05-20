@@ -120,9 +120,9 @@ const Root = React.memo(
           ? (value: string) => {
               setStateValue(prev => {
                 const prevValue = prev as Set<string>;
-                if (!prevValue.has(value))
+                if (!prevValue.has(value)) {
                   return new Set([...prevValue, value]);
-
+                }
                 const result = new Set(
                   Array.from(prevValue).filter(item => item !== value),
                 );
@@ -152,7 +152,11 @@ const Root = React.memo(
           themeName="SelectRoot"
           {...rest}
         >
-          {stateValue === "" ? <option value="" /> : <></>}
+          {stateValue === "" || Array.from(stateValue).length == 0 ? (
+            <option value="" />
+          ) : (
+            <></>
+          )}
           {Array.from(optionMap.values())}
         </styled.select>
         <Popover.Root>{children}</Popover.Root>
@@ -205,13 +209,18 @@ const ValueItem = React.memo(
   React.forwardRef<HTMLSpanElement, ValueItemProps & TailwindProps>(
     (props, ref) => {
       const { value, onClick, ...rest } = props;
+      const { valueMap } = useSelectContext();
+      const valueKey = Array.from(valueMap.entries()).filter(
+        item => item[1] === value,
+      )[0][0];
+
       return (
         <styled.span
           ref={ref}
           {...rest}
           onClick={e => {
             e.preventDefault();
-            onClick(value);
+            onClick(valueKey);
           }}
           themeName="SelectValueItem"
         >
