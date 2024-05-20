@@ -13,7 +13,6 @@ import { tableTheme } from "./theme";
 const Table = Components.Table;
 
 const meta: Meta<typeof Table> = {
-  title: "Table",
   component: Table,
   decorators: [
     Story => (
