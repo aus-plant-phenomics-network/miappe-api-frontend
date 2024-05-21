@@ -72,7 +72,7 @@ describe("Test Single No Fetched Data", () => {
   beforeEach(() => {
     render(
       <ThemeProvider value={theme}>
-        <TestSelectComponent name="facility" required={true} multiple={false} />
+        <TestSelectComponent required={true} multiple={false} />
       </ThemeProvider>,
     );
   });
@@ -93,7 +93,6 @@ describe("Test Single No Default Data", () => {
     render(
       <ThemeProvider value={theme}>
         <TestSelectComponent
-          name={name}
           required={true}
           fetchedData={fetchData}
           onSubmit={onSubmit}
@@ -147,7 +146,6 @@ describe("Test simple select with data and label", () => {
     render(
       <ThemeProvider value={theme}>
         <TestSelectComponent
-          name={name}
           required={true}
           fetchedData={fetchData}
           onSubmit={onSubmit}
@@ -200,21 +198,204 @@ describe("Test simple select with data and label", () => {
   });
 });
 
+describe("Test simple select no default data exclude first Id", () => {
+  const excludeId = fetchData![0].id as string;
+  const onSubmit = vi.fn(e => {
+    e.preventDefault();
+  });
+  beforeEach(async () => {
+    render(
+      <ThemeProvider value={theme}>
+        <TestSelectComponent
+          required={true}
+          fetchedData={fetchData}
+          onSubmit={onSubmit}
+          multiple={false}
+          excludeId={excludeId}
+        />
+      </ThemeProvider>,
+    );
+  });
+  test("Select was rendered", Validator.select.isRendered);
+  describe("When click on dropdown", () => {
+    beforeEach(Action.clickOnDropDown);
+    for (const dataItem of fetchData!) {
+      const optionValue = dataItem.title;
+      if (dataItem.id === excludeId) {
+        test(
+          `Option ${optionValue} is not invisible`,
+          Validator.option.isInvisible(optionValue as string),
+        );
+      } else {
+        test(
+          "Options are rendered: " + optionValue,
+          Validator.option.isRendered(optionValue as string),
+        );
+      }
+    }
+  });
+});
+
+describe("Test simple select with data and label and exclude Id", () => {
+  const choice = fetchData![2].title as string;
+  const choiceValue = fetchData![2].id as string;
+  const name = "facility";
+  const onSubmit = vi.fn(e => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    expect(formData.get(name)).toEqual(choiceValue);
+  });
+  const defaultValue = fetchData![0].id;
+  const excludeId = fetchData![1].id as string;
+  beforeEach(() => {
+    render(
+      <ThemeProvider value={theme}>
+        <TestSelectComponent
+          required={true}
+          fetchedData={fetchData}
+          onSubmit={onSubmit}
+          multiple={false}
+          defaultValue={defaultValue as string}
+          excludeId={excludeId}
+        />
+      </ThemeProvider>,
+    );
+  });
+  test("Select was rendered", Validator.select.isRendered);
+  for (const dataItem of fetchData!) {
+    const optionValue = dataItem.title;
+    if (dataItem.id === defaultValue) {
+      test(
+        `Default option is visible ${optionValue}`,
+        Validator.option.isRendered(optionValue as string),
+      );
+    } else {
+      test(
+        `Options are not rendered: ${optionValue}`,
+        Validator.option.notInTheDocument(optionValue as string),
+      );
+    }
+  }
+  test(
+    "Default value is correct",
+    Validator.select.valueIs(defaultValue as string),
+  );
+
+  describe("When click on dropdown", () => {
+    beforeEach(Action.clickOnDropDown);
+    for (const dataItem of fetchData!) {
+      const optionValue = dataItem.title;
+      if (dataItem.id === excludeId) {
+        test(
+          "Option is invisible: " + optionValue,
+          Validator.option.isInvisible(optionValue as string),
+        );
+      } else {
+        test(
+          "Options are rendered: " + optionValue,
+          Validator.option.isRendered(optionValue as string),
+        );
+      }
+    }
+    describe(`When click on value: ${choice}`, () => {
+      beforeEach(Action.clickOnOption(choice));
+      test(
+        "Select value matches choice",
+        Validator.select.valueIs(choiceValue),
+      );
+      test("submitted value is correct", async () => {
+        await Action.clickSubmit();
+        expect(onSubmit).toBeCalled();
+      });
+    });
+  });
+});
+
+describe("Test simple select with data and label and exclude Id where exclude Id is default data", () => {
+  const choice = fetchData![2].title as string;
+  const choiceValue = fetchData![2].id as string;
+  const name = "facility";
+  const onSubmit = vi.fn(e => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    expect(formData.get(name)).toEqual(choiceValue);
+  });
+  const defaultValue = fetchData![0].id;
+  const excludeId = defaultValue as string;
+  beforeEach(() => {
+    render(
+      <ThemeProvider value={theme}>
+        <TestSelectComponent
+          required={true}
+          fetchedData={fetchData}
+          onSubmit={onSubmit}
+          multiple={false}
+          defaultValue={defaultValue as string}
+          excludeId={excludeId}
+        />
+      </ThemeProvider>,
+    );
+  });
+  test("Select was rendered", Validator.select.isRendered);
+  for (const dataItem of fetchData!) {
+    const optionValue = dataItem.title;
+    if (dataItem.id === defaultValue) {
+      test(
+        `Options are not rendered: ${optionValue}`,
+        Validator.option.notInTheDocument(optionValue as string),
+      );
+    }
+  }
+  test(
+    "Default value is correct",
+    Validator.select.valueIs(""),
+  );
+
+  describe("When click on dropdown", () => {
+    beforeEach(Action.clickOnDropDown);
+    for (const dataItem of fetchData!) {
+      const optionValue = dataItem.title;
+      if (dataItem.id === excludeId) {
+        test(
+          "Option is invisible: " + optionValue,
+          Validator.option.isInvisible(optionValue as string),
+        );
+      } else {
+        test(
+          "Options are rendered: " + optionValue,
+          Validator.option.isRendered(optionValue as string),
+        );
+      }
+    }
+    describe(`When click on value: ${choice}`, () => {
+      beforeEach(Action.clickOnOption(choice));
+      test(
+        "Select value matches choice",
+        Validator.select.valueIs(choiceValue),
+      );
+      test("submitted value is correct", async () => {
+        await Action.clickSubmit();
+        expect(onSubmit).toBeCalled();
+      });
+    });
+  });
+});
+
+class TestSchema extends BaseSchema {
+  facility: SchemaElementType = { type: "select", multiple: true };
+}
+
 describe("Test Multiple No Fetched Data", () => {
   beforeEach(() => {
     render(
       <ThemeProvider value={theme}>
-        <TestSelectComponent name="facility" required={true} multiple={true} />
+        <TestSelectComponent required={true} multiple={true} />
       </ThemeProvider>,
     );
   });
   test("select is rendered", Validator.select.isRendered);
   test("select has no children", Validator.select.hasNoChildren);
 });
-
-class TestSchema extends BaseSchema {
-  facility: SchemaElementType = { type: "select", multiple: true };
-}
 
 describe("Test Multiple No Default Data", () => {
   const firstChoice = fetchData![2].title as string;
@@ -232,7 +413,6 @@ describe("Test Multiple No Default Data", () => {
     render(
       <ThemeProvider value={theme}>
         <TestSelectComponent
-          name={name}
           required={true}
           fetchedData={fetchData}
           onSubmit={onSubmit}
@@ -314,7 +494,6 @@ describe("Test Multiple With Default Data", () => {
     render(
       <ThemeProvider value={theme}>
         <TestSelectComponent
-          name={name}
           required={true}
           fetchedData={fetchData}
           onSubmit={onSubmit}
@@ -418,7 +597,6 @@ describe("Test Search Feature", () => {
     render(
       <ThemeProvider value={theme}>
         <TestSelectComponent
-          name={name}
           required={true}
           fetchedData={fetchData}
           onSubmit={onSubmit}
