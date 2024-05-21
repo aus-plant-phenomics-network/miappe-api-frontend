@@ -2,7 +2,7 @@ import { PresetTheme } from "@ailiyah-ui/utils";
 
 const formTheme: PresetTheme = {
   FormRoot: {
-    twMaxWidth: "max-w-[600px]",
+    twMaxWidth: "max-w-[700px]",
     twFlex: "flex",
     twFlexDirection: "flex-col",
     twGap: "gap-y-4",
@@ -43,14 +43,15 @@ const formTheme: PresetTheme = {
     twFlexGrow: "flex-1",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-md",
-    twPadding: "p-1",
+    twBorderColor: "border-inherit data-[valid=invalid]:border-red-500",
+    twPadding: "p-3",
   },
   FormSelectContainer: {
     twFlex: "flex",
     twFlexGrow: "flex-1",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-md",
-    twPadding: "p-1",
+    twPadding: "p-3",
   },
   FormSelect: {
     twFlexGrow: "flex-1",

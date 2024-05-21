@@ -11,7 +11,7 @@ const theme: PresetTheme = {
     twFlex: "flex",
     twJustifyContent: "justify-between",
     twAlignItems: "items-center",
-    twPadding: "p-2",
+    twPadding: "p-1",
     twBorderRadius: "rounded-md",
   },
   SelectValue: {
