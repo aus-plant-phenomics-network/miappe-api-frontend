@@ -7,7 +7,7 @@ const theme: PresetTheme = {
   SelectTrigger: {
     twWidth: "w-full",
     twBorderWidth: "border-2",
-    twBorderColor: "border-neutral-800",
+    twBorderColor: "border-inherit data-[valid=invalid]:border-red-500",
     twFlex: "flex",
     twJustifyContent: "justify-between",
     twAlignItems: "items-center",
@@ -26,7 +26,6 @@ const theme: PresetTheme = {
     twAlignItems: "items-center",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-lg",
-    twBorderColor: "border-netral-800",
     twPadding: "p-1",
     twBackgroundColor:
       "bg-neutral-700 dark:bg-neutral-50 hover:bg-neutral-800 hover:dark:bg-white",
@@ -37,10 +36,11 @@ const theme: PresetTheme = {
     twFlex: "flex",
     twFlexDirection: "flex-col",
     twPadding: "p-2",
-    twBorderColor: "border-neutral-800",
+    twBorderColor: "border-inherit",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-md",
     twBackgroundColor: "bg-white",
+    twGap: "gap-y-1",
   },
   SelectItem: {
     twBackgroundColor: "bg-white hover:bg-neutral-200",
@@ -56,6 +56,7 @@ const theme: PresetTheme = {
     twPadding: "px-2 py-1",
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-md",
+    twOutlineStyle: "outline-none",
   },
 };
 
