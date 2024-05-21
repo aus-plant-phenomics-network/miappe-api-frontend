@@ -678,10 +678,7 @@ describe("Test Multiple With Default Data multiple values with clashing exclude 
   const excludeId = fetchData![0].id as string;
   const defaultValue = [fetchData![0].id as string, fetchData![1].id as string];
   const defaultValueExcl = defaultValue.filter(item => item !== excludeId);
-  const firstChoice = fetchData![2].title as string;
-  const firstChoiceValue = fetchData![2].id as string;
-  const secondChoice = fetchData![3].title as string;
-  const secondChoiceValue = fetchData![3].id as string;
+
   const name = "facility";
   let submissionValue: SubmissionFormType;
   const onSubmit = vi.fn(e => {
