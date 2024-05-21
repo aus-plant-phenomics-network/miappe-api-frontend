@@ -8,11 +8,6 @@ const meta: Meta<typeof TestSelectComponent> = {
   component: TestSelectComponent,
   tags: ["autodocs"],
   args: {
-    onSubmit: e => {
-      e.preventDefault();
-      alert("Submit Form");
-    },
-    name: "facility",
     required: true,
   },
   decorators: [
@@ -49,6 +44,24 @@ export const SingleWithDefaultData: Story = {
   },
 };
 
+export const SingleWithDefaultDataWithExcludeId: Story = {
+  args: {
+    multiple: false,
+    fetchedData: fetchData,
+    defaultValue: fetchData![0].id as string,
+    excludeId: fetchData![1].id as string,
+  },
+};
+
+export const SingleWithDefaultDataWithExcludeIdSameAsDefault: Story = {
+  args: {
+    multiple: false,
+    fetchedData: fetchData,
+    defaultValue: fetchData![0].id as string,
+    excludeId: fetchData![0].id as string,
+  },
+};
+
 export const MultipleNoFetchedData: Story = {
   args: {
     multiple: true,
@@ -75,5 +88,14 @@ export const MultipleWithMultipleDefaultData: Story = {
     multiple: true,
     fetchedData: fetchData,
     defaultValue: [fetchData![0].id as string, fetchData![1].id as string],
+  },
+};
+
+export const MultipleWithMultipleDefaultDataExcludeKey: Story = {
+  args: {
+    multiple: true,
+    fetchedData: fetchData,
+    defaultValue: [fetchData![0].id as string, fetchData![1].id as string],
+    excludeId: fetchData![1].id as string,
   },
 };

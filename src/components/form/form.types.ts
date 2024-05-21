@@ -1,8 +1,8 @@
 import { TailwindComponentProps } from "@ailiyah-ui/factory";
 import { TypeLiterals } from "../types";
-import { SelectProps as PrivimitiveSelectProps } from "../select";
+import { SelectProps as PrimitiveSelectProps } from "../select";
 
-interface InputSelectOwnProps extends PrivimitiveSelectProps {
+interface InputSelectOwnProps extends PrimitiveSelectProps {
   type: TypeLiterals;
   fetcherKey: string;
   labelKey: string;

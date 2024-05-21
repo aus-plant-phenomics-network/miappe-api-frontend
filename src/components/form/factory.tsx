@@ -25,6 +25,7 @@ const createInputArray = (
   schema: SchemaType,
   data?: FetchDataType,
 ): Array<React.ReactElement> => {
+  const excludeId = data?.id;
   return Object.entries(schema).map(([key, schema]) => {
     const type = schema.type;
     const required = getRequired(schema);
@@ -46,6 +47,7 @@ const createInputArray = (
         fetcherKey={fetcherKey}
         labelKey={labelKey}
         multiple={multiple}
+        excludeId={excludeId}
       />
     );
   });

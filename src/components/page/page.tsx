@@ -86,7 +86,7 @@ function CreatePage({
 function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
   const data = useLoaderData() as FetchDataType;
   const updateComponents = React.useMemo(
-    () => createInputArray(schema, [], data),
+    () => createInputArray(schema, data),
     [JSON.stringify(data)],
   );
   const onSubmit = usePrevious();
