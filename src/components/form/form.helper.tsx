@@ -36,11 +36,18 @@ const FixtureData = {
     title: "First Test",
     description: "First Test Description",
     studyId: ["studyId1"],
-    releaseDate: "2021-01-01T00:00:00Z",
+    releaseDate: "2021-01-01T00:00:00.000Z",
     deviceTypeId: "vocabularyId0",
-    createdAt: "2020-01-01T00:00:00",
-    updatedAt: "2020-01-02T00:00:00",
+    createdAt: "2020-01-01T00:00:00.000Z",
+    updatedAt: "2020-01-02T00:00:00.000Z",
     testId: ["testId1", "testId2"],
+  },
+  filledTestValue: {
+    title: "Fourth Test",
+    studyId: ["studyId0"],
+    study: "First Study",
+    testId: ["testId2"],
+    test: "Third Test",
   },
   study: [
     {
@@ -124,7 +131,7 @@ const TestComponent = ({
 }: {
   schema: BaseSchema;
   data: FetchDataType;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit?: (e: React.FormEvent) => void;
 }) => {
   const components = createInputArray(schema, data);
   const routes = createMemoryRouter([
