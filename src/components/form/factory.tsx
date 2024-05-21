@@ -25,8 +25,8 @@ const createInputArray = (
   schema: SchemaType,
   data?: FetchDataType,
 ): Array<React.ReactElement> => {
-  const excludeId = data?.id;
-  return Object.entries(schema).map(([key, schema]) => {
+  const excludeId = data?.id as string;
+  return Object.entries(schema).filter(([key, ])=> key !== "_constructor-name_").map(([key, schema]) => {
     const type = schema.type;
     const required = getRequired(schema);
     const placeholder = getPlaceHolderValue(schema, key);
