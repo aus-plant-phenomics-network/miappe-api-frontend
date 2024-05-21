@@ -11,11 +11,17 @@ import { beforeEach, describe, expect, test } from "vitest";
 
 const Action = {
   render: {
-    POST: () => {
-      render(<TestComponent schema={schema} data={null} />);
+    POST: (onSubmit?: (e: React.FormEvent<Element>) => void) => {
+      render(<TestComponent schema={schema} data={null} onSubmit={onSubmit} />);
     },
-    PUT: () => {
-      render(<TestComponent schema={schema} data={FixtureData.test} />);
+    PUT: (onSubmit?: (e: React.FormEvent<Element>) => void) => {
+      render(
+        <TestComponent
+          schema={schema}
+          data={FixtureData.test}
+          onSubmit={onSubmit}
+        />,
+      );
     },
   },
   clickOnDropDown: {

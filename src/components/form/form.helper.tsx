@@ -124,7 +124,7 @@ const TestComponent = ({
 }: {
   schema: BaseSchema;
   data: FetchDataType;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit?: (e: React.FormEvent) => void;
 }) => {
   const components = createInputArray(schema, data);
   const routes = createMemoryRouter([
