@@ -1,5 +1,5 @@
 import { theme } from "../../assets/theme";
-import { BaseSchema } from "../helpers";
+import { BaseSchema, parseFormData } from "../helpers";
 import { FetchDataType, SchemaElementType } from "../types";
 import { createInputArray } from "./factory";
 import * as Form from "./form";
@@ -28,7 +28,7 @@ const FixtureData = {
     id: "testId0",
     title: "First Test",
     description: "First Test Description",
-    studyId: "studyId1",
+    studyId: ["studyId1"],
     releaseDate: "2021-01-01T00:00:00Z",
     deviceTypeId: "vocabularyId0",
     createdAt: "2020-01-01T00:00:00",
@@ -73,15 +73,25 @@ const schema = new TestSchema();
 const TestComponent = ({
   schema,
   data,
+  onSubmit = (e: React.FormEvent) => {
+    alert("SubmitForm");
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    console.log(parseFormData(schema, formData));
+  },
 }: {
   schema: BaseSchema;
   data: FetchDataType;
+  onSubmit: (e: React.FormEvent) => void;
 }) => {
   const components = createInputArray(schema, [], data);
   const routes = createMemoryRouter([
     {
       path: "/",
-      element: <Form.FormComponent>{components}</Form.FormComponent>,
+      element: (
+        <Form.FormComponent onSubmit={onSubmit}>
+          {components}
+        </Form.FormComponent>
+      ),
     },
     {
       path: "/study",
