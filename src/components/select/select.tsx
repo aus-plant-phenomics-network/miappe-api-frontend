@@ -13,6 +13,7 @@ interface SelectContextValue {
   multiple?: boolean;
   onOptionAdd: (option: SelectItemProps) => void;
   placeholder?: string;
+  ref?: React.MutableRefObject<HTMLButtonElement | null>;
 }
 
 const [SelectContextProvider, useSelectContext] =
@@ -47,126 +48,161 @@ interface SelectItemProps {
 const CrossIcon = styled(Cross2Icon);
 
 const Root = React.memo(
-  React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    const {
-      defaultValue,
-      defaultValueMap,
-      placeholder,
-      multiple,
-      children,
-      ...rest
-    } = props;
+  React.forwardRef<HTMLSelectElement, SelectProps & TailwindProps>(
+    (props, ref) => {
+      const {
+        defaultValue,
+        defaultValueMap,
+        placeholder,
+        multiple,
+        children,
+        required,
+        ...rest
+      } = props;
+      const TriggerRef = React.useRef<HTMLButtonElement | null>(null);
 
-    const [optionMap, setOptionMap] = React.useState(() => {
-      const initMap = new Map<string, NativeOption>();
-      if (defaultValueMap) {
-        for (const pair of defaultValueMap.entries()) {
+      // Invalid handler for required select - will display the error message at trigger
+      const onInvalid = React.useCallback(
+        (e: React.FormEvent<HTMLSelectElement>) => {
+          e.preventDefault();
+          if (TriggerRef && TriggerRef.current) {
+            TriggerRef.current.setCustomValidity(
+              (e.target as HTMLSelectElement).validationMessage,
+            );
+            console.log(TriggerRef.current.validationMessage);
+            TriggerRef.current.reportValidity();
+          }
+        },
+        [],
+      );
+
+      const [optionMap, setOptionMap] = React.useState(
+        new Map<string, NativeOption>(),
+      );
+
+      const defaultOptionMap = React.useMemo(() => {
+        const initOptionMap = new Map<string, NativeOption>();
+        if (defaultValueMap) {
+          for (const pair of defaultValueMap.entries()) {
+            const newOption = (
+              <option
+                key={pair[0]}
+                value={pair[0]}
+                label={pair[1]}
+                disabled={false}
+              />
+            );
+            initOptionMap.set(pair[0], newOption);
+          }
+        }
+        return initOptionMap;
+      }, [JSON.stringify(Array.from(defaultValueMap?.keys()!))]);
+
+      const contextOptionMap =
+        optionMap.size !== 0 ? optionMap : defaultOptionMap;
+
+      const [valueMap, setValueMap] = React.useState(new Map<string, string>());
+
+      const contextValueMap =
+        valueMap.size !== 0
+          ? valueMap
+          : defaultValueMap
+            ? defaultValueMap
+            : valueMap;
+
+      const onOptionAdd = React.useCallback((option: SelectItemProps) => {
+        setOptionMap(prev => {
+          if (option.selectValue in prev) {
+            return prev;
+          }
+          setValueMap(prevMap => {
+            const newMap = new Map(prevMap);
+            newMap.set(option.selectValue, option.textValue);
+            return newMap;
+          });
           const newOption = (
             <option
-              key={pair[0]}
-              value={pair[0]}
-              label={pair[1]}
-              disabled={false}
+              key={option.selectValue}
+              label={option.textValue}
+              value={option.selectValue}
+              disabled={option.disabled}
             />
           );
-          initMap.set(pair[0], newOption);
-        }
-      }
-      return initMap;
-    });
-
-    const [valueMap, setValueMap] = React.useState(new Map<string, string>());
-    const contextValueMap =
-      valueMap.size !== 0
-        ? valueMap
-        : defaultValueMap
-          ? defaultValueMap
-          : valueMap;
-
-    const onOptionAdd = React.useCallback((option: SelectItemProps) => {
-      setOptionMap(prev => {
-        if (option.selectValue in prev) {
-          return prev;
-        }
-        setValueMap(prevMap => {
-          const newMap = new Map(prevMap);
-          newMap.set(option.selectValue, option.textValue);
+          const newMap = new Map(prev);
+          newMap.set(option.selectValue, newOption);
           return newMap;
         });
-        const newOption = (
-          <option
-            key={option.selectValue}
-            label={option.textValue}
-            value={option.selectValue}
-            disabled={option.disabled}
-          />
-        );
-        const newMap = new Map(prev);
-        newMap.set(option.selectValue, newOption);
-        return newMap;
-      });
-    }, []);
+      }, []);
 
-    const [stateValue, setStateValue] = React.useState<string | Set<string>>(
-      () => {
-        if (!defaultValue) return multiple ? new Set<string>() : "";
-        if (!Array.isArray(defaultValue))
-          return multiple ? new Set<string>([defaultValue]) : defaultValue;
-        return multiple ? new Set<string>(defaultValue) : defaultValue[0];
-      },
-    );
-    const setStateFn = React.useMemo(
-      () =>
-        multiple
-          ? (value: string) => {
-              setStateValue(prev => {
-                const prevValue = prev as Set<string>;
-                if (!prevValue.has(value)) {
-                  return new Set([...prevValue, value]);
-                }
-                const result = new Set(
-                  Array.from(prevValue).filter(item => item !== value),
-                );
-                return result;
-              });
-            }
-          : (value: string) => setStateValue(value),
-      [multiple],
-    );
+      const [stateValue, setStateValue] = React.useState<string | Set<string>>(
+        () => {
+          if (!defaultValue) return multiple ? new Set<string>() : "";
+          if (!Array.isArray(defaultValue))
+            return multiple ? new Set<string>([defaultValue]) : defaultValue;
+          return multiple ? new Set<string>(defaultValue) : defaultValue[0];
+        },
+      );
 
-    const selectContextValue: SelectContextValue = {
-      value: stateValue,
-      valueMap: contextValueMap,
-      setValue: setStateFn,
-      multiple: multiple,
-      onOptionAdd: onOptionAdd,
-      placeholder: placeholder,
-    };
+      const setStateFn = React.useMemo(
+        () =>
+          multiple
+            ? (value: string) => {
+                setStateValue(prev => {
+                  const prevValue = prev as Set<string>;
+                  if (!prevValue.has(value)) {
+                    return new Set([...prevValue, value]);
+                  }
+                  const result = new Set(
+                    Array.from(prevValue).filter(item => item !== value),
+                  );
+                  return result;
+                });
+              }
+            : (value: string) => setStateValue(value),
+        [multiple],
+      );
 
-    return (
-      <SelectContextProvider value={selectContextValue}>
-        <styled.select
-          multiple={multiple}
-          onChange={e => console.log(e.currentTarget.value)}
-          value={multiple ? Array.from(stateValue) : (stateValue as string)}
-          ref={ref}
-          themeName="SelectRoot"
-          {...rest}
-        >
-          {stateValue === "" || Array.from(stateValue).length == 0 ? (
-            <option value="" />
-          ) : (
-            <></>
-          )}
-          {Array.from(optionMap.values())}
-        </styled.select>
-        <Popover.Root>{children}</Popover.Root>
-      </SelectContextProvider>
-    );
-  }),
+      const selectContextValue: SelectContextValue = {
+        value: stateValue,
+        valueMap: contextValueMap,
+        setValue: setStateFn,
+        multiple: multiple,
+        onOptionAdd: onOptionAdd,
+        placeholder: placeholder,
+        ref: TriggerRef,
+      };
+
+      return (
+        <SelectContextProvider value={selectContextValue}>
+          <styled.select
+            multiple={multiple}
+            onChange={e => console.log(e.currentTarget.value)}
+            value={multiple ? Array.from(stateValue) : (stateValue as string)}
+            ref={ref}
+            required={required}
+            onInvalid={onInvalid}
+            {...rest}
+          >
+            {stateValue === "" || Array.from(stateValue).length == 0 ? (
+              <option value="" />
+            ) : (
+              <></>
+            )}
+            {Array.from(contextOptionMap.values())}
+          </styled.select>
+          <Popover.Root>{children}</Popover.Root>
+        </SelectContextProvider>
+      );
+    },
+  ),
 );
 
-const Trigger = styled(Popover.Trigger, { themeName: "SelectTrigger" });
+const _Trigger = styled(Popover.Trigger);
+
+const Trigger: React.FC<TailwindComponentProps<"button">> = props => {
+  const { ref } = useSelectContext();
+  return <_Trigger {...props} ref={ref} />;
+};
 
 const Value = React.memo(
   React.forwardRef<HTMLSpanElement, TailwindComponentProps<"span">>(
@@ -193,7 +229,7 @@ const Value = React.memo(
       }
 
       return (
-        <styled.span {...props} ref={ref} themeName="SelectValue">
+        <styled.span {...props} ref={ref}>
           {displayContent}
         </styled.span>
       );
@@ -277,7 +313,7 @@ const Content = React.memo(
 
     return (
       <ContentContextProvider value={contentContextValue}>
-        <_Content ref={ref} {...rest} themeName="SelectContent">
+        <_Content ref={ref} {...rest}>
           {children}
         </_Content>
       </ContentContextProvider>
