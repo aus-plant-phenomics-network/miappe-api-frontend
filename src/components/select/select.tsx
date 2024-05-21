@@ -13,7 +13,7 @@ interface SelectContextValue {
   multiple?: boolean;
   onOptionAdd: (option: SelectItemProps) => void;
   placeholder?: string;
-  ref?: React.MutableRefObject<HTMLButtonElement | null>;
+  valid: boolean;
 }
 
 const [SelectContextProvider, useSelectContext] =
@@ -59,22 +59,8 @@ const Root = React.memo(
         required,
         ...rest
       } = props;
-      const TriggerRef = React.useRef<HTMLButtonElement | null>(null);
 
-      // Invalid handler for required select - will display the error message at trigger
-      const onInvalid = React.useCallback(
-        (e: React.FormEvent<HTMLSelectElement>) => {
-          e.preventDefault();
-          if (TriggerRef && TriggerRef.current) {
-            TriggerRef.current.setCustomValidity(
-              (e.target as HTMLSelectElement).validationMessage,
-            );
-            console.log(TriggerRef.current.validationMessage);
-            TriggerRef.current.reportValidity();
-          }
-        },
-        [],
-      );
+      const [valid, setValid] = React.useState<boolean>(true);
 
       const [optionMap, setOptionMap] = React.useState(
         new Map<string, NativeOption>(),
@@ -83,6 +69,7 @@ const Root = React.memo(
       const defaultValueMapDependency = defaultValueMap
         ? JSON.stringify(Array.from(defaultValueMap.keys()))
         : undefined;
+
       const defaultOptionMap = React.useMemo(() => {
         const initOptionMap = new Map<string, NativeOption>();
         if (defaultValueMap) {
@@ -150,6 +137,7 @@ const Root = React.memo(
         () =>
           multiple
             ? (value: string) => {
+                setValid(true);
                 setStateValue(prev => {
                   const prevValue = prev as Set<string>;
                   if (!prevValue.has(value)) {
@@ -161,29 +149,35 @@ const Root = React.memo(
                   return result;
                 });
               }
-            : (value: string) => setStateValue(value),
+            : (value: string) => {
+                setStateValue(value);
+                setValid(true);
+              },
         [multiple],
       );
 
-      const selectContextValue: SelectContextValue = {
-        value: stateValue,
-        valueMap: contextValueMap,
-        setValue: setStateFn,
-        multiple: multiple,
-        onOptionAdd: onOptionAdd,
-        placeholder: placeholder,
-        ref: TriggerRef,
-      };
-
       return (
-        <SelectContextProvider value={selectContextValue}>
+        <SelectContextProvider
+          value={{
+            value: stateValue,
+            valueMap: contextValueMap,
+            setValue: setStateFn,
+            multiple: multiple,
+            onOptionAdd: onOptionAdd,
+            placeholder: placeholder,
+            valid: valid,
+          }}
+        >
           <styled.select
             multiple={multiple}
             onChange={e => console.log(e.currentTarget.value)}
             value={multiple ? Array.from(stateValue) : (stateValue as string)}
             ref={ref}
             required={required}
-            onInvalid={onInvalid}
+            onInvalid={e => {
+              e.preventDefault();
+              setValid(false);
+            }}
             {...rest}
           >
             {stateValue === "" || Array.from(stateValue).length == 0 ? (
@@ -203,8 +197,8 @@ const Root = React.memo(
 const _Trigger = styled(Popover.Trigger);
 
 const Trigger: React.FC<TailwindComponentProps<"button">> = props => {
-  const { ref } = useSelectContext();
-  return <_Trigger {...props} ref={ref} />;
+  const { valid } = useSelectContext();
+  return <_Trigger {...props} data-valid={valid ? "valid" : "invalid"} />;
 };
 
 const Value = React.memo(
