@@ -80,6 +80,9 @@ const Root = React.memo(
         new Map<string, NativeOption>(),
       );
 
+      const defaultValueMapDependency = defaultValueMap
+        ? JSON.stringify(Array.from(defaultValueMap.keys()))
+        : undefined;
       const defaultOptionMap = React.useMemo(() => {
         const initOptionMap = new Map<string, NativeOption>();
         if (defaultValueMap) {
@@ -96,7 +99,7 @@ const Root = React.memo(
           }
         }
         return initOptionMap;
-      }, [JSON.stringify(Array.from(defaultValueMap?.keys()!))]);
+      }, [defaultValueMapDependency]);
 
       const contextOptionMap =
         optionMap.size !== 0 ? optionMap : defaultOptionMap;
