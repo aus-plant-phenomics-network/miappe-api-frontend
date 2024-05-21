@@ -2,7 +2,7 @@ import { SelectProps } from "./form.types";
 import { TailwindProps } from "@ailiyah-ui/utils";
 import React from "react";
 import { Form, FormProps, Link } from "react-router-dom";
-import { styled } from "@ailiyah-ui/factory";
+import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
 import { createBox } from "@ailiyah-ui/box";
 import { InputProps } from "./form.types";
 import { AddButton } from "@ailiyah-ui/button";
@@ -46,7 +46,30 @@ const Label = styled("label");
  * Renders a regular input component that accepts tailwind props
  * Styled via themeName = FormInput
  */
-const Input = styled("input");
+const _Input = styled("input");
+const Input = React.memo(
+  React.forwardRef<HTMLInputElement, TailwindComponentProps<"input">>(
+    (props, ref) => {
+      const [valid, setValid] = React.useState(true);
+      const { onChange, ...rest } = props;
+      return (
+        <_Input
+          {...rest}
+          ref={ref}
+          onChange={e => {
+            onChange && onChange(e);
+            setValid(true);
+          }}
+          data-valid={valid ? "valid" : "invalid"}
+          onInvalid={e => {
+            e.preventDefault();
+            setValid(false);
+          }}
+        />
+      );
+    },
+  ),
+);
 
 /**
  * Renders a regular select component that accepts tailwind props
@@ -145,6 +168,7 @@ const InputField = React.memo(
       fetcherKey,
       labelKey,
       placeholder,
+      excludeId,
       ...rest
     } = props;
     const id = React.useId();
@@ -165,12 +189,13 @@ const InputField = React.memo(
             required={required}
             defaultValue={defaultValue}
             fetcherKey={fetcherKey}
+            excludeId={excludeId}
           />
         ) : (
           <Input
             id={id}
             {...(rest as InputProps)}
-            ref={ref}
+            ref={ref as React.Ref<HTMLInputElement>}
             name={name}
             required={required}
             type={type}
