@@ -6,8 +6,10 @@ import {
   getDefaultValue,
   getFormDisplayKey,
   getPlaceHolderValue,
+  parseFormData,
 } from "../helpers";
-import { beforeEach, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
+import { FetchDataSuccessType, SubmissionFormType } from "../types";
 
 const Action = {
   render: {
@@ -24,6 +26,9 @@ const Action = {
       );
     },
   },
+  clickOnSubmit: async () => {
+    await userEvent.click(screen.queryByText("Submit")!);
+  },
   clickOnDropDown: {
     study: async () => {
       const component = Array.from(
@@ -31,10 +36,16 @@ const Action = {
       )[0];
       await userEvent.click(component);
     },
-    select: async () => {
+    type: async () => {
       const component = Array.from(
         document.querySelectorAll(".SelectTrigger"),
       )[1];
+      await userEvent.click(component);
+    },
+    test: async () => {
+      const component = Array.from(
+        document.querySelectorAll(".SelectTrigger"),
+      )[2];
       await userEvent.click(component);
     },
   },
@@ -61,24 +72,55 @@ const Validator = {
         screen.queryByText(getFormDisplayKey(schema.id, "id")),
       ).not.toBeVisible();
     },
-    selectOptionsAreRendered: async () => {
+  },
+  selectOptions: {
+    study: async () => {
       const StudyData = FixtureData.study;
-      const VocabularyData = FixtureData.vocabulary;
-
       await Action.clickOnDropDown.study();
-      for (const study of StudyData) {
-        const element = Array.from(
-          document.querySelectorAll(`.SelectItem`),
-        ).filter(item => item.textContent === study.title)[0];
-        expect(element).toBeInTheDocument();
-      }
 
-      await Action.clickOnDropDown.select();
-      for (const vocab of VocabularyData) {
-        const element = Array.from(
-          document.querySelectorAll(`.SelectItem`),
-        ).filter(item => item.textContent === vocab.title)[0];
+      for (const study of StudyData) {
+        const element = Array.from(screen.queryAllByText(study.title)).filter(
+          item => item.tagName === "LABEL",
+        )[0];
         expect(element).toBeInTheDocument();
+        expect(element.className.includes("hidden")).toBeFalsy();
+      }
+    },
+    vocabulary: async () => {
+      const VocabularyData = FixtureData.vocabulary;
+      await Action.clickOnDropDown.type();
+      for (const vocab of VocabularyData) {
+        const element = Array.from(screen.queryAllByText(vocab.title)).filter(
+          item => item.tagName === "LABEL",
+        )[0];
+        expect(element).toBeInTheDocument();
+        expect(element.className.includes("hidden")).toBeFalsy();
+      }
+    },
+    testAllVisible: async () => {
+      const TestData = FixtureData.testFixture;
+      await Action.clickOnDropDown.test();
+      for (const test of TestData) {
+        const element = Array.from(screen.queryAllByText(test.title)).filter(
+          item => item.tagName === "LABEL",
+        )[0];
+        expect(element).toBeInTheDocument();
+        expect(element.className.includes("hidden")).toBeFalsy();
+      }
+    },
+    testExcludePUTId: async () => {
+      const TestData = FixtureData.testFixture;
+      await Action.clickOnDropDown.test();
+      for (const test of TestData) {
+        const element = Array.from(screen.queryAllByText(test.title)).filter(
+          item => item.tagName === "LABEL",
+        )[0];
+        expect(element).toBeInTheDocument();
+        if (test.id === FixtureData.test.id) {
+          expect(element.className.includes("hidden")).toBeTruthy();
+        } else {
+          expect(element.className.includes("hidden")).toBeFalsy();
+        }
       }
     },
   },
@@ -97,7 +139,7 @@ const Validator = {
         );
       }
     },
-    isRenderedWithDefaultValue: () => {
+    isRenderedWithDefaultInputValue: () => {
       for (const item of Object.entries(schema).filter(
         schemaItem =>
           !["id", "createdAt", "updatedAt"].includes(schemaItem[0]) &&
@@ -113,23 +155,28 @@ const Validator = {
         );
       }
     },
-    selectDefaultValuesAreSet: () => {
-      expect(document.querySelector(`select[name="studyId"]`)).toEqual(
-        FixtureData.test.studyId,
-      );
-      expect(document.querySelector(`select[name="deviceTypeId"]`)).toEqual(
-        FixtureData.test.deviceTypeId,
-      );
-    },
   },
 };
 
 describe("Test POST form", () => {
-  beforeEach(Action.render.POST);
+  let submissionValue: SubmissionFormType = {};
+  const onSubmit = vi.fn(e => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    submissionValue = parseFormData(schema, formData);
+  });
+  beforeEach(() => {
+    Action.render.POST(onSubmit);
+  });
   test("Labels are rendered correctly", Validator.label.isRendered);
+  test("Study options are rendered correctly", Validator.selectOptions.study);
   test(
-    "Options are rendered correctly",
-    Validator.label.selectOptionsAreRendered,
+    "Vocabulary options are rendered correctly",
+    Validator.selectOptions.vocabulary,
+  );
+  test(
+    "Test options are rendered correctly",
+    Validator.selectOptions.testAllVisible,
   );
   test(
     "Data are initially placeholders",
@@ -138,11 +185,40 @@ describe("Test POST form", () => {
 });
 
 describe("Test PUT form", () => {
-  beforeEach(Action.render.PUT);
+  let submissionValue: SubmissionFormType = {};
+  const onSubmit = vi.fn(e => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    submissionValue = parseFormData(schema, formData);
+  });
+  beforeEach(() => {
+    Action.render.PUT(onSubmit);
+  });
   test("Labels are rendered correctly", Validator.label.isRendered);
+  test("Labels are rendered correctly", Validator.label.isRendered);
+  test("Study options are rendered correctly", Validator.selectOptions.study);
   test(
-    "Options are rendered correctly",
-    Validator.label.selectOptionsAreRendered,
+    "Vocabulary options are rendered correctly",
+    Validator.selectOptions.vocabulary,
   );
-  test("Data are test data value", Validator.data.isRenderedWithDefaultValue);
+  test(
+    "Test options are rendered correctly",
+    Validator.selectOptions.testExcludePUTId,
+  );
+  test(
+    "Data are test data value",
+    Validator.data.isRenderedWithDefaultInputValue,
+  );
+  test("Submit data shows default value", async () => {
+    await Action.clickOnSubmit();
+    expect(onSubmit).toBeCalled();
+    for (const pair of Object.entries(submissionValue)) {
+      const [key, value] = pair;
+      if (key === "createdAt" || key === "updatedAt" || key === "releaseDate") {
+        expect(value).toEqual(new Date(FixtureData.test[key]));
+      } else {
+        expect(value).toEqual((FixtureData.test as FetchDataSuccessType)[key]);
+      }
+    }
+  });
 });
