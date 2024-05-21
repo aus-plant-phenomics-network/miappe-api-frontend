@@ -5,8 +5,8 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { createButton } from "@ailiyah-ui/button";
 const Content = styled(Popover.Content);
 import * as Popover from "@radix-ui/react-popover";
-import { SchemaType } from "../types";
-import { getTableDisplayKey } from "../helpers";
+import { SchemaType } from "../components/types";
+import { getTableDisplayKey } from "../components/helpers";
 
 const Link = styled(_Link);
 const Form = styled(_Form);

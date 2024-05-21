@@ -1,5 +1,5 @@
 import { VocabularySchema } from "./type";
-import { createRoutes } from "../../factory/factory";
+import { createRoutes } from "../../handlers/factory";
 
 const VocabularyRoutes = createRoutes(VocabularySchema, "vocabulary");
 

@@ -1,9 +1,13 @@
-import { Handler } from "../../handlers";
-import { createInputArray } from "../form";
-import { FetchDataArrayType, FetchDataType, SchemaType } from "../types";
+import { Handler } from ".";
+import { createInputArray } from "../components/form";
+import {
+  FetchDataArrayType,
+  FetchDataType,
+  SchemaType,
+} from "../components/types";
 import { styled } from "@ailiyah-ui/factory";
 import React from "react";
-import { FormComponent } from "../form";
+import { FormComponent } from "../components/form";
 import { useLoaderData } from "react-router-dom";
 import {
   PageSearchForm,
@@ -11,8 +15,8 @@ import {
   FieldSelection,
   SelectFieldsDropDown,
 } from "./widget";
-import { Table } from "../table";
-import { usePrevious } from "../hooks";
+import { Table } from "../components/table";
+import { usePrevious } from "../components/hooks";
 
 function DetailPage({
   fields,

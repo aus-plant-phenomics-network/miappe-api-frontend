@@ -1,5 +1,5 @@
 import { StaffSchema } from "./type";
-import { createRoutes } from "../../factory/factory";
+import { createRoutes } from "../../handlers/factory";
 
 const StaffRoutes = createRoutes(StaffSchema, "staff");
 
