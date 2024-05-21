@@ -39,10 +39,11 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
         placeholder="Select from dropdown"
         defaultValue={defaultValue}
         defaultValueMap={defaultValueMap}
+        themeName="SelectRoot"
       >
-        <Select.Trigger>
-          <Select.Value />
-          <Select.Icon />
+        <Select.Trigger themeName="SelectTrigger">
+          <Select.Value themeName="SelectValue" />
+          <Select.Icon themeName="SelectIcon" />
         </Select.Trigger>
 
         <Select.Portal>
@@ -51,6 +52,7 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
             align="start"
             hideWhenDetached={true}
             twWidth="w-[var(--radix-popover-trigger-width)]"
+            themeName="SelectContent"
           >
             <Select.Search themeName="SelectSearch" />
             {fetchedData &&

@@ -77,10 +77,11 @@ const Select = React.memo(
           defaultValueMap={defaultValueMap}
           {...rest}
           ref={ref}
+          themeName="SelectRoot"
         >
-          <PrimitiveSelect.Trigger>
-            <PrimitiveSelect.Value />
-            <PrimitiveSelect.Icon />
+          <PrimitiveSelect.Trigger themeName="SelectTrigger">
+            <PrimitiveSelect.Value themeName="SelectValue" />
+            <PrimitiveSelect.Icon themeName="SelectIcon" />
           </PrimitiveSelect.Trigger>
 
           <PrimitiveSelect.Portal>
@@ -88,6 +89,7 @@ const Select = React.memo(
               sideOffset={5}
               align="start"
               hideWhenDetached={true}
+              themeName="SelectContent"
               twWidth="w-[var(--radix-popover-trigger-width)]"
             >
               <PrimitiveSelect.Search themeName="SelectSearch" />
