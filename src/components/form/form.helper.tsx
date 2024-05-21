@@ -21,6 +21,13 @@ class TestSchema extends BaseSchema {
     fetcherKey: "vocabulary",
     labelKey: "type",
   };
+  testId: SchemaElementType = {
+    type: "select",
+    required: true,
+    fetcherKey: "test",
+    labelKey: "test",
+    multiple: true,
+  };
 }
 
 const FixtureData = {
@@ -33,6 +40,7 @@ const FixtureData = {
     deviceTypeId: "vocabularyId0",
     createdAt: "2020-01-01T00:00:00",
     updatedAt: "2020-01-02T00:00:00",
+    testId: ["testId1", "testId2"],
   },
   study: [
     {
@@ -64,6 +72,41 @@ const FixtureData = {
       description: "Second Vocabulary Description",
       createdAt: "2020-01-09T00:00:00",
       updatedAt: "2020-01-10T00:00:00",
+    },
+  ],
+  testFixture: [
+    {
+      id: "testId0",
+      title: "First Test",
+      description: "First Test Description",
+      studyId: ["studyId1"],
+      releaseDate: "2021-01-01T00:00:00Z",
+      deviceTypeId: "vocabularyId0",
+      createdAt: "2020-01-01T00:00:00",
+      updatedAt: "2020-01-02T00:00:00",
+      testId: ["testId1", "testId2"],
+    },
+    {
+      id: "testId1",
+      title: "Second Test",
+      description: "Second Test Description",
+      studyId: ["studyId0"],
+      releaseDate: "2021-01-01T00:00:00Z",
+      deviceTypeId: "vocabularyId1",
+      createdAt: "2020-01-01T00:00:00",
+      updatedAt: "2020-01-02T00:00:00",
+      testId: [],
+    },
+    {
+      id: "testId2",
+      title: "Third Test",
+      description: "Third Test Description",
+      studyId: ["studyId1"],
+      releaseDate: "2021-01-01T00:00:00Z",
+      deviceTypeId: "vocabularyId1",
+      createdAt: "2020-01-01T00:00:00",
+      updatedAt: "2020-01-02T00:00:00",
+      testId: [],
     },
   ],
 };
@@ -100,6 +143,10 @@ const TestComponent = ({
     {
       path: "/vocabulary",
       loader: () => FixtureData.vocabulary,
+    },
+    {
+      path: "/test",
+      loader: () => FixtureData.testFixture,
     },
   ]);
   return (
