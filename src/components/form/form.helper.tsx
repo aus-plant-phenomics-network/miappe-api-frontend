@@ -83,7 +83,7 @@ const TestComponent = ({
   data: FetchDataType;
   onSubmit: (e: React.FormEvent) => void;
 }) => {
-  const components = createInputArray(schema, [], data);
+  const components = createInputArray(schema, data);
   const routes = createMemoryRouter([
     {
       path: "/",

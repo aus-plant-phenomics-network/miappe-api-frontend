@@ -27,6 +27,8 @@ export default defineConfig({
         "**/*.helpers.[jt]sx",
         "**/*.types.ts",
         "src/routes/",
+        "src/handlers/",
+        "src/components/page",
       ],
     },
     global: true,

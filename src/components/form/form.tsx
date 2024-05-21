@@ -147,7 +147,7 @@ const InputField = React.memo(
       placeholder,
       ...rest
     } = props;
-    const id = rest.id ? rest.id : React.useId();
+    const id = React.useId();
 
     return (
       <LabelGroup

@@ -17,47 +17,38 @@ import {
  * form rendering
  *
  * @params - schema - input schema
- * @params - exclude - input fields to exclude from creation
  * @params - data - data to initialise field value
  * @returns Array<InputField>
  */
 
 const createInputArray = (
   schema: SchemaType,
-  exclude: Array<string> = [],
   data?: FetchDataType,
 ): Array<React.ReactElement> => {
-  return (
-    Object.entries(schema)
-      // Remove schema entries that are in exclude
-      .filter(
-        key => !exclude.includes(key[0]) && key[0] !== "_constructor-name_",
-      )
-      .map(([key, schema]) => {
-        const type = schema.type;
-        const required = getRequired(schema);
-        const placeholder = getPlaceHolderValue(schema, key);
-        const hidden = getHiddenValue(schema);
-        const defaultValue = getDefaultValue(schema, data?.[key] as string);
-        const fetcherKey = getFetcherKey(schema, key);
-        const labelKey = getFormDisplayKey(schema, key);
-        const multiple = getMultipleValue(schema);
-        return (
-          <InputField
-            key={key}
-            name={key}
-            type={type}
-            required={required}
-            placeholder={placeholder}
-            hidden={hidden}
-            defaultValue={defaultValue}
-            fetcherKey={fetcherKey}
-            labelKey={labelKey}
-            multiple={multiple}
-          />
-        );
-      })
-  );
+  return Object.entries(schema).map(([key, schema]) => {
+    const type = schema.type;
+    const required = getRequired(schema);
+    const placeholder = getPlaceHolderValue(schema, key);
+    const hidden = getHiddenValue(schema);
+    const defaultValue = getDefaultValue(schema, data?.[key] as string);
+    const fetcherKey = getFetcherKey(schema, key);
+    const labelKey = getFormDisplayKey(schema, key);
+    const multiple = getMultipleValue(schema);
+    return (
+      <InputField
+        key={key}
+        name={key}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        hidden={hidden}
+        defaultValue={defaultValue}
+        fetcherKey={fetcherKey}
+        labelKey={labelKey}
+        multiple={multiple}
+      />
+    );
+  });
 };
 
 export { createInputArray };

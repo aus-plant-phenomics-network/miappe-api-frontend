@@ -170,7 +170,7 @@ const Root = React.memo(
         >
           <styled.select
             multiple={multiple}
-            onChange={e => console.log(e.currentTarget.value)}
+            onChange={() => setValid(true)}
             value={multiple ? Array.from(stateValue) : (stateValue as string)}
             ref={ref}
             required={required}
