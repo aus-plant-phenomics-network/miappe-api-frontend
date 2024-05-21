@@ -33,6 +33,7 @@ interface SelectProps {
   placeholder?: string;
   defaultValue?: string | string[];
   defaultValueMap?: Map<string, string>;
+  excludeId?: string;
 }
 
 interface SelectItemProps {
@@ -47,6 +48,89 @@ interface SelectItemProps {
 
 const CrossIcon = styled(Cross2Icon);
 
+class ImmutableMap<K, V> extends Map<K, V> {
+  static fromMap<K, V>(value?: Map<K, V>, excludeKey?: K) {
+    const initMap = value
+      ? new ImmutableMap<K, V>(value)
+      : new ImmutableMap<K, V>();
+    return excludeKey ? initMap.remove(excludeKey) : initMap;
+  }
+  append(key: K, value: V, excludeKey?: K): ImmutableMap<K, V> {
+    if (key === excludeKey) return this;
+    const newMap = new ImmutableMap<K, V>(this);
+    newMap.set(key, value);
+    return newMap;
+  }
+  remove(key: K): ImmutableMap<K, V> {
+    const newMap = new ImmutableMap<K, V>(this);
+    newMap.delete(key);
+    return newMap;
+  }
+}
+
+class OptionMap extends ImmutableMap<string, NativeOption> {
+  static fromValueMap(
+    value?: ImmutableMap<string, string>,
+    excludeKey?: string,
+  ) {
+    const initOptionMap = new OptionMap();
+    if (value) {
+      for (const pair of value.entries()) {
+        if (excludeKey && excludeKey === pair[0]) {
+          continue;
+        }
+        const newOption = (
+          <option
+            key={pair[0]}
+            value={pair[0]}
+            label={pair[1]}
+            disabled={false}
+          />
+        );
+        initOptionMap.set(pair[0], newOption);
+      }
+    }
+    return initOptionMap;
+  }
+  append(key: string, value: NativeOption): OptionMap {
+    return new OptionMap(super.append(key, value));
+  }
+  addOption(item: SelectItemProps, excludeKey?: string): OptionMap {
+    if (item.selectValue === excludeKey) return this;
+    const newOption = (
+      <option
+        key={item.selectValue}
+        value={item.selectValue}
+        label={item.textValue}
+        disabled={item.disabled}
+      />
+    );
+    return this.append(item.selectValue, newOption);
+  }
+}
+
+class ImmutableSet<K> extends Set<K> {
+  toggle(key: K): ImmutableSet<K> {
+    const newSet = new ImmutableSet(this);
+    newSet.has(key) ? newSet.delete(key) : newSet.add(key);
+    return newSet;
+  }
+}
+
+const getDefaultValue = (
+  defaultValue?: string | string[],
+  multiple?: boolean,
+  excludeId?: string,
+): string | ImmutableSet<string> => {
+  if (defaultValue) {
+    let array = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
+    array = array.filter(item => item !== excludeId);
+    if (array.length > 0)
+      return multiple ? new ImmutableSet<string>(array) : array[0];
+  }
+  return multiple ? new ImmutableSet<string>() : "";
+};
+
 const Root = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps & TailwindProps>(
     (props, ref) => {
@@ -57,80 +141,39 @@ const Root = React.memo(
         multiple,
         children,
         required,
+        excludeId,
         ...rest
       } = props;
 
       const [valid, setValid] = React.useState<boolean>(true);
-
-      const [optionMap, setOptionMap] = React.useState(
-        new Map<string, NativeOption>(),
+      const [valueMap, setValueMap] = React.useState(
+        new ImmutableMap<string, string>(),
       );
-
-      const defaultValueMapDependency = defaultValueMap
+      const [optionMap, setOptionMap] = React.useState(new OptionMap());
+      const dependency = defaultValueMap
         ? JSON.stringify(Array.from(defaultValueMap.keys()))
         : undefined;
 
-      const defaultOptionMap = React.useMemo(() => {
-        const initOptionMap = new Map<string, NativeOption>();
-        if (defaultValueMap) {
-          for (const pair of defaultValueMap.entries()) {
-            const newOption = (
-              <option
-                key={pair[0]}
-                value={pair[0]}
-                label={pair[1]}
-                disabled={false}
-              />
-            );
-            initOptionMap.set(pair[0], newOption);
-          }
-        }
-        return initOptionMap;
-      }, [defaultValueMapDependency]);
+      const fDefaultValueMap = React.useMemo(() => {
+        return ImmutableMap.fromMap(defaultValueMap, excludeId);
+      }, [dependency]);
 
-      const contextOptionMap =
-        optionMap.size !== 0 ? optionMap : defaultOptionMap;
+      const fDefaultOptionMap = React.useMemo(() => {
+        return OptionMap.fromValueMap(fDefaultValueMap, excludeId);
+      }, [dependency]);
 
-      const [valueMap, setValueMap] = React.useState(new Map<string, string>());
-
-      const contextValueMap =
-        valueMap.size !== 0
-          ? valueMap
-          : defaultValueMap
-            ? defaultValueMap
-            : valueMap;
+      const cValueMap = valueMap.size !== 0 ? valueMap : fDefaultValueMap;
+      const cOptionMap = optionMap.size !== 0 ? optionMap : fDefaultOptionMap;
 
       const onOptionAdd = React.useCallback((option: SelectItemProps) => {
-        setOptionMap(prev => {
-          if (option.selectValue in prev) {
-            return prev;
-          }
-          setValueMap(prevMap => {
-            const newMap = new Map(prevMap);
-            newMap.set(option.selectValue, option.textValue);
-            return newMap;
-          });
-          const newOption = (
-            <option
-              key={option.selectValue}
-              label={option.textValue}
-              value={option.selectValue}
-              disabled={option.disabled}
-            />
-          );
-          const newMap = new Map(prev);
-          newMap.set(option.selectValue, newOption);
-          return newMap;
-        });
+        const key = option.selectValue;
+        const value = option.textValue;
+        setValueMap(prev => prev.append(key, value, excludeId));
+        setOptionMap(prev => prev.addOption(option, excludeId));
       }, []);
 
       const [stateValue, setStateValue] = React.useState<string | Set<string>>(
-        () => {
-          if (!defaultValue) return multiple ? new Set<string>() : "";
-          if (!Array.isArray(defaultValue))
-            return multiple ? new Set<string>([defaultValue]) : defaultValue;
-          return multiple ? new Set<string>(defaultValue) : defaultValue[0];
-        },
+        () => getDefaultValue(defaultValue, multiple, excludeId),
       );
 
       const setStateFn = React.useMemo(
@@ -138,20 +181,13 @@ const Root = React.memo(
           multiple
             ? (value: string) => {
                 setValid(true);
-                setStateValue(prev => {
-                  const prevValue = prev as Set<string>;
-                  if (!prevValue.has(value)) {
-                    return new Set([...prevValue, value]);
-                  }
-                  const result = new Set(
-                    Array.from(prevValue).filter(item => item !== value),
-                  );
-                  return result;
-                });
+                setStateValue(prev =>
+                  (prev as ImmutableSet<string>).toggle(value),
+                );
               }
             : (value: string) => {
-                setStateValue(value);
                 setValid(true);
+                setStateValue(value);
               },
         [multiple],
       );
@@ -160,7 +196,7 @@ const Root = React.memo(
         <SelectContextProvider
           value={{
             value: stateValue,
-            valueMap: contextValueMap,
+            valueMap: cValueMap,
             setValue: setStateFn,
             multiple: multiple,
             onOptionAdd: onOptionAdd,
@@ -185,7 +221,7 @@ const Root = React.memo(
             ) : (
               <></>
             )}
-            {Array.from(contextOptionMap.values())}
+            {Array.from(cOptionMap.values())}
           </styled.select>
           <Popover.Root>{children}</Popover.Root>
         </SelectContextProvider>
