@@ -82,7 +82,7 @@ const NavBar: React.FC<{
           <Accordion.Root type="multiple">
             {parsedData &&
               Object.entries(parsedData).map(entry => (
-                <NavItems entry={entry} useLink={useLink} />
+                <NavItems key={entry[0]} entry={entry} useLink={useLink} />
               ))}
           </Accordion.Root>
         </PNavBar.Body>
