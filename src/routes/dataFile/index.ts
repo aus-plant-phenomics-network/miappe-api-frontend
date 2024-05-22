@@ -1,5 +1,5 @@
 import { DataFileSchema } from "./type";
-import { createRoutes } from "../../handlers/factory";
+import { createRoutes } from "../../factory";
 
 const DataFileRoutes = createRoutes(DataFileSchema, "dataFile");
 

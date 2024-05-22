@@ -1,5 +1,5 @@
 import { StudySchema } from "./type";
-import { createRoutes } from "../../handlers/factory";
+import { createRoutes } from "../../factory";
 
 const StudyRoutes = createRoutes(StudySchema, "study");
 
