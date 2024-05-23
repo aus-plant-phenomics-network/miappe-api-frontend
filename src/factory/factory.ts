@@ -3,10 +3,11 @@ import { Handler } from ".";
 import { RouteObject } from "react-router-dom";
 import { Page } from "./page";
 
-const BASE_URL = "http://127.0.0.1:8000/";
+const BASE_URL = "http://127.0.0.1:8000";
 
 const createRoutes = (schema: SchemaType, title: string) => {
   const url = `${BASE_URL}/${title}`;
+  console.log(url);
   const idKey = `${title}Id`;
   const handlers = new Handler(schema, url, idKey);
   const pages = new Page(title, schema, handlers);
