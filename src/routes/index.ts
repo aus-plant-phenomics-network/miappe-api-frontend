@@ -8,6 +8,7 @@ import { DeviceRoutes } from "./device";
 import { UnitRoutes } from "./unit";
 import { MethodRoutes } from "./method";
 import { EnvironmentRoutes } from "./environment";
+import { ExperimentalFactorRoutes } from "./experimentalFactor";
 
 const routes = [
   ...DataFileRoutes,
@@ -20,6 +21,7 @@ const routes = [
   ...UnitRoutes,
   ...MethodRoutes,
   ...EnvironmentRoutes,
+  ...ExperimentalFactorRoutes,
 ];
 
 export { routes };
