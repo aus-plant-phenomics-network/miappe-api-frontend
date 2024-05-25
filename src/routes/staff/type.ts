@@ -4,10 +4,11 @@ class StaffType extends BaseSchema {
   email: SchemaElementType = { type: "text", required: false };
   phone: SchemaElementType = { type: "text", required: false };
   orcid: SchemaElementType = { type: "text", required: false };
-  affiliation: SchemaElementType = {
+  institutionId: SchemaElementType = {
     type: "select",
     required: false,
-    fetcherKey: "instutition",
+    labelKey: "affiliation",
+    fetcherKey: "institution",
   };
 }
 
