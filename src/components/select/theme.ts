@@ -27,10 +27,8 @@ const theme: PresetTheme = {
     twBorderWidth: "border-2",
     twBorderRadius: "rounded-lg",
     twPadding: "p-1",
-    twBackgroundColor:
-      "bg-neutral-700 dark:bg-neutral-50 hover:bg-neutral-800 hover:dark:bg-white",
-    twTextColor:
-      "text-neutral-50 hover:text-white dark:text-neutral-800 dark:hover:text-neutral-900",
+    twBackgroundColor: "bg-neutral-700 hover:bg-neutral-800",
+    twTextColor: "text-neutral-50 hover:text-white",
   },
   SelectContent: {
     twFlex: "flex",
