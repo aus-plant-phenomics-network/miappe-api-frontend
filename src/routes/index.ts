@@ -7,6 +7,7 @@ import { VocabularyRoutes } from "./vocabulary";
 import { DeviceRoutes } from "./device";
 import { UnitRoutes } from "./unit";
 import { MethodRoutes } from "./method";
+import { EnvironmentRoutes } from "./environment";
 
 const routes = [
   ...DataFileRoutes,
@@ -18,6 +19,7 @@ const routes = [
   ...DeviceRoutes,
   ...UnitRoutes,
   ...MethodRoutes,
+  ...EnvironmentRoutes,
 ];
 
 export { routes };
