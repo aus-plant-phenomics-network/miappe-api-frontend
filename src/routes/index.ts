@@ -5,6 +5,7 @@ import { StaffRoutes } from "./staff";
 import { StudyRoutes } from "./study";
 import { VocabularyRoutes } from "./vocabulary";
 import { DeviceRoutes } from "./device";
+import { UnitRoutes } from "./unit";
 
 const routes = [
   ...DataFileRoutes,
@@ -14,6 +15,7 @@ const routes = [
   ...StudyRoutes,
   ...VocabularyRoutes,
   ...DeviceRoutes,
+  ...UnitRoutes,
 ];
 
 export { routes };
