@@ -7,13 +7,12 @@ class InstitutionType extends BaseSchema {
     labelKey: "InstitutionType",
     fetcherKey: "vocabulary",
   };
-  parent: SchemaElementType = {
+  parentId: SchemaElementType = {
     type: "select",
     required: false,
     labelKey: "parentInstitution",
     fetcherKey: "institution",
-    selfReferencing: true,
-    selfReferencingRelationship: "parent",
+    multiple: true,
   };
 }
 
