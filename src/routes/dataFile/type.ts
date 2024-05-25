@@ -7,6 +7,7 @@ class DataFileType extends BaseSchema {
     type: "select",
     required: true,
     fetcherKey: "study",
+    labelKey: "study",
   };
 }
 
