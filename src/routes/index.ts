@@ -9,6 +9,7 @@ import { UnitRoutes } from "./unit";
 import { MethodRoutes } from "./method";
 import { EnvironmentRoutes } from "./environment";
 import { ExperimentalFactorRoutes } from "./experimentalFactor";
+import { ObservedVariableRoutes } from "./observedVariable";
 
 const routes = [
   ...DataFileRoutes,
@@ -22,6 +23,7 @@ const routes = [
   ...MethodRoutes,
   ...EnvironmentRoutes,
   ...ExperimentalFactorRoutes,
+  ...ObservedVariableRoutes,
 ];
 
 export { routes };
