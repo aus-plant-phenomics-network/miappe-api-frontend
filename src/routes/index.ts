@@ -10,6 +10,7 @@ import { MethodRoutes } from "./method";
 import { EnvironmentRoutes } from "./environment";
 import { ExperimentalFactorRoutes } from "./experimentalFactor";
 import { ObservedVariableRoutes } from "./observedVariable";
+import { BiologicalMaterialRoutes } from "./biologicalMaterial";
 
 const routes = [
   ...DataFileRoutes,
@@ -24,6 +25,7 @@ const routes = [
   ...EnvironmentRoutes,
   ...ExperimentalFactorRoutes,
   ...ObservedVariableRoutes,
+  ...BiologicalMaterialRoutes,
 ];
 
 export { routes };
