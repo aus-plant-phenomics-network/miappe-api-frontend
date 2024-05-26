@@ -15,6 +15,7 @@ import { FacilityRoutes } from "./facility";
 import { ObservationUnitRoutes } from "./observationUnit";
 import { EventRoutes } from "./event";
 import { SampleRoutes } from "./sample";
+import { ExperimentRoutes } from "./experiment";
 
 const routes = [
   ...DataFileRoutes,
@@ -34,6 +35,7 @@ const routes = [
   ...ObservationUnitRoutes,
   ...EventRoutes,
   ...SampleRoutes,
+  ...ExperimentRoutes,
 ];
 
 export { routes };
