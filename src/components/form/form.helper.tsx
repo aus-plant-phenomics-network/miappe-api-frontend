@@ -8,6 +8,8 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@ailiyah-ui/context";
 
 class TestSchema extends BaseSchema {
+  title: SchemaElementType = { type: "text", required: true };
+  description: SchemaElementType = { type: "text" };
   studyId: SchemaElementType = {
     type: "select",
     required: true,
