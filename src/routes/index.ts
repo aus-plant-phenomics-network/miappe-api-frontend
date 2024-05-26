@@ -14,6 +14,7 @@ import { BiologicalMaterialRoutes } from "./biologicalMaterial";
 import { FacilityRoutes } from "./facility";
 import { ObservationUnitRoutes } from "./observationUnit";
 import { EventRoutes } from "./event";
+import { SampleRoutes } from "./sample";
 
 const routes = [
   ...DataFileRoutes,
@@ -32,6 +33,7 @@ const routes = [
   ...FacilityRoutes,
   ...ObservationUnitRoutes,
   ...EventRoutes,
+  ...SampleRoutes,
 ];
 
 export { routes };
