@@ -199,13 +199,6 @@ const parseFormData = (
  */
 class BaseSchema implements SchemaType {
   id: SchemaElementType = { type: "text", hidden: true };
-  title: SchemaElementType = {
-    type: "text",
-    required: true,
-  };
-  description: SchemaElementType = {
-    type: "text",
-  };
   createdAt: SchemaElementType = {
     type: "date",
     hidden: true,
