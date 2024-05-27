@@ -19,6 +19,7 @@ interface SchemaElementType {
 
 interface SchemaType {
   id: SchemaElementType;
+  title: SchemaElementType;
   [k: string]: SchemaElementType;
 }
 
