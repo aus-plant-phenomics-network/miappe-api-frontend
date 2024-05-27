@@ -11,6 +11,7 @@ class StaffType extends BaseSchema {
     required: false,
     labelKey: "affiliation",
     fetcherKey: "institution",
+    multiple: true,
   };
 }
 
