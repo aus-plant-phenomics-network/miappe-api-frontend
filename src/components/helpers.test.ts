@@ -539,6 +539,23 @@ describe("Test BaseSchema default value", () => {
     expect(getRequired(schema.createdAt)).not.toBeTruthy();
     expect(getRequired(schema.updatedAt)).not.toBeTruthy();
   });
+  test("title is text, required, not hidden with FormLabel being Title*, table header being Title, placeholder value being Enter Title", () => {
+    expect(schema.title.type).toBe("text");
+    expect(getRequired(schema.title)).toBeTruthy();
+    expect(getHiddenValue(schema.title)).toBeFalsy();
+    expect(getFormDisplayKey(schema.title, "title")).toBe("Title*");
+    expect(getTableDisplayKey(schema.title, "title")).toBe("Title");
+    expect(getPlaceHolderValue(schema.title, "title")).toBe("Enter Title");
+  });
+  test("Setting title with valid string returns as is", () => {
+    expect(getDefaultValue(schema.title, "")).toEqual("");
+    expect(getDefaultValue(schema.title, "First Project")).toEqual(
+      "First Project",
+    );
+  });
+  test("Setting title with null valid returns empty string", () => {
+    expect(getDefaultValue(schema.title, null)).toEqual("");
+  });
 });
 
 /**
