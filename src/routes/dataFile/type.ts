@@ -20,6 +20,7 @@ class DataFileType extends BaseSchema {
     required: true,
     fetcherKey: "study",
     labelKey: "study",
+    multiple: true,
   };
 }
 
