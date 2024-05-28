@@ -1,7 +1,7 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class StaffType extends BaseSchema {
-  title: SchemaElementType = { type: "text", labelKey: "name" };
+  name: SchemaElementType = { type: "text", labelKey: "name" };
   role: SchemaElementType = { type: "text", labelKey: "role" };
   email: SchemaElementType = { type: "text", required: false };
   phone: SchemaElementType = { type: "text", required: false };
