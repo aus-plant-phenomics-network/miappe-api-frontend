@@ -95,7 +95,6 @@ const Select = React.memo(
       acc.set(dataItem.id as string, dataItem[titleKey] as string);
       return acc;
     }, new Map<string, string>());
-
     return (
       <styled.div themeName="FormSelectContainer">
         <PrimitiveSelect.Root
@@ -129,7 +128,7 @@ const Select = React.memo(
                     themeName="SelectItem"
                     key={dataItem.id as string}
                     selectValue={dataItem.id as string}
-                    textValue={dataItem.title as string}
+                    textValue={dataItem[titleKey] as string}
                   />
                 ))}
             </PrimitiveSelect.Content>
