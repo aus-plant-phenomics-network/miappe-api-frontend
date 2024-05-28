@@ -16,7 +16,6 @@ import {
 import { describe, expect, test } from "vitest";
 import { SchemaElementType } from "./types";
 
-
 const getTitleKeyFixture = [
   {
     inputValue: "studyId",
@@ -25,7 +24,7 @@ const getTitleKeyFixture = [
   },
   {
     inputValue: "studyId",
-    schema: { type: "select"},
+    schema: { type: "select" },
     expValue: "title",
   },
   {
@@ -43,7 +42,6 @@ describe.each(getTitleKeyFixture)(
     });
   },
 );
-
 
 const getMultipleFixture = [
   {

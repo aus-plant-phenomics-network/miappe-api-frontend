@@ -99,7 +99,7 @@ class Handler<T extends SchemaType, Key extends string> {
 
     return parseFormData(this.schema, formData);
   };
-  // TODO: FIX THIS SO IT SEARCHES MORE THAN JUST TITLE 
+  // TODO: FIX THIS SO IT SEARCHES MORE THAN JUST TITLE
   public loaderAll = async ({
     request,
   }: {
