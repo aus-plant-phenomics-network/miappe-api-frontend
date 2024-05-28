@@ -1,10 +1,12 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class MethodType extends BaseSchema {
-  methodTypeId: SchemaElementType = {
+  name: SchemaElementType = { type: "text", required: true };
+  description: SchemaElementType = { type: "text" };
+  methodReferenceId: SchemaElementType = {
     type: "select",
     required: true,
-    labelKey: "methodType",
+    labelKey: "methodReference",
     fetcherKey: "vocabulary",
   };
   deviceId: SchemaElementType = {
@@ -12,6 +14,7 @@ class MethodType extends BaseSchema {
     required: false,
     labelKey: "device",
     fetcherKey: "device",
+    titleKey: "name",
   };
 }
 
