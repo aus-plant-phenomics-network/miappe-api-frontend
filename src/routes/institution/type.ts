@@ -1,7 +1,7 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class InstitutionType extends BaseSchema {
-  title: SchemaElementType = { type: "text", labelKey: "name", required: true };
+  name: SchemaElementType = { type: "text", labelKey: "name", required: true };
   country: SchemaElementType = { type: "text" };
   institutionTypeId: SchemaElementType = {
     type: "select",
@@ -14,6 +14,7 @@ class InstitutionType extends BaseSchema {
     required: false,
     labelKey: "parentInstitution",
     fetcherKey: "institution",
+    titleKey: "name",
     multiple: true,
   };
 }
