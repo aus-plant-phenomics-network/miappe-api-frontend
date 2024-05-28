@@ -7,6 +7,7 @@ import {
   getFormDisplayKey,
   getHiddenValue,
   getMultipleValue,
+  getTitleKey,
   getPlaceHolderValue,
   getRequired,
 } from "../helpers";
@@ -26,31 +27,35 @@ const createInputArray = (
   data?: FetchDataType,
 ): Array<React.ReactElement> => {
   const excludeId = data?.id as string;
-  return Object.entries(schema).filter(([key, ])=> key !== "_constructor-name_").map(([key, schema]) => {
-    const type = schema.type;
-    const required = getRequired(schema);
-    const placeholder = getPlaceHolderValue(schema, key);
-    const hidden = getHiddenValue(schema);
-    const defaultValue = getDefaultValue(schema, data?.[key] as string);
-    const fetcherKey = getFetcherKey(schema, key);
-    const labelKey = getFormDisplayKey(schema, key);
-    const multiple = getMultipleValue(schema);
-    return (
-      <InputField
-        key={key}
-        name={key}
-        type={type}
-        required={required}
-        placeholder={placeholder}
-        hidden={hidden}
-        defaultValue={defaultValue}
-        fetcherKey={fetcherKey}
-        labelKey={labelKey}
-        multiple={multiple}
-        excludeId={excludeId}
-      />
-    );
-  });
+  return Object.entries(schema)
+    .filter(([key]) => key !== "_constructor-name_")
+    .map(([key, schema]) => {
+      const type = schema.type;
+      const required = getRequired(schema);
+      const placeholder = getPlaceHolderValue(schema, key);
+      const hidden = getHiddenValue(schema);
+      const defaultValue = getDefaultValue(schema, data?.[key] as string);
+      const fetcherKey = getFetcherKey(schema, key);
+      const labelKey = getFormDisplayKey(schema, key);
+      const multiple = getMultipleValue(schema);
+      const titleKey = getTitleKey(schema);
+      return (
+        <InputField
+          key={key}
+          name={key}
+          type={type}
+          required={required}
+          placeholder={placeholder}
+          hidden={hidden}
+          defaultValue={defaultValue}
+          fetcherKey={fetcherKey}
+          labelKey={labelKey}
+          titleKey={titleKey}
+          multiple={multiple}
+          excludeId={excludeId}
+        />
+      );
+    });
 };
 
 export { createInputArray };
