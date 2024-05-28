@@ -5,6 +5,10 @@ import {
   SubmissionFormType,
 } from "./types";
 
+const getTitleKey = (schema: SchemaElementType): string => {
+  return schema.titleKey ? schema.titleKey : "title";
+};
+
 const getMultipleValue = (schema: SchemaElementType): boolean => {
   return schema.multiple ? true : false;
 };
@@ -199,13 +203,6 @@ const parseFormData = (
  */
 class BaseSchema implements SchemaType {
   id: SchemaElementType = { type: "text", hidden: true };
-  title: SchemaElementType = {
-    type: "text",
-    required: true,
-  };
-  description: SchemaElementType = {
-    type: "text",
-  };
   createdAt: SchemaElementType = {
     type: "date",
     hidden: true,
@@ -228,6 +225,7 @@ export {
   getRequired,
   getMultipleValue,
   parseFormData,
+  getTitleKey,
   capitalise,
   BaseSchema,
 };

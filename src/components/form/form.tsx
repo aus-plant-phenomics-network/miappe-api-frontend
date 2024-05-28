@@ -77,18 +77,24 @@ const Input = React.memo(
  */
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-    const { name, required, defaultValue, multiple, fetcherKey, ...rest } =
-      props;
+    const {
+      name,
+      required,
+      defaultValue,
+      multiple,
+      fetcherKey,
+      titleKey,
+      ...rest
+    } = props;
     const fetcher = useFetcherData(fetcherKey);
     const fetchedData = (fetcher.data as FetchDataArrayType)
       ? (fetcher.data as FetchDataArrayType)
       : [];
 
     const defaultValueMap = fetchedData?.reduce((acc, dataItem) => {
-      acc.set(dataItem.id as string, dataItem.title as string);
+      acc.set(dataItem.id as string, dataItem[titleKey] as string);
       return acc;
     }, new Map<string, string>());
-
     return (
       <styled.div themeName="FormSelectContainer">
         <PrimitiveSelect.Root
@@ -122,7 +128,7 @@ const Select = React.memo(
                     themeName="SelectItem"
                     key={dataItem.id as string}
                     selectValue={dataItem.id as string}
-                    textValue={dataItem.title as string}
+                    textValue={dataItem[titleKey] as string}
                   />
                 ))}
             </PrimitiveSelect.Content>
@@ -167,6 +173,7 @@ const InputField = React.memo(
       defaultValue,
       fetcherKey,
       labelKey,
+      titleKey,
       placeholder,
       excludeId,
       ...rest
@@ -190,6 +197,7 @@ const InputField = React.memo(
             defaultValue={defaultValue}
             fetcherKey={fetcherKey}
             excludeId={excludeId}
+            titleKey={titleKey}
           />
         ) : (
           <Input

@@ -19,7 +19,7 @@
     "Device": "device",
     "Biological Material": "biologicalMaterial",
     "Environment": "environment",
-    "Experiment Factor": "experimentFactor",
+    "Experimental Factor": "experimentalFactor",
     "Observed Variable": "observedVariable"
   },
   "Ontology": {

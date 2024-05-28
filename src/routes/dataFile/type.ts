@@ -1,12 +1,26 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class DataFileType extends BaseSchema {
-  link: SchemaElementType = { type: "text", required: false };
-  version: SchemaElementType = { type: "text", required: true };
+  dataFileLink: SchemaElementType = {
+    type: "text",
+    required: false,
+    labelKey: "link",
+  };
+  dataFileVersion: SchemaElementType = {
+    type: "text",
+    required: true,
+    labelKey: "version",
+  };
+  dataFileDescription: SchemaElementType = {
+    type: "text",
+    labelKey: "description",
+  };
   studyId: SchemaElementType = {
     type: "select",
     required: true,
     fetcherKey: "study",
+    labelKey: "study",
+    multiple: true,
   };
 }
 

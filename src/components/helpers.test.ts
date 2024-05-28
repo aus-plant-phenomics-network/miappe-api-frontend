@@ -10,10 +10,38 @@ import {
   capitalise,
   BaseSchema,
   getMultipleValue,
+  getTitleKey,
   parseFormData,
 } from "./helpers";
 import { describe, expect, test } from "vitest";
 import { SchemaElementType } from "./types";
+
+const getTitleKeyFixture = [
+  {
+    inputValue: "studyId",
+    schema: { type: "select", titleKey: "name" },
+    expValue: "name",
+  },
+  {
+    inputValue: "studyId",
+    schema: { type: "select" },
+    expValue: "title",
+  },
+  {
+    inputValue: "studyId",
+    schema: { type: "select", titleKey: "title" },
+    expValue: "title",
+  },
+];
+
+describe.each(getTitleKeyFixture)(
+  "given %o",
+  ({ inputValue, schema, expValue }) => {
+    test(`${inputValue} getMultiple returns ${expValue}`, () => {
+      expect(getTitleKey(schema as SchemaElementType)).toEqual(expValue);
+    });
+  },
+);
 
 const getMultipleFixture = [
   {
@@ -538,37 +566,6 @@ describe("Test BaseSchema default value", () => {
 
     expect(getRequired(schema.createdAt)).not.toBeTruthy();
     expect(getRequired(schema.updatedAt)).not.toBeTruthy();
-  });
-  test("title is text, required, not hidden with FormLabel being Title*, table header being Title, placeholder value being Enter Title", () => {
-    expect(schema.title.type).toBe("text");
-    expect(getRequired(schema.title)).toBeTruthy();
-    expect(getHiddenValue(schema.title)).toBeFalsy();
-    expect(getFormDisplayKey(schema.title, "title")).toBe("Title*");
-    expect(getTableDisplayKey(schema.title, "title")).toBe("Title");
-    expect(getPlaceHolderValue(schema.title, "title")).toBe("Enter Title");
-  });
-  test("description is text, not required, not hidden with FormLabel and TableHeader being Description, placeholder value being Enter Description", () => {
-    expect(schema.description.type).toBe("text");
-    expect(getRequired(schema.description)).toBeFalsy();
-    expect(getHiddenValue(schema.description)).toBeFalsy();
-    expect(getFormDisplayKey(schema.description, "description")).toBe(
-      "Description",
-    );
-    expect(getTableDisplayKey(schema.description, "description")).toBe(
-      "Description",
-    );
-    expect(getPlaceHolderValue(schema.description, "description")).toBe(
-      "Enter Description",
-    );
-  });
-  test("Setting title with valid string returns as is", () => {
-    expect(getDefaultValue(schema.title, "")).toEqual("");
-    expect(getDefaultValue(schema.title, "First Project")).toEqual(
-      "First Project",
-    );
-  });
-  test("Setting title with null valid returns empty string", () => {
-    expect(getDefaultValue(schema.title, null)).toEqual("");
   });
 });
 

@@ -22,11 +22,13 @@ function DetailPage({
   fields,
   schema,
   title,
+  defaultColumns,
   children,
 }: {
   fields: string[];
   schema: SchemaType;
   title: string;
+  defaultColumns: string[];
   children: React.ReactElement[];
 }) {
   const fieldData = useLoaderData() as FetchDataArrayType;
@@ -35,7 +37,7 @@ function DetailPage({
   const [displayFields, setDisplayFields] = React.useState<FieldSelection>(() =>
     Object.fromEntries(
       fields.map(field => {
-        return [field, ["title", "description"].includes(field)];
+        return [field, defaultColumns.includes(field)];
       }),
     ),
   );
@@ -112,12 +114,19 @@ class Page<T extends SchemaType, Key extends string> {
   handler: Handler<T, Key>;
   title: string;
   fields: string[];
+  defaultColumns: string[];
 
-  constructor(title: string, schema: T, handler: Handler<T, Key>) {
+  constructor(
+    title: string,
+    schema: T,
+    defaultColumns: string[],
+    handler: Handler<T, Key>,
+  ) {
     this.schema = schema;
     this.handler = handler;
     this.title = title;
     this.fields = Object.keys(schema);
+    this.defaultColumns = defaultColumns;
   }
 
   getCreatePage() {
@@ -142,6 +151,7 @@ class Page<T extends SchemaType, Key extends string> {
         schema={this.schema}
         fields={this.fields}
         key={this.title}
+        defaultColumns={this.defaultColumns}
       >
         <PageSearchForm />
         <NewItemButton title={this.title} />

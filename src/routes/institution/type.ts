@@ -1,19 +1,21 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class InstitutionType extends BaseSchema {
+  name: SchemaElementType = { type: "text", labelKey: "name", required: true };
+  country: SchemaElementType = { type: "text" };
   institutionTypeId: SchemaElementType = {
     type: "select",
     required: false,
     labelKey: "InstitutionType",
     fetcherKey: "vocabulary",
   };
-  parent: SchemaElementType = {
+  parentId: SchemaElementType = {
     type: "select",
     required: false,
     labelKey: "parentInstitution",
     fetcherKey: "institution",
-    selfReferencing: true,
-    selfReferencingRelationship: "parent",
+    titleKey: "name",
+    multiple: true,
   };
 }
 

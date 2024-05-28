@@ -30,6 +30,7 @@ class Handler<T extends SchemaType, Key extends string> {
     }
 
     const result = await response.json();
+    console.log(result);
     return result as FetchDataArrayType;
   };
   protected getDataById = async (id: string): Promise<FetchDataType> => {
@@ -40,11 +41,13 @@ class Handler<T extends SchemaType, Key extends string> {
     }
 
     const result = await response.json();
+    console.log(result);
     return result as FetchDataType;
   };
   protected createData = async (
     data: SubmissionFormType,
   ): Promise<FetchDataType> => {
+    console.log(JSON.stringify(data));
     const response = await fetch(this.url, {
       method: "POST",
       headers: {
@@ -63,6 +66,7 @@ class Handler<T extends SchemaType, Key extends string> {
     data: SubmissionFormType,
     id: string,
   ): Promise<FetchDataType> => {
+    console.log(JSON.stringify(data));
     const response = await fetch(`${this.url}/${id}`, {
       method: "PUT",
       headers: {
@@ -95,7 +99,7 @@ class Handler<T extends SchemaType, Key extends string> {
 
     return parseFormData(this.schema, formData);
   };
-
+  // TODO: FIX THIS SO IT SEARCHES MORE THAN JUST TITLE
   public loaderAll = async ({
     request,
   }: {

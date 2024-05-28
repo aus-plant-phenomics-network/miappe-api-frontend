@@ -6,6 +6,7 @@ interface InputSelectOwnProps extends PrimitiveSelectProps {
   type: TypeLiterals;
   fetcherKey: string;
   labelKey: string;
+  titleKey: string;
 }
 
 interface InputProps

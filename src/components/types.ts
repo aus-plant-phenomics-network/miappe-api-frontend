@@ -15,12 +15,12 @@ interface SchemaElementType {
   multiple?: boolean;
   /** Whether to display form value */
   hidden?: boolean;
+  /** Title key */
+  titleKey?: string;
 }
 
 interface SchemaType {
   id: SchemaElementType;
-  title: SchemaElementType;
-  description: SchemaElementType;
   [k: string]: SchemaElementType;
 }
 
