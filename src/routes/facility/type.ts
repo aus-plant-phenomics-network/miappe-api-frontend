@@ -1,9 +1,10 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class FacilityType extends BaseSchema {
+  name: SchemaElementType = { type: "text", required: true };
+  description: SchemaElementType = { type: "text" };
   facilityTypeId: SchemaElementType = {
     type: "select",
-    required: true,
     labelKey: "facilityType",
     fetcherKey: "vocabulary",
   };
@@ -11,6 +12,7 @@ class FacilityType extends BaseSchema {
     type: "select",
     labelKey: "institution",
     fetcherKey: "institution",
+    titleKey: "name",
   };
   address: SchemaElementType = { type: "text" };
   city: SchemaElementType = { type: "text" };
@@ -20,12 +22,6 @@ class FacilityType extends BaseSchema {
   latitude: SchemaElementType = { type: "text" };
   longitude: SchemaElementType = { type: "text" };
   altitude: SchemaElementType = { type: "text" };
-  environmentId: SchemaElementType = {
-    type: "select",
-    fetcherKey: "environment",
-    labelKey: "environment",
-    multiple: true,
-  };
 }
 
 const FacilitySchema = new FacilityType();

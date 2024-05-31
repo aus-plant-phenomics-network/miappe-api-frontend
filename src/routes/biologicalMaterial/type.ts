@@ -2,15 +2,30 @@ import { SchemaElementType } from "../../components";
 import { VariableSchema } from "../variable";
 
 class BiologicalMaterialType extends VariableSchema {
-  biologicalLocation: SchemaElementType = { type: "text" };
+  title: SchemaElementType = { type: "text", required: true };
+  organismId: SchemaElementType = {
+    type: "select",
+    fetcherKey: "vocabulary",
+    labelKey: "organism",
+    required: true,
+  };
+  genus: SchemaElementType = { type: "text", required: true };
+  species: SchemaElementType = { type: "text", required: true };
+  infraspecific_name: SchemaElementType = { type: "text" };
+  biologicalMaterialLatitude: SchemaElementType = { type: "text" };
+  biologicalMaterialLongitude: SchemaElementType = { type: "text" };
+  biologicalMaterialAltitude: SchemaElementType = { type: "text" };
+  biologicalMaterialCoordinatesUncertainty: SchemaElementType = {
+    type: "text",
+  };
+  biological_material_preprocessing: SchemaElementType = { type: "text" };
   materialSourceId: SchemaElementType = { type: "text" };
   materialSourceDoi: SchemaElementType = { type: "text" };
-  materialSourceLocation: SchemaElementType = { type: "text" };
+  materialSourceLatitude: SchemaElementType = { type: "text" };
+  materialSourceLongitude: SchemaElementType = { type: "text" };
+  materialSourceAltitude: SchemaElementType = { type: "text" };
+  materialSourceCoordinatesUncertainty: SchemaElementType = { type: "text" };
   materialSourceDescription: SchemaElementType = { type: "text" };
-  preprocessingMethod: SchemaElementType = {
-    type: "select",
-    fetcherKey: "method",
-  };
 }
 
 const BiologicalMaterialSchema = new BiologicalMaterialType();

@@ -1,6 +1,7 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class DeviceType extends BaseSchema {
+  name: SchemaElementType = {type: "text", required: true};
   deviceTypeId: SchemaElementType = {
     type: "select",
     required: true,

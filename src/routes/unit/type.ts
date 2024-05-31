@@ -1,7 +1,8 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class UnitType extends BaseSchema {
-  unitTypeId: SchemaElementType = {
+  name: SchemaElementType = { type: "text", required: true };
+  unitReferenceId: SchemaElementType = {
     type: "select",
     required: true,
     labelKey: "unitType",

@@ -1,35 +1,43 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class ExperimentType extends BaseSchema {
-  studyId: SchemaElementType = {
-    type: "select",
-    fetcherKey: "study",
-    labelKey: "study",
-    required: true,
-  };
-  startDate: SchemaElementType = { type: "date", required: true };
+  title: SchemaElementType = { type: "text", required: true };
+  objective: SchemaElementType = { type: "text" };
+  startDate: SchemaElementType = { type: "date" };
   endDate: SchemaElementType = { type: "date" };
-  objective: SchemaElementType = { type: "text", required: true };
+  observationUnitLevelHierarchy: SchemaElementType = { type: "text" };
+  observationUnitLevelDescription: SchemaElementType = { type: "text" };
+  culturalPractices: SchemaElementType = { type: "text" };
+  mapOfExperimentalDesign: SchemaElementType = { type: "text" };
+  descriptionOfExperimentalDesign: SchemaElementType = {
+    type: "text",
+    labelKey: "description",
+  };
   experimentTypeId: SchemaElementType = {
     type: "select",
     required: true,
     fetcherKey: "vocabulary",
     labelKey: "experimentType",
   };
+  studyId: SchemaElementType = {
+    type: "select",
+    fetcherKey: "study",
+    labelKey: "study",
+    required: true,
+  };
   facilityId: SchemaElementType = {
     type: "select",
     fetcherKey: "facility",
     labelKey: "facility",
+    multiple: true,
+    titleKey: "name",
   };
-  observationUnitLevelHierarchy: SchemaElementType = { type: "text" };
-  observationUnitDescription: SchemaElementType = { type: "text" };
-  culturalPractices: SchemaElementType = { type: "text" };
-  mapOfExperimentDesign: SchemaElementType = { type: "text" };
   staffId: SchemaElementType = {
     type: "select",
     multiple: true,
     labelKey: "staff",
     fetcherKey: "staff",
+    titleKey: "name",
   };
 }
 

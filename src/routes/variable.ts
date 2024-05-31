@@ -1,6 +1,7 @@
 import { BaseSchema, SchemaElementType } from "../components";
 
 class VariableSchema extends BaseSchema {
+  description: SchemaElementType = { type: "text" };
   timeInterval: SchemaElementType = { type: "text" };
   sampleInterval: SchemaElementType = { type: "text" };
   deviceId: SchemaElementType = {
@@ -12,6 +13,12 @@ class VariableSchema extends BaseSchema {
     type: "select",
     labelKey: "unit",
     fetcherKey: "unit",
+  };
+  studyId: SchemaElementType = {
+    type: "select",
+    labelKey: "study",
+    fetcherKey: "study",
+    multiple: true,
   };
 }
 
