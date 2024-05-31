@@ -13,6 +13,7 @@ class VariableSchema extends BaseSchema {
     type: "select",
     labelKey: "unit",
     fetcherKey: "unit",
+    titleKey: "name",
   };
   studyId: SchemaElementType = {
     type: "select",
