@@ -4,7 +4,7 @@ import { createRoutes } from "../../factory";
 const ExperimentalFactorRoutes = createRoutes(
   ExperimentalFactorSchema,
   "experimentalFactor",
-  ["description", "factorDescription"],
+  ["description", "factorDescription", "factorValue"],
 );
 
 export { ExperimentalFactorRoutes };
