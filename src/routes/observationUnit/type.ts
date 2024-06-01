@@ -1,34 +1,47 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class ObservationUnitType extends BaseSchema {
-  studyId: SchemaElementType = {
-    type: "select",
-    labelKey: "study",
-    fetcherKey: "study",
-  };
+  title: SchemaElementType = { type: "text", required: true };
+  location: SchemaElementType = { type: "text" };
   facilityId: SchemaElementType = {
     type: "select",
-    labelKey: "facility",
     fetcherKey: "facility",
+    labelKey: "facility",
+    titleKey: "name",
   };
   observationUnitTypeId: SchemaElementType = {
     type: "select",
-    required: true,
-    labelKey: "observationUnitType",
     fetcherKey: "vocabulary",
-  };
-  parentId: SchemaElementType = {
-    type: "select",
-    labelKey: "parentObservationUnit",
-    fetcherKey: "observationUnit",
-    multiple: true,
+    labelKey: "observationUnitType",
+    required: true,
   };
   biologicalMaterialId: SchemaElementType = {
     type: "select",
-    labelKey: "biologicalMaterial",
     fetcherKey: "biologicalMaterial",
+    labelKey: "biologicalMaterial",
+    required: true,
   };
-  factorSetting: SchemaElementType = { type: "text" };
+  experimentalFactorId: SchemaElementType = {
+    type: "select",
+    fetcherKey: "experimentalFactor",
+    labelKey: "experimentalFactor",
+    multiple: true,
+    required: true,
+    titleKey: "title",
+  };
+  studyId: SchemaElementType = {
+    type: "select",
+    required: true,
+    fetcherKey: "study",
+    labelKey: "study",
+    multiple: true,
+  };
+  parentId: SchemaElementType = {
+    type: "select",
+    fetcherKey: "observationUnit",
+    labelKey: "parent",
+    multiple: true,
+  };
 }
 
 const ObservationUnitSchema = new ObservationUnitType();
