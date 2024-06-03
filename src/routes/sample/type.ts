@@ -1,6 +1,9 @@
 import { SchemaElementType, BaseSchema } from "../../components";
 
 class SampleType extends BaseSchema {
+  title: SchemaElementType = { type: "text", required: true };
+  description: SchemaElementType = { type: "text" };
+  collectionDate: SchemaElementType = { type: "date", required: true };
   observationUnitId: SchemaElementType = {
     type: "select",
     fetcherKey: "observationUnit",
@@ -16,10 +19,6 @@ class SampleType extends BaseSchema {
     required: true,
     fetcherKey: "vocabulary",
     labelKey: "plantAnatomicalEntity",
-  };
-  collectionDate: SchemaElementType = {
-    type: "date",
-    required: true,
   };
 }
 

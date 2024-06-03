@@ -11,14 +11,14 @@ class BiologicalMaterialType extends VariableSchema {
   };
   genus: SchemaElementType = { type: "text", required: true };
   species: SchemaElementType = { type: "text", required: true };
-  infraspecific_name: SchemaElementType = { type: "text" };
+  infraspecificName: SchemaElementType = { type: "text" };
   biologicalMaterialLatitude: SchemaElementType = { type: "text" };
   biologicalMaterialLongitude: SchemaElementType = { type: "text" };
   biologicalMaterialAltitude: SchemaElementType = { type: "text" };
   biologicalMaterialCoordinatesUncertainty: SchemaElementType = {
     type: "text",
   };
-  biological_material_preprocessing: SchemaElementType = { type: "text" };
+  biologicalMaterialPreprocessing: SchemaElementType = { type: "text" };
   materialSourceId: SchemaElementType = { type: "text" };
   materialSourceDoi: SchemaElementType = { type: "text" };
   materialSourceLatitude: SchemaElementType = { type: "text" };
