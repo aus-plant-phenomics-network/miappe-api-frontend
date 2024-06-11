@@ -13,6 +13,7 @@ export default function App() {
         twFlexGrow="flex-grow"
         twMargin="my-5 mx-10"
         twOverflow="overflow-y-auto"
+        twHeight="h-screen"
       >
         <Outlet />
       </styled.div>
