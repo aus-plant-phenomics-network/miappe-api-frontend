@@ -9,7 +9,11 @@ export default function App() {
       <styled.div twFlexShrink="flex-shrink-0">
         <Root />
       </styled.div>
-      <styled.div twFlexGrow="flex-grow" twMargin="my-5 mx-10">
+      <styled.div
+        twFlexGrow="flex-grow"
+        twMargin="my-5 mx-10"
+        twOverflow="overflow-y-auto"
+      >
         <Outlet />
       </styled.div>
     </styled.div>
