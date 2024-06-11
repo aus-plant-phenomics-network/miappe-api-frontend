@@ -3,7 +3,7 @@ import { Handler } from ".";
 import { RouteObject } from "react-router-dom";
 import { Page } from "./page";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "/api";
 
 const createRoutes = (
   schema: SchemaType,
