@@ -5,7 +5,6 @@ import {
   FetchDataType,
   SchemaType,
 } from "../components/types";
-import { styled } from "@ailiyah-ui/factory";
 import React from "react";
 import { FormComponent } from "../components/form";
 import { useLoaderData } from "react-router-dom";
@@ -17,6 +16,7 @@ import {
 } from "./widget";
 import { Table } from "../components/table";
 import { usePrevious } from "../components/hooks";
+import "./page.css";
 
 function DetailPage({
   fields,
@@ -48,23 +48,23 @@ function DetailPage({
     .map(item => item[0]);
 
   return (
-    <styled.div themeName="PageRoot">
-      <styled.h1 themeName="PageTitle">{title}</styled.h1>
-      <styled.div themeName="PageComponent">
+    <div className="PageRoot">
+      <h1 className="PageTitle">{title}</h1>
+      <div className="PageComponent">
         <SelectFieldsDropDown
           fields={displayFields}
           setFields={setDisplayFields}
           schema={schema}
         />
         {children}
-      </styled.div>
+      </div>
       <Table
         key={title}
         fields={tableFields}
         fieldData={fieldData}
         schema={schema}
       />
-    </styled.div>
+    </div>
   );
 }
 
@@ -77,15 +77,15 @@ function CreatePage({
 }) {
   const onSubmit = usePrevious();
   return (
-    <styled.div themeName="PageRoot">
-      <styled.h1 themeName="PageTitle">{title}</styled.h1>
-      <styled.p themeName="PageDescription">
+    <div className="PageRoot">
+      <h1 className="PageTitle">{title}</h1>
+      <p className="PageDescription">
         Create a new {title} entry by filling out the form below.
-      </styled.p>
+      </p>
       <FormComponent method="POST" navigate={false} onSubmit={onSubmit}>
         {children}
       </FormComponent>
-    </styled.div>
+    </div>
   );
 }
 
@@ -97,15 +97,15 @@ function UpdatePage({ schema, title }: { schema: SchemaType; title: string }) {
   );
   const onSubmit = usePrevious();
   return (
-    <styled.div themeName="PageRoot">
-      <styled.h1 themeName="PageTitle">{title}</styled.h1>
-      <styled.p themeName="PageDescription">
+    <div className="PageRoot">
+      <h1 className="PageTitle">{title}</h1>
+      <p className="PageDescription">
         Update the current {title} entry by filling out the form below.
-      </styled.p>
+      </p>
       <FormComponent method="PUT" navigate={false} onSubmit={onSubmit}>
         {updateComponents}
       </FormComponent>
-    </styled.div>
+    </div>
   );
 }
 
