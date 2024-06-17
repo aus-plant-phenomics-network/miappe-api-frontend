@@ -1,40 +1,60 @@
 import React from "react";
-import { Link as _Link, Form as _Form } from "react-router-dom";
-import { styled } from "@ailiyah-ui/factory";
+import { Link, Form } from "react-router-dom";
 import { ChevronDownIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { createButton } from "@ailiyah-ui/button";
-const Content = styled(Popover.Content);
+import * as Tooltip from "@radix-ui/react-tooltip";
 import * as Popover from "@radix-ui/react-popover";
 import { SchemaType } from "../components/types";
 import { getTableDisplayKey } from "../components/helpers";
-
-const Link = styled(_Link);
-const Form = styled(_Form);
-const SearchIcon = styled(MagnifyingGlassIcon);
-const SearchButton = createButton(
-  "Search Button",
-  <SearchIcon themeName="Icons" />,
-);
+import "./widget.css";
 
 function NewItemButton({ title }: { title: string }) {
   return (
-    <Link to={`/${title}/create`} themeName="WidgetNewButton">
+    <Link to={`/${title}/create`} className="WidgetNewButton">
       New Item
     </Link>
   );
 }
 
+function SearchButton({
+  className,
+  tooltip,
+}: {
+  className: string;
+  tooltip: string;
+}) {
+  return (
+    <Tooltip.Provider>
+      <Tooltip.Root>
+        <Tooltip.Trigger asChild>
+          <button className={className}>
+            <MagnifyingGlassIcon className="Icons" />
+          </button>
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content
+            className="TooltipContent PopoverContent"
+            sideOffset={5}
+          >
+            {tooltip}
+            <Tooltip.Arrow className="TooltipArrow" />
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
+  );
+}
+
 function PageSearchForm() {
   return (
-    <Form id="search-form" role="search" themeName="WidgetSearchForm">
-      <SearchButton tooltipContent="Search" themeName="WidgetSearchButton" />
-      <styled.input
+    <Form id="search-form" role="search" className="WidgetSearchForm">
+      <SearchButton className="WidgetSearchButton" tooltip="Search" />
+      <input
         id="title"
         aria-label="Search title"
         placeholder="Search"
         type="search"
         name="title"
-        themeName="WidgetSearchInput"
+        className="WidgetSearchInput"
       />
     </Form>
   );
@@ -54,14 +74,14 @@ const FieldSelectionContent = ({
   schema: SchemaType;
 }) => {
   return (
-    <styled.div themeName="WidgetCheckBox">
+    <div className="WidgetCheckBox">
       {fields &&
         Object.entries(fields).map(item => {
           const [key, value] = item;
           return (
-            <styled.div key={key} themeName="WidgetCheckBoxItem">
-              <styled.input
-                themeName="WidgetCheckBoxInput"
+            <div key={key} className="WidgetCheckBoxItem">
+              <input
+                className="WidgetCheckBoxInput"
                 type="checkbox"
                 checked={value}
                 id={key}
@@ -74,13 +94,13 @@ const FieldSelectionContent = ({
                   })
                 }
               />
-              <styled.label htmlFor={key} themeName="WidgetCheckBoxLabel">
+              <label htmlFor={key} className="WidgetCheckBoxLabel">
                 {getTableDisplayKey(schema[key], key)}
-              </styled.label>
-            </styled.div>
+              </label>
+            </div>
           );
         })}
-    </styled.div>
+    </div>
   );
 };
 
@@ -96,15 +116,14 @@ function SelectFieldsDropDown({
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <styled.button themeName="WidgetNewButton">
+        <button className="WidgetNewButton">
           Columns
           <ChevronDownIcon />
-        </styled.button>
+        </button>
       </Popover.Trigger>
       <Popover.Portal>
-        <Content
-          className="PopoverContent"
-          themeName="WidgetPopoverContent"
+        <Popover.Content
+          className="WidgetPopoverContent PopoverContent"
           sideOffset={5}
           align="start"
           hideWhenDetached={true}
@@ -114,7 +133,7 @@ function SelectFieldsDropDown({
             setFields={setFields}
             schema={schema}
           />
-        </Content>
+        </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
   );

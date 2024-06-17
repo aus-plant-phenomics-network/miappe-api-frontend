@@ -1,0 +1,76 @@
+button,
+input,
+div,
+form,
+a {
+  border-radius: 0.5rem;
+}
+
+.WidgetCheckBox {
+  background-color: var(--neutral-400);
+}
+
+.WidgetCheckBoxItem {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.75rem;
+  padding: 0.5rem;
+}
+
+.WidgetCheckBoxItem:hover {
+  background-color: var(--neutral-500);
+}
+
+.WidgetCheckBoxInput {
+  accent-color: #a3e635;
+}
+
+.WidgetCheckBoxLabel {
+  color: var(--neutral-100);
+}
+
+.WidgetSearchForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: var(--neutral-300);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-width: 2px;
+}
+
+.WidgetSearchButton {
+  padding-top: 0.25rem; /* 4px */
+  padding-bottom: 0.25rem; /* 4px */
+}
+
+.WidgetSearchInput {
+  padding-top: 0.25rem; /* 4px */
+  padding-bottom: 0.25rem; /* 4px */
+  padding-left: 0.25rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.WidgetNewButton {
+  border-width: 2px;
+  background-color: var(--neutral-400);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--neutral-100);
+  column-gap: 0.25rem;
+  font-weight: 500;
+  padding-top: 0.25rem; /* 4px */
+  padding-bottom: 0.25rem; /* 4px */
+  padding-left: 0.5rem; /* 8px */
+  padding-right: 0.5rem; /* 8px */
+}
+
+.WidgetNewButton:hover {
+  background-color: var(--neutral-300);
+}
+
+.WidgetPopoverContent {
+  border-radius: 0.125rem;
+}
