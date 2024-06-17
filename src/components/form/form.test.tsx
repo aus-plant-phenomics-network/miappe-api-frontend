@@ -135,9 +135,13 @@ const Validator = {
         )[0];
         expect(element).toBeInTheDocument();
         if (test.id === FixtureData.test.id) {
-          expect(element.className.includes("hidden")).toBeTruthy();
+          expect(
+            element.className.toLowerCase().includes("hidden"),
+          ).toBeTruthy();
         } else {
-          expect(element.className.includes("hidden")).toBeFalsy();
+          expect(
+            element.className.toLowerCase().includes("hidden"),
+          ).toBeFalsy();
         }
       }
     },
