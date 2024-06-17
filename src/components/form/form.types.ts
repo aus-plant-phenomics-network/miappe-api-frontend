@@ -1,6 +1,6 @@
-import { TailwindComponentProps } from "@ailiyah-ui/factory";
 import { TypeLiterals } from "../types";
 import { SelectProps as PrimitiveSelectProps } from "../select";
+import React from "react";
 
 interface InputSelectOwnProps extends PrimitiveSelectProps {
   type: TypeLiterals;
@@ -11,7 +11,7 @@ interface InputSelectOwnProps extends PrimitiveSelectProps {
 
 interface InputProps
   extends Omit<
-      TailwindComponentProps<"input">,
+      React.ComponentPropsWithoutRef<"input">,
       | "name"
       | "required"
       | "type"
@@ -23,7 +23,7 @@ interface InputProps
 
 interface SelectProps
   extends Omit<
-      TailwindComponentProps<"select">,
+      React.ComponentPropsWithoutRef<"select">,
       | "name"
       | "required"
       | "type"

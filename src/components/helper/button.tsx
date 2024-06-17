@@ -97,5 +97,5 @@ const DeleteAlertButton: React.FC<
   );
 };
 
-export { EditButton, DeleteAlertButton, AddButton, DeleteButton };
+export { EditButton, DeleteAlertButton, AddButton, DeleteButton, createButton };
 export type { ButtonProps };
