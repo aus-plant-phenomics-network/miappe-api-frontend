@@ -1,6 +1,6 @@
 import React from "react";
 import { Tooltip, TooltipProps } from "./tooltip";
-import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
+import { Pencil1Icon, TrashIcon, PlusIcon } from "@radix-ui/react-icons";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import "./button.css";
 
@@ -40,6 +40,9 @@ const DeleteButton = createButton(
   "DeleteButton",
   <TrashIcon className="Icons" />,
 );
+
+// Add Button
+const AddButton = createButton("AddButton", <PlusIcon className="Icons" />);
 
 // Delete Alert Button
 const DeleteAlertButton: React.FC<
@@ -94,5 +97,5 @@ const DeleteAlertButton: React.FC<
   );
 };
 
-export { EditButton, DeleteAlertButton };
+export { EditButton, DeleteAlertButton, AddButton, DeleteButton };
 export type { ButtonProps };

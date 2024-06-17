@@ -1,59 +1,24 @@
 import { SelectProps } from "./form.types";
-import { TailwindProps } from "@ailiyah-ui/utils";
 import React from "react";
 import { Form, FormProps, Link } from "react-router-dom";
-import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
-import { createBox } from "@ailiyah-ui/box";
 import { InputProps } from "./form.types";
-import { AddButton } from "@ailiyah-ui/button";
+import { AddButton } from "../helper";
 import { FetchDataArrayType } from "../types";
 import { useFetcherData } from "../hooks";
 import * as PrimitiveSelect from "../select";
-
-/**
- * Renders a div that contains the created form.
- * Styled via themeName - FormRoot
- */
-const Root = createBox("FormRoot");
-
-/** Renders a div that contains the form labels and data. Position is relative so
- * components can be positioned against this container.
- * Styled via themeName - FormContent
- */
-const Content = createBox("Content", {
-  twPosition: "relative",
-});
-
-/**
- * Renders a div that can contain auxiliary components such as buttons or icons.
- * Set twTopLeftBottomRight to position the components.
- */
-const Component = createBox("Component", { twPosition: "relative" });
-
-/**
- * Renders a div that contains a label and the corresponding input.
- * Styled via themeName = FormLabelGroup
- */
-const LabelGroup = createBox("FormLabelGroup");
-
-/**
- * Renders a regular label component that accepts tailwind props.
- * Styled via themeName = FormLabel
- */
-const Label = styled("label");
+import "../select/select.css";
+import "./form.css";
 
 /**
  * Renders a regular input component that accepts tailwind props
- * Styled via themeName = FormInput
  */
-const _Input = styled("input");
 const Input = React.memo(
-  React.forwardRef<HTMLInputElement, TailwindComponentProps<"input">>(
+  React.forwardRef<HTMLInputElement, React.ComponentPropsWithoutRef<"input">>(
     (props, ref) => {
       const [valid, setValid] = React.useState(true);
       const { onChange, ...rest } = props;
       return (
-        <_Input
+        <input
           {...rest}
           ref={ref}
           onChange={e => {
@@ -73,7 +38,6 @@ const Input = React.memo(
 
 /**
  * Renders a regular select component that accepts tailwind props
- * Styled via themeName = FormSelect
  */
 const Select = React.memo(
   React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
@@ -96,7 +60,7 @@ const Select = React.memo(
       return acc;
     }, new Map<string, string>());
     return (
-      <styled.div themeName="FormSelectContainer">
+      <div className="FormSelectContainer">
         <PrimitiveSelect.Root
           name={name}
           required={required}
@@ -106,11 +70,11 @@ const Select = React.memo(
           defaultValueMap={defaultValueMap}
           {...rest}
           ref={ref}
-          themeName="SelectRoot"
+          className="SelectRoot"
         >
-          <PrimitiveSelect.Trigger themeName="SelectTrigger">
-            <PrimitiveSelect.Value themeName="SelectValue" />
-            <PrimitiveSelect.Icon themeName="SelectIcon" />
+          <PrimitiveSelect.Trigger className="SelectTrigger">
+            <PrimitiveSelect.Value className="SelectValue" />
+            <PrimitiveSelect.Icon className="SelectIcon" />
           </PrimitiveSelect.Trigger>
 
           <PrimitiveSelect.Portal>
@@ -118,14 +82,13 @@ const Select = React.memo(
               sideOffset={5}
               align="start"
               hideWhenDetached={true}
-              themeName="SelectContent"
-              twWidth="w-[var(--radix-popover-trigger-width)]"
+              className="SelectContent"
             >
-              <PrimitiveSelect.Search themeName="SelectSearch" />
+              <PrimitiveSelect.Search className="SelectSearch" />
               {fetchedData &&
                 fetchedData.map(dataItem => (
                   <PrimitiveSelect.Item
-                    themeName="SelectItem"
+                    className="SelectItem"
                     key={dataItem.id as string}
                     selectValue={dataItem.id as string}
                     textValue={dataItem[titleKey] as string}
@@ -139,10 +102,10 @@ const Select = React.memo(
             tooltipContent="Add"
             type="button"
             aria-label={`${name}-create-button`}
-            themeName="FormCreateButton"
+            className="FormCreateButton"
           />
         </Link>
-      </styled.div>
+      </div>
     );
   }),
 );
@@ -181,12 +144,10 @@ const InputField = React.memo(
     const id = React.useId();
 
     return (
-      <LabelGroup
-        themeName={hidden ? "FormLabelGroupHidden" : "FormLabelGroup"}
-      >
-        <Label htmlFor={id} themeName="FormLabel">
+      <div className={hidden ? "FormLabelGroupHidden" : "FormLabelGroup"}>
+        <label htmlFor={id} className="FormLabel">
           {labelKey}
-        </Label>
+        </label>
         {type === "select" ? (
           <Select
             id={id}
@@ -209,32 +170,31 @@ const InputField = React.memo(
             type={type}
             defaultValue={defaultValue}
             placeholder={placeholder}
-            themeName="FormInput"
+            className="FormInput"
           />
         )}
-      </LabelGroup>
+      </div>
     );
   }),
 );
 
-const FormComponent = React.forwardRef<
-  HTMLFormElement,
-  FormProps & TailwindProps
->((props, ref) => {
-  const { children, ...rest } = props;
-  return (
-    <Form {...rest} ref={ref}>
-      <Root themeName="FormRoot">
-        <Content themeName="FormContent">{children}</Content>
-        <Component themeName="FormComponent">
-          <styled.button type="submit" themeName="FormSubmitButton">
-            Submit
-          </styled.button>
-        </Component>
-      </Root>
-    </Form>
-  );
-});
+const FormComponent = React.forwardRef<HTMLFormElement, FormProps>(
+  (props, ref) => {
+    const { children, ...rest } = props;
+    return (
+      <Form {...rest} ref={ref}>
+        <div className="FormRoot">
+          <div className="FormContent">{children}</div>
+          <div className="FormComponent">
+            <button type="submit" className="FormSubmitButton">
+              Submit
+            </button>
+          </div>
+        </div>
+      </Form>
+    );
+  },
+);
 
 FormComponent.displayName = "FormComponent";
 
