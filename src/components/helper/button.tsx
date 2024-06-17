@@ -47,20 +47,14 @@ const AddButton = createButton("AddButton", <PlusIcon className="Icons" />);
 // Delete Alert Button
 const DeleteAlertButton: React.FC<
   {
-    tooltipContent: string;
     dialogTitle: string;
     dialogDescription: string;
-    dialogCancelButtonName: string;
-    dialogSubmitButtonName: string;
     dialogOnCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
     dialogOnSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  } & React.ComponentPropsWithoutRef<"button">
+  } & ButtonProps
 > = ({
-  tooltipContent,
   dialogTitle,
   dialogDescription,
-  dialogCancelButtonName = "Cancel",
-  dialogSubmitButtonName = "OK",
   dialogOnCancel,
   dialogOnSubmit,
   ...rest
@@ -68,7 +62,7 @@ const DeleteAlertButton: React.FC<
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild>
-        <DeleteButton tooltipContent={tooltipContent} />
+        <DeleteButton {...rest} />
       </AlertDialog.Trigger>
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="AlertDialogOverlay" />
