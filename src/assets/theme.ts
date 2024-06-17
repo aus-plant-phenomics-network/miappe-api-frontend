@@ -1,7 +1,6 @@
 import { PresetTheme } from "@ailiyah-ui/utils";
 import { defaultTheme } from "@ailiyah-ui/utils";
-import { formTheme, navbarTheme } from "../components";
-import { selectTheme } from "../components/select/theme";
+import { navbarTheme } from "../components";
 
 export const theme: PresetTheme = {
   ...defaultTheme,
@@ -10,6 +9,4 @@ export const theme: PresetTheme = {
     twWidth: "",
   },
   ...navbarTheme,
-  ...formTheme,
-  ...selectTheme,
 };
