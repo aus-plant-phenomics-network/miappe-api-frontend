@@ -1,0 +1,46 @@
+.TableRoot {
+  width: 100%;
+  border-radius: 0.375rem;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border-collapse: collapse;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+  position: relative;
+  overflow-x: auto;
+}
+
+.Table {
+  width: 100%;
+  text-align: left;
+  color: var(--neutral-500);
+  overflow-x: auto;
+  table-layout: auto;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .Table {
+    table-layout: fixed;
+  }
+}
+
+.TableHead {
+  width: 100%;
+  background-color: var(--neutral-400);
+}
+.TableHeadRow {
+  color: var(--neutral-100);
+  text-transform: capitalize;
+  font-size: medium;
+}
+
+.TableHeadHeader,
+.TableBodyData {
+  padding: 0.5rem;
+}
+.TableBodyRow:hover {
+  background-color: var(--neutral-100);
+}

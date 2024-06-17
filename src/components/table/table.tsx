@@ -1,5 +1,4 @@
 import React from "react";
-import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
 import {
   BodyOwnProps,
   BodyRowComponentOwnProps,
@@ -8,19 +7,20 @@ import {
   TableOwnProps,
 } from "./table.types";
 import { Link } from "react-router-dom";
-import { EditButton, DeleteAlertButton } from "@ailiyah-ui/button";
 import { getDefaultValue, getTableDisplayKey } from "../helpers";
 import { FetchDataSuccessType } from "../types";
 import { useDelete } from "../hooks";
+import { EditButton, DeleteAlertButton } from "../helper";
+import "./table.css";
 
 const Root = React.memo(
-  React.forwardRef<HTMLDivElement, TailwindComponentProps<"div">>(
+  React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
     (props, ref) => {
       const { children, ...rest } = props;
       return (
-        <styled.div themeName="TableRoot" {...rest} ref={ref}>
-          <styled.table themeName="Table">{children}</styled.table>
-        </styled.div>
+        <div className="TableRoot" {...rest} ref={ref}>
+          <table className="Table">{children}</table>
+        </div>
       );
     },
   ),
@@ -29,21 +29,21 @@ const Root = React.memo(
 const Header = React.memo(
   React.forwardRef<
     HTMLTableRowElement,
-    TailwindComponentProps<"thead"> & HeaderOwnProps
+    React.ComponentPropsWithoutRef<"thead"> & HeaderOwnProps
   >((props, ref) => {
     const { fields, ...rest } = props;
     return (
-      <styled.thead themeName="TableHead" ref={ref} {...rest}>
-        <styled.tr themeName="TableHeadRow">
+      <thead className="TableHead" {...rest}>
+        <tr className="TableHeadRow">
           {fields &&
             fields.map(field => (
-              <styled.th colSpan={1} key={field} themeName="TableHeadHeader">
+              <th colSpan={1} key={field} className="TableHeadHeader">
                 {field}
-              </styled.th>
+              </th>
             ))}
-          <styled.th themeName="TableHeadHeader">Action</styled.th>
-        </styled.tr>
-      </styled.thead>
+          <th className="TableHeadHeader">Action</th>
+        </tr>
+      </thead>
     );
   }),
 );
@@ -52,14 +52,14 @@ const Header = React.memo(
 const BodyRowComponent = React.memo(
   React.forwardRef<
     HTMLTableCellElement,
-    TailwindComponentProps<"td"> & BodyRowComponentOwnProps
+    React.ComponentPropsWithoutRef<"td"> & BodyRowComponentOwnProps
   >((props, ref) => {
     const { href, ...rest } = props;
 
     const dialogOnSubmit = useDelete(href);
 
     return (
-      <styled.td {...rest} ref={ref}>
+      <td {...rest} ref={ref}>
         <Link to={href}>
           <EditButton tooltipContent="Edit Entry" />
         </Link>
@@ -72,7 +72,7 @@ const BodyRowComponent = React.memo(
           dialogOnCancel={() => {}}
           dialogOnSubmit={dialogOnSubmit}
         />
-      </styled.td>
+      </td>
     );
   }),
 );
@@ -80,21 +80,21 @@ const BodyRowComponent = React.memo(
 const BodyRow = React.memo(
   React.forwardRef<
     HTMLTableRowElement,
-    TailwindComponentProps<"tr"> & BodyRowOwnProps
+    React.ComponentPropsWithoutRef<"tr"> & BodyRowOwnProps
   >((props, ref) => {
     const { rowItem, fields, ...rest } = props;
     const id = rowItem.id;
     const href = `${id}`;
 
     return (
-      <styled.tr key={id as string} {...rest} ref={ref}>
+      <tr key={id as string} {...rest} ref={ref}>
         {fields.map(field => (
-          <styled.td key={field} themeName="TableBodyData" colSpan={1}>
+          <td key={field} className="TableBodyData" colSpan={1}>
             {rowItem[field] ? rowItem[field] : ""}
-          </styled.td>
+          </td>
         ))}
-        <BodyRowComponent href={href} themeName="TableBodyData" />
-      </styled.tr>
+        <BodyRowComponent href={href} className="TableBodyData" />
+      </tr>
     );
   }),
 );
@@ -102,11 +102,11 @@ const BodyRow = React.memo(
 const Body = React.memo(
   React.forwardRef<
     HTMLTableSectionElement,
-    TailwindComponentProps<"tbody"> & BodyOwnProps
+    React.ComponentPropsWithoutRef<"tbody"> & BodyOwnProps
   >((props, ref) => {
     const { fields, fieldData, ...rest } = props;
     return (
-      <styled.tbody themeName="TableBody" {...rest} ref={ref}>
+      <tbody className="TableBody" {...rest} ref={ref}>
         {fieldData &&
           fieldData.length > 0 &&
           fieldData.map(rowItem => (
@@ -114,10 +114,10 @@ const Body = React.memo(
               key={rowItem.id as string}
               fields={fields}
               rowItem={rowItem}
-              themeName="TableBodyRow"
+              className="TableBodyRow"
             />
           ))}
-      </styled.tbody>
+      </tbody>
     );
   }),
 );
@@ -125,7 +125,7 @@ const Body = React.memo(
 const Table = React.memo(
   React.forwardRef<
     HTMLTableElement,
-    TailwindComponentProps<"table"> & TableOwnProps
+    React.ComponentPropsWithoutRef<"table"> & TableOwnProps
   >((props, ref) => {
     const { fieldData, fields, schema, ...rest } = props;
     // Process table display fields

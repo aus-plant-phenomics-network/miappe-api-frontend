@@ -7,8 +7,6 @@ import {
   fetchDataFailure,
 } from "./table.helpers";
 import React from "react";
-import { ThemeProvider } from "@ailiyah-ui/context";
-import { tableTheme } from "./theme";
 
 const Table = Components.Table;
 
@@ -16,10 +14,8 @@ const meta: Meta<typeof Table> = {
   component: Table,
   decorators: [
     Story => (
-      <div className="w-full h-[500px] p-4">
-        <ThemeProvider value={tableTheme}>
-          <Story />
-        </ThemeProvider>
+      <div style={{ width: "100%", height: "500px", padding: "1rem" }}>
+        <Story />
       </div>
     ),
   ],
