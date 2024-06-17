@@ -1,6 +1,4 @@
 import React from "react";
-import { ThemeProvider } from "@ailiyah-ui/context";
-import { theme } from "../../assets/theme";
 import { Meta, StoryObj } from "@storybook/react";
 import { TestSelectComponent, fetchData } from "./select.helpers";
 
@@ -10,13 +8,7 @@ const meta: Meta<typeof TestSelectComponent> = {
   args: {
     required: true,
   },
-  decorators: [
-    Story => (
-      <ThemeProvider value={theme}>
-        <Story />
-      </ThemeProvider>
-    ),
-  ],
+  decorators: [Story => <Story />],
 };
 
 export default meta;

@@ -3,8 +3,6 @@ import { expect, describe, test, vi, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { TestSelectComponent, fetchData } from "./select.helpers";
 import React from "react";
-import { ThemeProvider } from "@ailiyah-ui/context";
-import { theme } from "../../assets/theme";
 import { BaseSchema, parseFormData } from "../helpers";
 import { SchemaElementType, SubmissionFormType } from "../types";
 
@@ -70,11 +68,7 @@ const Validator = {
 
 describe("Test Single No Fetched Data", () => {
   beforeEach(() => {
-    render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent required={true} multiple={false} />
-      </ThemeProvider>,
-    );
+    render(<TestSelectComponent required={true} multiple={false} />);
   });
   test("select is rendered", Validator.select.isRendered);
   test("select has no children", Validator.select.hasNoChildren);
@@ -91,14 +85,12 @@ describe("Test Single No Default Data", () => {
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={false}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={false}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -144,15 +136,13 @@ describe("Test simple select with data and label", () => {
   const defaultValue = fetchData![0].id;
   beforeEach(() => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={false}
-          defaultValue={defaultValue as string}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={false}
+        defaultValue={defaultValue as string}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -205,15 +195,13 @@ describe("Test simple select no default data exclude first Id", () => {
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={false}
-          excludeId={excludeId}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={false}
+        excludeId={excludeId}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -249,16 +237,14 @@ describe("Test simple select with data and label and exclude Id", () => {
   const excludeId = fetchData![1].id as string;
   beforeEach(() => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={false}
-          defaultValue={defaultValue as string}
-          excludeId={excludeId}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={false}
+        defaultValue={defaultValue as string}
+        excludeId={excludeId}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -324,16 +310,14 @@ describe("Test simple select with data and label and exclude Id where exclude Id
   const excludeId = defaultValue as string;
   beforeEach(() => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={false}
-          defaultValue={defaultValue as string}
-          excludeId={excludeId}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={false}
+        defaultValue={defaultValue as string}
+        excludeId={excludeId}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -384,11 +368,7 @@ class TestSchema extends BaseSchema {
 
 describe("Test Multiple No Fetched Data", () => {
   beforeEach(() => {
-    render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent required={true} multiple={true} />
-      </ThemeProvider>,
-    );
+    render(<TestSelectComponent required={true} multiple={true} />);
   });
   test("select is rendered", Validator.select.isRendered);
   test("select has no children", Validator.select.hasNoChildren);
@@ -408,14 +388,12 @@ describe("Test Multiple No Default Data", () => {
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={true}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={true}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -489,15 +467,13 @@ describe("Test Multiple With Default Data", () => {
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={true}
-          defaultValue={defaultValue}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={true}
+        defaultValue={defaultValue}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -589,15 +565,13 @@ describe("Test Multiple No Default Data with exclude id", () => {
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={true}
-          excludeId={excludeId}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={true}
+        excludeId={excludeId}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -635,16 +609,14 @@ describe("Test Multiple With Default Data one value with clashing exclude id", (
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={true}
-          excludeId={excludeId}
-          defaultValue={defaultValue}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={true}
+        excludeId={excludeId}
+        defaultValue={defaultValue}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -688,16 +660,14 @@ describe("Test Multiple With Default Data multiple values with clashing exclude 
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={true}
-          defaultValue={defaultValue}
-          excludeId={excludeId}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={true}
+        defaultValue={defaultValue}
+        excludeId={excludeId}
+      />,
     );
   });
   test("Select was rendered", Validator.select.isRendered);
@@ -750,14 +720,12 @@ describe("Test Search Feature", () => {
   });
   beforeEach(async () => {
     render(
-      <ThemeProvider value={theme}>
-        <TestSelectComponent
-          required={true}
-          fetchedData={fetchData}
-          onSubmit={onSubmit}
-          multiple={false}
-        />
-      </ThemeProvider>,
+      <TestSelectComponent
+        required={true}
+        fetchedData={fetchData}
+        onSubmit={onSubmit}
+        multiple={false}
+      />,
     );
     await Action.clickOnDropDown();
   });
