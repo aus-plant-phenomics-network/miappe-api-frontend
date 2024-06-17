@@ -1,11 +1,9 @@
-import { theme } from "../../assets/theme";
 import { BaseSchema, parseFormData } from "../helpers";
 import { FetchDataType, SchemaElementType } from "../types";
 import { createInputArray } from "./factory";
 import * as Form from "./form";
 import React from "react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import { ThemeProvider } from "@ailiyah-ui/context";
 
 class TestSchema extends BaseSchema {
   title: SchemaElementType = { type: "text", required: true };
@@ -158,11 +156,7 @@ const TestComponent = ({
       loader: () => FixtureData.testFixture,
     },
   ]);
-  return (
-    <ThemeProvider value={theme}>
-      <RouterProvider router={routes} />
-    </ThemeProvider>
-  );
+  return <RouterProvider router={routes} />;
 };
 
 export { TestComponent, schema, FixtureData };
