@@ -2,6 +2,7 @@ import { FetchDataArrayType, SchemaElementType } from "../types";
 import React from "react";
 import * as Select from "./select";
 import { BaseSchema, parseFormData } from "../helpers";
+import "./select.css";
 
 const fetchData: FetchDataArrayType = [
   { id: "facility0", title: "firstFacility", description: "first facility" },
@@ -52,7 +53,10 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
     return acc;
   }, new Map<string, string>());
   return (
-    <form onSubmit={submit} className="flex gap-x-4 w-1/2">
+    <form
+      onSubmit={submit}
+      style={{ display: "flex", columnGap: "1rem", width: "50%" }}
+    >
       <Select.Root
         name={name}
         required={required}
@@ -61,11 +65,11 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
         defaultValue={defaultValue}
         defaultValueMap={defaultValueMap}
         excludeId={excludeId}
-        themeName="SelectRoot"
+        className="SelectRoot"
       >
-        <Select.Trigger themeName="SelectTrigger">
-          <Select.Value themeName="SelectValue" />
-          <Select.Icon themeName="SelectIcon" />
+        <Select.Trigger className="SelectTrigger">
+          <Select.Value className="SelectValue" />
+          <Select.Icon className="SelectIcon" />
         </Select.Trigger>
 
         <Select.Portal>
@@ -73,14 +77,14 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
             sideOffset={5}
             align="start"
             hideWhenDetached={true}
-            twWidth="w-[var(--radix-popover-trigger-width)]"
-            themeName="SelectContent"
+            className="SelectContent"
+            style={{ width: "var(--radix-popover-trigger-width)" }}
           >
-            <Select.Search themeName="SelectSearch" />
+            <Select.Search className="SelectSearch" />
             {fetchedData &&
               fetchedData.map(dataItem => (
                 <Select.Item
-                  themeName="SelectItem"
+                  className="SelectItem"
                   key={dataItem.id as string}
                   selectValue={dataItem.id as string}
                   textValue={dataItem.title as string}
@@ -89,7 +93,14 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
           </Select.Content>
         </Select.Portal>
       </Select.Root>
-      <button type="submit" className="border-w-2 p-4 bg-neutral-500">
+      <button
+        type="submit"
+        style={{
+          padding: "1rem",
+          backgroundColor: "var(--neutral-500)",
+          borderWidth: "2px",
+        }}
+      >
         Submit
       </button>
     </form>

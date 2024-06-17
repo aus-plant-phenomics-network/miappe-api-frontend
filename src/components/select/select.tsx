@@ -1,9 +1,7 @@
 import React from "react";
-import { TailwindComponentProps, styled } from "@ailiyah-ui/factory";
 import * as Popover from "@radix-ui/react-popover";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { createContext } from "@ailiyah-ui/context";
-import { TailwindProps } from "@ailiyah-ui/utils";
 import { matchSorter } from "match-sorter";
 
 interface SelectContextValue {
@@ -34,6 +32,7 @@ interface SelectProps {
   defaultValue?: string | string[];
   defaultValueMap?: Map<string, string>;
   excludeId?: string;
+  className?: string;
 }
 
 interface SelectItemProps {
@@ -41,12 +40,6 @@ interface SelectItemProps {
   textValue: string;
   disabled?: boolean;
 }
-
-// const Item
-// const ItemText
-// const ItemIndicator
-
-const CrossIcon = styled(Cross2Icon);
 
 class ImmutableMap<K, V> extends Map<K, V> {
   static fromMap<K, V>(value?: Map<K, V>, excludeKey?: K) {
@@ -132,113 +125,111 @@ const getDefaultValue = (
 };
 
 const Root = React.memo(
-  React.forwardRef<HTMLSelectElement, SelectProps & TailwindProps>(
-    (props, ref) => {
-      const {
-        defaultValue,
-        defaultValueMap,
-        placeholder,
-        multiple,
-        children,
-        required,
-        excludeId,
-        ...rest
-      } = props;
+  React.forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
+    const {
+      defaultValue,
+      defaultValueMap,
+      placeholder,
+      multiple,
+      children,
+      required,
+      excludeId,
+      ...rest
+    } = props;
 
-      const [valid, setValid] = React.useState<boolean>(true);
-      const [valueMap, setValueMap] = React.useState(
-        new ImmutableMap<string, string>(),
-      );
-      const [optionMap, setOptionMap] = React.useState(new OptionMap());
-      const dependency = defaultValueMap
-        ? JSON.stringify(Array.from(defaultValueMap.keys()))
-        : undefined;
+    const [valid, setValid] = React.useState<boolean>(true);
+    const [valueMap, setValueMap] = React.useState(
+      new ImmutableMap<string, string>(),
+    );
+    const [optionMap, setOptionMap] = React.useState(new OptionMap());
+    const dependency = defaultValueMap
+      ? JSON.stringify(Array.from(defaultValueMap.keys()))
+      : undefined;
 
-      const fDefaultValueMap = React.useMemo(() => {
-        return ImmutableMap.fromMap(defaultValueMap, excludeId);
-      }, [dependency]);
+    const fDefaultValueMap = React.useMemo(() => {
+      return ImmutableMap.fromMap(defaultValueMap, excludeId);
+    }, [dependency]);
 
-      const fDefaultOptionMap = React.useMemo(() => {
-        return OptionMap.fromValueMap(fDefaultValueMap, excludeId);
-      }, [dependency]);
+    const fDefaultOptionMap = React.useMemo(() => {
+      return OptionMap.fromValueMap(fDefaultValueMap, excludeId);
+    }, [dependency]);
 
-      const cValueMap = valueMap.size !== 0 ? valueMap : fDefaultValueMap;
-      const cOptionMap = optionMap.size !== 0 ? optionMap : fDefaultOptionMap;
+    const cValueMap = valueMap.size !== 0 ? valueMap : fDefaultValueMap;
+    const cOptionMap = optionMap.size !== 0 ? optionMap : fDefaultOptionMap;
 
-      const onOptionAdd = React.useCallback((option: SelectItemProps) => {
-        const key = option.selectValue;
-        const value = option.textValue;
-        setValueMap(prev => prev.append(key, value, excludeId));
-        setOptionMap(prev => prev.addOption(option, excludeId));
-      }, []);
+    const onOptionAdd = React.useCallback((option: SelectItemProps) => {
+      const key = option.selectValue;
+      const value = option.textValue;
+      setValueMap(prev => prev.append(key, value, excludeId));
+      setOptionMap(prev => prev.addOption(option, excludeId));
+    }, []);
 
-      const [stateValue, setStateValue] = React.useState<string | Set<string>>(
-        () => getDefaultValue(defaultValue, multiple, excludeId),
-      );
+    const [stateValue, setStateValue] = React.useState<string | Set<string>>(
+      () => getDefaultValue(defaultValue, multiple, excludeId),
+    );
 
-      const setStateFn = React.useMemo(
-        () =>
-          multiple
-            ? (value: string) => {
-                setValid(true);
-                setStateValue(prev =>
-                  (prev as ImmutableSet<string>).toggle(value),
-                );
-              }
-            : (value: string) => {
-                setValid(true);
-                setStateValue(value);
-              },
-        [multiple],
-      );
+    const setStateFn = React.useMemo(
+      () =>
+        multiple
+          ? (value: string) => {
+              setValid(true);
+              setStateValue(prev =>
+                (prev as ImmutableSet<string>).toggle(value),
+              );
+            }
+          : (value: string) => {
+              setValid(true);
+              setStateValue(value);
+            },
+      [multiple],
+    );
 
-      return (
-        <SelectContextProvider
-          value={{
-            value: stateValue,
-            valueMap: cValueMap,
-            setValue: setStateFn,
-            multiple: multiple,
-            onOptionAdd: onOptionAdd,
-            placeholder: placeholder,
-            valid: valid,
+    return (
+      <SelectContextProvider
+        value={{
+          value: stateValue,
+          valueMap: cValueMap,
+          setValue: setStateFn,
+          multiple: multiple,
+          onOptionAdd: onOptionAdd,
+          placeholder: placeholder,
+          valid: valid,
+        }}
+      >
+        <select
+          multiple={multiple}
+          onChange={() => setValid(true)}
+          value={multiple ? Array.from(stateValue) : (stateValue as string)}
+          ref={ref}
+          required={required}
+          onInvalid={e => {
+            e.preventDefault();
+            setValid(false);
           }}
+          {...rest}
         >
-          <styled.select
-            multiple={multiple}
-            onChange={() => setValid(true)}
-            value={multiple ? Array.from(stateValue) : (stateValue as string)}
-            ref={ref}
-            required={required}
-            onInvalid={e => {
-              e.preventDefault();
-              setValid(false);
-            }}
-            {...rest}
-          >
-            {stateValue === "" || Array.from(stateValue).length == 0 ? (
-              <option value="" />
-            ) : (
-              <></>
-            )}
-            {Array.from(cOptionMap.values())}
-          </styled.select>
-          <Popover.Root>{children}</Popover.Root>
-        </SelectContextProvider>
-      );
-    },
-  ),
+          {stateValue === "" || Array.from(stateValue).length == 0 ? (
+            <option value="" />
+          ) : (
+            <></>
+          )}
+          {Array.from(cOptionMap.values())}
+        </select>
+        <Popover.Root>{children}</Popover.Root>
+      </SelectContextProvider>
+    );
+  }),
 );
 
-const _Trigger = styled(Popover.Trigger);
-
-const Trigger: React.FC<TailwindComponentProps<"button">> = props => {
+const Trigger: React.FC<React.ComponentPropsWithoutRef<"button">> = props => {
   const { valid } = useSelectContext();
-  return <_Trigger {...props} data-valid={valid ? "valid" : "invalid"} />;
+  return (
+    <Popover.Trigger {...props} data-valid={valid ? "valid" : "invalid"} />
+  );
 };
 
 const Value = React.memo(
-  React.forwardRef<HTMLSpanElement, TailwindComponentProps<"span">>(
+  React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<"span">>(
     (props, ref) => {
       const { multiple, value, valueMap, setValue, placeholder } =
         useSelectContext();
@@ -262,9 +253,9 @@ const Value = React.memo(
       }
 
       return (
-        <styled.span {...props} ref={ref}>
+        <span {...props} ref={ref}>
           {displayContent}
-        </styled.span>
+        </span>
       );
     },
   ),
@@ -276,47 +267,42 @@ type ValueItemProps = {
 };
 
 const ValueItem = React.memo(
-  React.forwardRef<HTMLSpanElement, ValueItemProps & TailwindProps>(
-    (props, ref) => {
-      const { value, onClick, ...rest } = props;
-      const { valueMap } = useSelectContext();
+  React.forwardRef<HTMLSpanElement, ValueItemProps>((props, ref) => {
+    const { value, onClick, ...rest } = props;
+    const { valueMap } = useSelectContext();
 
-      const valueKey = Array.from(valueMap.entries()).filter(
-        item => item[1] === value,
-      )?.[0]?.[0];
+    const valueKey = Array.from(valueMap.entries()).filter(
+      item => item[1] === value,
+    )?.[0]?.[0];
 
-      return (
-        <styled.span
-          ref={ref}
-          {...rest}
-          onClick={e => {
-            e.preventDefault();
-            onClick(valueKey);
-          }}
-          themeName="SelectValueItem"
-        >
-          <CrossIcon themeName="SelectValueItemIcon" />
-          {value}
-        </styled.span>
-      );
-    },
-  ),
-);
-
-const Icon = React.forwardRef<HTMLSpanElement, TailwindComponentProps<"span">>(
-  (props, ref) => {
-    const { children, ...rest } = props;
     return (
-      <styled.span aria-hidden {...rest} ref={ref}>
-        {children || "▼"}
-      </styled.span>
+      <span
+        ref={ref}
+        {...rest}
+        onClick={e => {
+          e.preventDefault();
+          onClick(valueKey);
+        }}
+        className="SelectValueItem"
+      >
+        <Cross2Icon className="SelectValueItemIcon" />
+        {value}
+      </span>
     );
-  },
+  }),
 );
 
-const Portal = styled(Popover.Portal);
-
-const _Content = styled(Popover.Content);
+const Icon = React.forwardRef<
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<"span">
+>((props, ref) => {
+  const { children, ...rest } = props;
+  return (
+    <span aria-hidden {...rest} ref={ref}>
+      {children || "▼"}
+    </span>
+  );
+});
 
 type ContentContextValue = {
   query: string;
@@ -330,7 +316,7 @@ const [ContentContextProvider, useContentContext] =
 const Content = React.memo(
   React.forwardRef<
     HTMLDivElement,
-    TailwindComponentProps<"div"> & Popover.PopperContentProps
+    React.ComponentPropsWithoutRef<"div"> & Popover.PopperContentProps
   >((props, ref) => {
     const { children, ...rest } = props;
     const [query, setQuery] = React.useState<string>("");
@@ -346,20 +332,20 @@ const Content = React.memo(
 
     return (
       <ContentContextProvider value={contentContextValue}>
-        <_Content ref={ref} {...rest}>
+        <Popover.Content ref={ref} {...rest}>
           {children}
-        </_Content>
+        </Popover.Content>
       </ContentContextProvider>
     );
   }),
 );
 
 const Search = React.memo(
-  React.forwardRef<HTMLInputElement, TailwindComponentProps<"input">>(
+  React.forwardRef<HTMLInputElement, React.ComponentPropsWithoutRef<"input">>(
     (props, ref) => {
       const { query, setQuery } = useContentContext();
       return (
-        <styled.input
+        <input
           {...props}
           ref={ref}
           value={query}
@@ -370,12 +356,10 @@ const Search = React.memo(
   ),
 );
 
-const Arrow = styled(Popover.Arrow);
-
 const Item = React.memo(
   React.forwardRef<
     HTMLLabelElement,
-    TailwindComponentProps<"label"> & SelectItemProps
+    React.ComponentPropsWithoutRef<"label"> & SelectItemProps
   >((props, ref) => {
     const { selectValue, textValue, disabled, ...rest } = props;
     const { setValue, value, multiple, onOptionAdd } = useSelectContext();
@@ -396,22 +380,25 @@ const Item = React.memo(
     }, [onOptionAdd, textValue, selectValue, disabledValue]);
 
     return (
-      <styled.label
+      <label
         {...rest}
         ref={ref}
-        themeName={visible ? "SelectItem" : "SelectItemHidden"}
+        className={visible ? "SelectItem" : "SelectItemHidden"}
       >
-        <styled.input
+        <input
           type="checkbox"
-          themeName="SelectCheckBox"
+          className="SelectCheckBox"
           checked={checked}
           onChange={() => (disabled ? {} : setValue(selectValue))}
         />
         {textValue}
-      </styled.label>
+      </label>
     );
   }),
 );
+
+const Portal = Popover.Portal;
+const Arrow = Popover.Arrow;
 
 export { Root, Trigger, Value, Icon, Portal, Content, Arrow, Item, Search };
 
