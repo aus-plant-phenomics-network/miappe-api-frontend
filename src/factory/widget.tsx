@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Form } from "react-router-dom";
 import { ChevronDownIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import * as Tooltip from "@radix-ui/react-tooltip";
+import { Tooltip } from "../components/helper";
 import * as Popover from "@radix-ui/react-popover";
 import { SchemaType } from "../components/types";
 import { getTableDisplayKey } from "../components/helpers";
@@ -15,39 +15,14 @@ function NewItemButton({ title }: { title: string }) {
   );
 }
 
-function SearchButton({
-  className,
-  tooltip,
-}: {
-  className: string;
-  tooltip: string;
-}) {
-  return (
-    <Tooltip.Provider>
-      <Tooltip.Root>
-        <Tooltip.Trigger asChild>
-          <button className={className}>
-            <MagnifyingGlassIcon className="Icons" />
-          </button>
-        </Tooltip.Trigger>
-        <Tooltip.Portal>
-          <Tooltip.Content
-            className="TooltipContent PopoverContent"
-            sideOffset={5}
-          >
-            {tooltip}
-            <Tooltip.Arrow className="TooltipArrow" />
-          </Tooltip.Content>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    </Tooltip.Provider>
-  );
-}
-
 function PageSearchForm() {
   return (
     <Form id="search-form" role="search" className="WidgetSearchForm">
-      <SearchButton className="WidgetSearchButton" tooltip="Search" />
+      <Tooltip tooltipContent="Search">
+        <button className="WidgetSearchButton">
+          <MagnifyingGlassIcon className="Icons" />
+        </button>
+      </Tooltip>
       <input
         id="title"
         aria-label="Search title"
