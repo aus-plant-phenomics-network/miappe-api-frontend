@@ -95,7 +95,7 @@ const Trigger = React.memo(
               onClick={onClick}
               data-state={dataActiveState}
               data-hover={dataHoverState}
-              tooltipContent="Expand"
+              tooltipContent="Collapse"
               ref={ref}
             />
           ) : (
@@ -105,7 +105,7 @@ const Trigger = React.memo(
               onClick={onClick}
               data-state={dataActiveState}
               data-hover={dataHoverState}
-              tooltipContent="Expand"
+              tooltipContent="Collapse"
               ref={ref}
             />
           )
@@ -116,7 +116,7 @@ const Trigger = React.memo(
             onClick={onClick}
             data-state={dataActiveState}
             data-hover={dataHoverState}
-            tooltipContent="Collapse"
+            tooltipContent="Expand"
             ref={ref}
           />
         )}
@@ -137,12 +137,7 @@ const Content = React.memo(
           {children}
         </div>
       ) : (
-        <div
-          ref={ref}
-          {...rest}
-          style={{ width: "0px" }}
-          data-state={getState(activeState)}
-        >
+        <div ref={ref} {...rest} data-state={getState(activeState)}>
           {children}
         </div>
       );

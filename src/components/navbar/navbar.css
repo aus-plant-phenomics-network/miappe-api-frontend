@@ -14,27 +14,6 @@
   color: var(--neutral-700);
 }
 
-@media (prefers-color-scheme: dark) {
-  .NavBarRoot {
-    background-color: var(--neutral-900);
-    color: var(--neutral-300);
-  }
-
-  .NavBarRoot[data-state="inactive"] {
-    color: var(--neutral-400);
-  }
-  .NavBarIcons {
-    stroke: var(--neutral-100);
-  }
-  .NavBarButtons {
-    background-color: var(--neutral-700);
-  }
-
-  .NavBarButtons:hover {
-    background-color: var(--neutral-600);
-  }
-}
-
 .NavBarTrigger {
   height: 100vh;
   width: fit-content;
@@ -52,6 +31,11 @@
   row-gap: 1.25rem;
   scrollbar-width: thin;
 }
+
+.NavBarContent[data-state="inactive"] {
+  width: 0px;
+}
+
 .NavBarContentHeader {
   flex-shrink: 0;
   order: 1;
@@ -99,4 +83,25 @@
 
 .NavBarButtons:hover {
   background-color: var(--neutral-300);
+}
+
+@media (prefers-color-scheme: dark) {
+  .NavBarRoot {
+    background-color: var(--neutral-900);
+    color: var(--neutral-300);
+  }
+
+  .NavBarRoot[data-state="inactive"] {
+    color: var(--neutral-400);
+  }
+  .NavBarIcons {
+    stroke: var(--neutral-100);
+  }
+  .NavBarButtons {
+    background-color: var(--neutral-700);
+  }
+
+  .NavBarButtons:hover {
+    background-color: var(--neutral-600);
+  }
 }

@@ -10,7 +10,9 @@ const TestPath = "investigation";
 const ActionFactory = (userEvent: RTLUserEvent | StoryUserEvent) => {
   return {
     clickExpandCollapseButton: async () => {
-      await userEvent.click(document.querySelector(".NavBarTrigger > button")!);
+      (
+        document.querySelector(".NavBarTrigger > button")! as HTMLButtonElement
+      ).click();
     },
 
     clickAccordionItem: async (textContent: string) => {

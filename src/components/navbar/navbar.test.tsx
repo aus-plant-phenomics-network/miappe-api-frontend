@@ -26,16 +26,11 @@ const Validate = {
     },
     isExpanded: async () => {
       const component = document.querySelector(".NavBarContent");
-      if (component?.hasAttribute("style")) {
-        expect(component?.getAttribute("style")).toBe("");
-      } else {
-        expect(component?.getAttribute("style")).toBeNull();
-      }
+      expect(component?.getAttribute("data-state")).toBe("active");
     },
     isCollapsed: async () => {
-      expect(document.querySelector(".NavBarContent")).toHaveStyle(
-        "width: 0px",
-      );
+      const component = document.querySelector(".NavBarContent");
+      expect(component?.getAttribute("data-state")).toBe("inactive");
     },
   },
   Accordion: {
