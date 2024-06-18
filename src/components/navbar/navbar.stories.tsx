@@ -1,7 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { NavBarStoryComponent } from "./navbar.helpers";
-import { theme } from "../../assets/theme";
 import { userEvent } from "@storybook/test";
 import { ActionFactory } from "./navbar.helpers";
 import { defaultData } from "./navbar";
@@ -12,12 +11,11 @@ const meta: Meta<typeof NavBarStoryComponent> = {
   title: "Navigation Bar",
   component: NavBarStoryComponent,
   args: {
-    themeValue: theme,
     parsedData: defaultData,
   },
   decorators: [
-    (Story) => (
-      <div className="w-[500px] h-[500px]">
+    Story => (
+      <div className="h-[500px] w-[500px]">
         <Story />
       </div>
     ),
@@ -58,14 +56,14 @@ export const UnexpandStudyDefinition: Story = {
 };
 
 export const ExpandStudyDefinitionOntology: Story = {
-  play: async (context) => {
+  play: async context => {
     ExpandStudyDefinition.play && (await ExpandStudyDefinition.play(context));
     Actions.clickAccordionItem("Ontology");
   },
 };
 
 export const CollapseStudyDefinitionWithOntology: Story = {
-  play: async (context) => {
+  play: async context => {
     ExpandStudyDefinitionOntology.play &&
       (await ExpandStudyDefinitionOntology.play(context));
     Actions.clickAccordionItem("Study Definition");

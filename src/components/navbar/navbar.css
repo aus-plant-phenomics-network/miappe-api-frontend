@@ -1,0 +1,102 @@
+.NavBarRoot {
+  height: 100vh;
+  width: fit-content;
+  display: flex;
+  padding: 0rem 0rem 0rem 1rem;
+  flex-direction: row-reverse;
+  background-color: var(--neutral-100);
+  color: var(--neutral-500);
+  overflow-y: auto;
+}
+
+.NavBarRoot[data-state="inactive"] {
+  padding: 0;
+  color: var(--neutral-700);
+}
+
+@media (prefers-color-scheme: dark) {
+  .NavBarRoot {
+    background-color: var(--neutral-900);
+    color: var(--neutral-300);
+  }
+
+  .NavBarRoot[data-state="inactive"] {
+    color: var(--neutral-400);
+  }
+  .NavBarIcons {
+    stroke: var(--neutral-100);
+  }
+  .NavBarButtons {
+    background-color: var(--neutral-700);
+  }
+
+  .NavBarButtons:hover {
+    background-color: var(--neutral-600);
+  }
+}
+
+.NavBarTrigger {
+  height: 100vh;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  padding: 0 0.25rem;
+}
+
+.NavBarContent {
+  width: 260px;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.25rem;
+  scrollbar-width: thin;
+}
+.NavBarContentHeader {
+  flex-shrink: 0;
+  order: 1;
+}
+
+.NavBarContentBody {
+  flex-grow: 1;
+  order: 2;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.NavBarContentFooter {
+  flex-shrink: 0;
+  order: 3;
+}
+
+.NavBarIcons {
+  width: 100%;
+  height: 100%;
+  opacity: 100%;
+  stroke: var(--neutral-500);
+}
+
+.NavBarIcons:hover {
+  opacity: 50%;
+}
+
+.NavBarButtons {
+  width: 83.333333%;
+  height: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  padding: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  border-width: 2px;
+  border-radius: 0.375rem;
+  border-style: solid;
+  background-color: var(--neutral-200);
+}
+
+.NavBarButtons:hover {
+  background-color: var(--neutral-300);
+}

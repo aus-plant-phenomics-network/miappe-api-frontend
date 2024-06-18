@@ -1,12 +1,19 @@
 import React from "react";
-import { Themed as PNavBar } from "@ailiyah-ui/navbar";
-import { Accordion } from "@ailiyah-ui/accordion";
-import { styled } from "@ailiyah-ui/factory";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { NavLink } from "react-router-dom";
-import { NavDefinition, FieldDefinition } from "./navbar.types";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import * as Accordion from "@radix-ui/react-accordion";
+import * as PNavBar from "./primitive";
+import "./accordion.css";
+import "./navbar.css";
 
-const StyledLink = styled(NavLink);
+interface FieldDefinition {
+  [key: string]: string;
+}
+
+interface NavDefinition {
+  [key: string]: FieldDefinition;
+}
+
 const defaultData: NavDefinition = (await import("../../assets/navItems.json"))
   .default;
 
@@ -16,31 +23,28 @@ const Content: React.FC<{ value: FieldDefinition; useLink: boolean }> =
       Object.entries(value).map(entry => {
         const [name, link] = entry;
         return (
-          <Accordion.Content themeName="NavBarAccordionContent" key={name}>
+          <Accordion.Content className="NavBarAccordionContent" key={name}>
             {useLink ? (
-              <StyledLink to={link}>
+              <NavLink to={link}>
                 {({ isActive }) => {
                   const [state, setState] = React.useState(false);
                   const dataState = state || isActive ? "active" : "inactive";
                   return (
-                    <styled.p
+                    <p
                       data-state={dataState}
                       onMouseEnter={() => setState(true)}
                       onMouseLeave={() => setState(false)}
-                      themeName="NavBarAccordionContentLink"
+                      className="NavBarAccordionContentLink"
                     >
                       {name}
-                    </styled.p>
+                    </p>
                   );
                 }}
-              </StyledLink>
+              </NavLink>
             ) : (
-              <styled.p
-                data-state="inactive"
-                themeName="NavBarAccordionContentLink"
-              >
+              <p data-state="inactive" className="NavBarAccordionContentLink">
                 {name}
-              </styled.p>
+              </p>
             )}
           </Accordion.Content>
         );
@@ -55,17 +59,16 @@ const NavItems: React.FC<{
   useLink: boolean;
 }> = React.memo(({ entry, useLink }) => {
   const [key, value] = entry;
-  const Icon = styled(ChevronDownIcon);
   return (
-    <Accordion.Item value={key} key={key} themeName="NavBarAccordionItem">
-      <Accordion.Trigger themeName="NavBarAccordionTrigger">
+    <Accordion.Item value={key} key={key} className="NavBarAccordionItem">
+      <Accordion.Trigger className="NavBarAccordionTrigger">
         {key}
-        <Icon data-rotate="180" themeName="Icons" />
+        <ChevronDownIcon data-rotate="180" className="Icons" />
       </Accordion.Trigger>
       <hr />
-      <styled.div themeName="NavBarAccordionContentContainer">
+      <div className="NavBarAccordionContentContainer">
         <Content useLink={useLink} value={value} />
-      </styled.div>
+      </div>
     </Accordion.Item>
   );
 });
@@ -75,20 +78,21 @@ const NavBar: React.FC<{
   parsedData?: NavDefinition | null;
 }> = React.memo(({ useLink, parsedData = defaultData }) => {
   return (
-    <PNavBar.Root themeName="NavBarRoot">
-      <PNavBar.Trigger themeName="NavBarTrigger" />
-      <PNavBar.Content themeName="NavBarContent">
-        <PNavBar.Body themeName="NavBarContentBody">
+    <PNavBar.Root className="NavBarRoot">
+      <PNavBar.Trigger className="NavBarTrigger" />
+      <PNavBar.Content className="NavBarContent">
+        <div className="NavBarContentBody">
           <Accordion.Root type="multiple">
             {parsedData &&
               Object.entries(parsedData).map(entry => (
                 <NavItems key={entry[0]} entry={entry} useLink={useLink} />
               ))}
           </Accordion.Root>
-        </PNavBar.Body>
+        </div>
       </PNavBar.Content>
     </PNavBar.Root>
   );
 });
 
 export { NavBar, defaultData };
+export type { FieldDefinition, NavDefinition };

@@ -5,12 +5,11 @@ import {
   NavBarWithRouter,
   TestPath,
 } from "./navbar.helpers";
-import { theme } from "../../assets/theme";
 import React from "react";
 import { ActionFactory } from "./navbar.helpers";
 import userEvent from "@testing-library/user-event";
-import { NavDefinition } from "./navbar.types";
 import { defaultData } from "./navbar";
+import { NavDefinition } from "./navbar";
 
 const data: NavDefinition = (await import("../../assets/navItems.json"))
   .default;
@@ -66,9 +65,7 @@ const Validate = {
 
 describe("Given parsedData, when first rendered", () => {
   beforeEach(() => {
-    render(
-      <NavBarStoryComponent themeValue={theme} parsedData={defaultData} />,
-    );
+    render(<NavBarStoryComponent parsedData={defaultData} />);
   });
   test("NavBarContent is rendered", Validate.NavBarContent.isRendered);
   test("NavBarContent is expanded", Validate.NavBarContent.isExpanded);
@@ -141,7 +138,7 @@ describe("Given parsedData, when first rendered", () => {
 
 describe("Given no parsedData, when first rendered", () => {
   beforeEach(() => {
-    render(<NavBarStoryComponent themeValue={theme} parsedData={null} />);
+    render(<NavBarStoryComponent parsedData={null} />);
   });
   test("NavBarContent is rendered", Validate.NavBarContent.isRendered);
   test("NavBarContent is expanded", Validate.NavBarContent.isExpanded);

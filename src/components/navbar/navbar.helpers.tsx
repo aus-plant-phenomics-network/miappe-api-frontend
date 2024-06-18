@@ -1,13 +1,10 @@
-import { PresetTheme } from "@ailiyah-ui/utils";
-import { ThemeProvider } from "@ailiyah-ui/context";
 import { NavBar } from "./navbar";
 import React from "react";
 import { screen } from "@testing-library/react";
 import { UserEvent as RTLUserEvent } from "@testing-library/user-event";
 import { UserEvent as StoryUserEvent } from "@storybook/test";
-import { NavDefinition } from "./navbar.types";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
-
+import { NavDefinition } from "./navbar";
 const TestPath = "investigation";
 
 const ActionFactory = (userEvent: RTLUserEvent | StoryUserEvent) => {
@@ -47,17 +44,11 @@ const ActionFactory = (userEvent: RTLUserEvent | StoryUserEvent) => {
 };
 
 function NavBarStoryComponent({
-  themeValue,
   parsedData,
 }: {
-  themeValue: PresetTheme;
   parsedData?: NavDefinition | null;
 }) {
-  return (
-    <ThemeProvider value={themeValue}>
-      <NavBar useLink={false} parsedData={parsedData} />
-    </ThemeProvider>
-  );
+  return <NavBar useLink={false} parsedData={parsedData} />;
 }
 
 const router = createMemoryRouter([

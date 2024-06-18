@@ -34,7 +34,7 @@ const Header = React.memo(
     const { fields, ...rest } = props;
     return (
       <thead className="TableHead" {...rest}>
-        <tr className="TableHeadRow">
+        <tr className="TableHeadRow" ref={ref}>
           {fields &&
             fields.map(field => (
               <th colSpan={1} key={field} className="TableHeadHeader">
@@ -67,8 +67,6 @@ const BodyRowComponent = React.memo(
           tooltipContent="Delete Entry"
           dialogTitle="Remove Entry"
           dialogDescription="This action is PERMANENT. Are you sure you want to continue?"
-          dialogCancelButtonName="Cancel"
-          dialogSubmitButtonName="Proceed"
           dialogOnCancel={() => {}}
           dialogOnSubmit={dialogOnSubmit}
         />
