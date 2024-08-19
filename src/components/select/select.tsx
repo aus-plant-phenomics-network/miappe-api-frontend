@@ -119,7 +119,7 @@ const getDefaultValue = (
     let array = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
     array = array.filter(item => item !== excludeId);
     if (array.length > 0)
-      return multiple ? new ImmutableSet<string>(array) : array[0];
+      return multiple ? new ImmutableSet<string>(array) : array[0]!;
   }
   return multiple ? new ImmutableSet<string>() : "";
 };
@@ -281,7 +281,7 @@ const ValueItem = React.memo(
         {...rest}
         onClick={e => {
           e.preventDefault();
-          onClick(valueKey);
+          onClick(valueKey!);
         }}
         className="SelectValueItem"
       >
