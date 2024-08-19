@@ -8,6 +8,7 @@ class VariableSchema extends BaseSchema {
     type: "select",
     labelKey: "device",
     fetcherKey: "device",
+    titleKey: "name",
   };
   unitId: SchemaElementType = {
     type: "select",

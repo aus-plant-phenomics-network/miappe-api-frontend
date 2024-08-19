@@ -10,6 +10,15 @@ const fetchData: FetchDataArrayType = [
   { id: "facility2", title: "thirdFacility", description: "third facility" },
   { id: "facility3", title: "fourthFacility", description: "fourth facility" },
   { id: "facility4", title: "fifthFacility", description: "fifth facility" },
+  { id: "facility5", title: "sixthFacility", description: "sixth facility" },
+  {
+    id: "facility6",
+    title: "seventhFacility",
+    description: "seventh facility",
+  },
+  { id: "facility7", title: "eighthFacility", description: "eighth facility" },
+  { id: "facility8", title: "ninthFacility", description: "ninth facility" },
+  { id: "facility9", title: "tenthFacility", description: "tenth facility" },
 ];
 
 interface SelectTestProps {
@@ -81,15 +90,17 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
             style={{ width: "var(--radix-popover-trigger-width)" }}
           >
             <Select.Search className="SelectSearch" />
-            {fetchedData &&
-              fetchedData.map(dataItem => (
-                <Select.Item
-                  className="SelectItem"
-                  key={dataItem.id as string}
-                  selectValue={dataItem.id as string}
-                  textValue={dataItem.title as string}
-                />
-              ))}
+            <div className="SelectItemContainer">
+              {fetchedData &&
+                fetchedData.map(dataItem => (
+                  <Select.Item
+                    className="SelectItem"
+                    key={dataItem.id as string}
+                    selectValue={dataItem.id as string}
+                    textValue={dataItem.title as string}
+                  />
+                ))}
+            </div>
           </Select.Content>
         </Select.Portal>
       </Select.Root>

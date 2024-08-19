@@ -15,7 +15,7 @@ import {
   SelectFieldsDropDown,
 } from "./widget";
 import { Table } from "../components/table";
-import { usePrevious } from "../components/hooks";
+import { usePrevious } from "../hooks";
 import "./page.css";
 
 function DetailPage({

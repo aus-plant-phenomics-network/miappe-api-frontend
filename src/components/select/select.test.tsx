@@ -14,14 +14,14 @@ const Action = {
     const component = screen
       .queryAllByText(`${optionValue}`)
       .filter(item => item.tagName === "LABEL")[0];
-    await userEvent.click(component);
+    await userEvent.click(component!);
   },
   clickOnValue: (optionValue: string) => async () => {
     const component = Array.from(
       document.querySelectorAll("span.SelectValueItem"),
     ).filter(item => item.textContent === optionValue);
     expect(component.length).toBeGreaterThan(0);
-    await userEvent.click(component[0]);
+    await userEvent.click(component![0]!);
   },
   clickSubmit: async () => {
     await userEvent.click(screen.getByText("Submit"));
@@ -75,8 +75,8 @@ describe("Test Single No Fetched Data", () => {
 });
 
 describe("Test Single No Default Data", () => {
-  const choice = fetchData![2].title as string;
-  const choiceValue = fetchData![2].id as string;
+  const choice = fetchData![2]!.title as string;
+  const choiceValue = fetchData![2]!.id as string;
   const name = "facility";
   const onSubmit = vi.fn(e => {
     e.preventDefault();
@@ -125,15 +125,15 @@ describe("Test Single No Default Data", () => {
 });
 
 describe("Test simple select with data and label", () => {
-  const choice = fetchData![2].title as string;
-  const choiceValue = fetchData![2].id as string;
+  const choice = fetchData![2]!.title as string;
+  const choiceValue = fetchData![2]!.id as string;
   const name = "facility";
   const onSubmit = vi.fn(e => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     expect(formData.get(name)).toEqual(choiceValue);
   });
-  const defaultValue = fetchData![0].id;
+  const defaultValue = fetchData![0]!.id;
   beforeEach(() => {
     render(
       <TestSelectComponent
@@ -189,7 +189,7 @@ describe("Test simple select with data and label", () => {
 });
 
 describe("Test simple select no default data exclude first Id", () => {
-  const excludeId = fetchData![0].id as string;
+  const excludeId = fetchData![0]!.id as string;
   const onSubmit = vi.fn(e => {
     e.preventDefault();
   });
@@ -225,16 +225,16 @@ describe("Test simple select no default data exclude first Id", () => {
 });
 
 describe("Test simple select with data and label and exclude Id", () => {
-  const choice = fetchData![2].title as string;
-  const choiceValue = fetchData![2].id as string;
+  const choice = fetchData![2]!.title as string;
+  const choiceValue = fetchData![2]!.id as string;
   const name = "facility";
   const onSubmit = vi.fn(e => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     expect(formData.get(name)).toEqual(choiceValue);
   });
-  const defaultValue = fetchData![0].id;
-  const excludeId = fetchData![1].id as string;
+  const defaultValue = fetchData![0]!.id;
+  const excludeId = fetchData![1]!.id as string;
   beforeEach(() => {
     render(
       <TestSelectComponent
@@ -298,15 +298,15 @@ describe("Test simple select with data and label and exclude Id", () => {
 });
 
 describe("Test simple select with data and label and exclude Id where exclude Id is default data", () => {
-  const choice = fetchData![2].title as string;
-  const choiceValue = fetchData![2].id as string;
+  const choice = fetchData![2]!.title as string;
+  const choiceValue = fetchData![2]!.id as string;
   const name = "facility";
   const onSubmit = vi.fn(e => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     expect(formData.get(name)).toEqual(choiceValue);
   });
-  const defaultValue = fetchData![0].id;
+  const defaultValue = fetchData![0]!.id;
   const excludeId = defaultValue as string;
   beforeEach(() => {
     render(
@@ -375,10 +375,10 @@ describe("Test Multiple No Fetched Data", () => {
 });
 
 describe("Test Multiple No Default Data", () => {
-  const firstChoice = fetchData![2].title as string;
-  const firstChoiceValue = fetchData![2].id as string;
-  const secondChoice = fetchData![3].title as string;
-  const secondChoiceValue = fetchData![3].id as string;
+  const firstChoice = fetchData![2]!.title as string;
+  const firstChoiceValue = fetchData![2]!.id as string;
+  const secondChoice = fetchData![3]!.title as string;
+  const secondChoiceValue = fetchData![3]!.id as string;
   const name = "facility";
   let submissionValue: SubmissionFormType;
   const onSubmit = vi.fn(e => {
@@ -450,14 +450,17 @@ describe("Test Multiple No Default Data", () => {
 
 describe("Test Multiple With Default Data", () => {
   const defaultChoices = [
-    fetchData![0].title as string,
-    fetchData![1].title as string,
+    fetchData![0]!.title as string,
+    fetchData![1]!.title as string,
   ];
-  const defaultValue = [fetchData![0].id as string, fetchData![1].id as string];
-  const firstChoice = fetchData![2].title as string;
-  const firstChoiceValue = fetchData![2].id as string;
-  const secondChoice = fetchData![3].title as string;
-  const secondChoiceValue = fetchData![3].id as string;
+  const defaultValue = [
+    fetchData![0]!.id as string,
+    fetchData![1]!.id as string,
+  ];
+  const firstChoice = fetchData![2]!.title as string;
+  const firstChoiceValue = fetchData![2]!.id as string;
+  const secondChoice = fetchData![3]!.title as string;
+  const secondChoiceValue = fetchData![3]!.id as string;
   const name = "facility";
   let submissionValue: SubmissionFormType;
   const onSubmit = vi.fn(e => {
@@ -496,7 +499,7 @@ describe("Test Multiple With Default Data", () => {
   });
   describe("when click on a display value", () => {
     test("submitted value consists of the remaining value", async () => {
-      await Action.clickOnValue(defaultChoices[0])();
+      await Action.clickOnValue(defaultChoices![0]!)();
       await Action.clickSubmit();
       expect(onSubmit).toBeCalled();
       expect(submissionValue[name]).toEqual([defaultValue[1]]);
@@ -559,7 +562,7 @@ describe("Test Multiple With Default Data", () => {
 });
 
 describe("Test Multiple No Default Data with exclude id", () => {
-  const excludeId = fetchData![0].id as string;
+  const excludeId = fetchData![0]!.id as string;
   const onSubmit = vi.fn(e => {
     e.preventDefault();
   });
@@ -602,7 +605,7 @@ describe("Test Multiple No Default Data with exclude id", () => {
 });
 
 describe("Test Multiple With Default Data one value with clashing exclude id", () => {
-  const excludeId = fetchData![0].id as string;
+  const excludeId = fetchData![0]!.id as string;
   const defaultValue = [excludeId];
   const onSubmit = vi.fn(e => {
     e.preventDefault();
@@ -647,8 +650,11 @@ describe("Test Multiple With Default Data one value with clashing exclude id", (
 });
 
 describe("Test Multiple With Default Data multiple values with clashing exclude id", () => {
-  const excludeId = fetchData![0].id as string;
-  const defaultValue = [fetchData![0].id as string, fetchData![1].id as string];
+  const excludeId = fetchData![0]!.id as string;
+  const defaultValue = [
+    fetchData![0]!.id as string,
+    fetchData![1]!.id as string,
+  ];
   const defaultValueExcl = defaultValue.filter(item => item !== excludeId);
 
   const name = "facility";
@@ -711,7 +717,7 @@ describe("Test Multiple With Default Data multiple values with clashing exclude 
 });
 
 describe("Test Search Feature", () => {
-  const choiceValue = fetchData![2].id as string;
+  const choiceValue = fetchData![2]!.id as string;
   const name = "facility";
   const onSubmit = vi.fn(e => {
     e.preventDefault();

@@ -53,6 +53,12 @@
   width: var(--radix-popover-trigger-width);
 }
 
+.SelectItemContainer {
+  position: relative;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
 .SelectItem {
   background-color: white;
   border-radius: 0.25rem;

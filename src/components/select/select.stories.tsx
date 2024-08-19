@@ -32,7 +32,7 @@ export const SingleWithDefaultData: Story = {
   args: {
     multiple: false,
     fetchedData: fetchData,
-    defaultValue: fetchData![0].id as string,
+    defaultValue: fetchData![0]!.id as string,
   },
 };
 
@@ -40,8 +40,8 @@ export const SingleWithDefaultDataWithExcludeId: Story = {
   args: {
     multiple: false,
     fetchedData: fetchData,
-    defaultValue: fetchData![0].id as string,
-    excludeId: fetchData![1].id as string,
+    defaultValue: fetchData![0]!.id as string,
+    excludeId: fetchData![1]!.id as string,
   },
 };
 
@@ -49,8 +49,8 @@ export const SingleWithDefaultDataWithExcludeIdSameAsDefault: Story = {
   args: {
     multiple: false,
     fetchedData: fetchData,
-    defaultValue: fetchData![0].id as string,
-    excludeId: fetchData![0].id as string,
+    defaultValue: fetchData![0]!.id as string,
+    excludeId: fetchData![0]!.id as string,
   },
 };
 
@@ -71,7 +71,7 @@ export const MultipleWithOneDefaultData: Story = {
   args: {
     multiple: true,
     fetchedData: fetchData,
-    defaultValue: fetchData![0].id as string,
+    defaultValue: fetchData![0]!.id as string,
   },
 };
 
@@ -79,7 +79,7 @@ export const MultipleWithMultipleDefaultData: Story = {
   args: {
     multiple: true,
     fetchedData: fetchData,
-    defaultValue: [fetchData![0].id as string, fetchData![1].id as string],
+    defaultValue: [fetchData![0]!.id as string, fetchData![1]!.id as string],
   },
 };
 
@@ -87,7 +87,7 @@ export const MultipleWithMultipleDefaultDataExcludeKey: Story = {
   args: {
     multiple: true,
     fetchedData: fetchData,
-    defaultValue: [fetchData![0].id as string, fetchData![1].id as string],
-    excludeId: fetchData![1].id as string,
+    defaultValue: [fetchData![0]!.id as string, fetchData![1]!.id as string],
+    excludeId: fetchData![1]!.id as string,
   },
 };

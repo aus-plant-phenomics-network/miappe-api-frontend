@@ -4,7 +4,7 @@ import { Form, FormProps, Link } from "react-router-dom";
 import { InputProps } from "./form.types";
 import { AddButton } from "../helper";
 import { FetchDataArrayType } from "../types";
-import { useFetcherData } from "../hooks";
+import { useFetcherData } from "../../hooks";
 import * as PrimitiveSelect from "../select";
 import "../select/select.css";
 import "./form.css";
@@ -85,15 +85,17 @@ const Select = React.memo(
               className="SelectContent"
             >
               <PrimitiveSelect.Search className="SelectSearch" />
-              {fetchedData &&
-                fetchedData.map(dataItem => (
-                  <PrimitiveSelect.Item
-                    className="SelectItem"
-                    key={dataItem.id as string}
-                    selectValue={dataItem.id as string}
-                    textValue={dataItem[titleKey] as string}
-                  />
-                ))}
+              <div className="SelectItemContainer">
+                {fetchedData &&
+                  fetchedData.map(dataItem => (
+                    <PrimitiveSelect.Item
+                      className="SelectItem"
+                      key={dataItem.id as string}
+                      selectValue={dataItem.id as string}
+                      textValue={dataItem[titleKey] as string}
+                    />
+                  ))}
+              </div>
             </PrimitiveSelect.Content>
           </PrimitiveSelect.Portal>
         </PrimitiveSelect.Root>
