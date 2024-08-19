@@ -82,7 +82,10 @@ const NavBar: React.FC<{
       <PNavBar.Trigger className="NavBarTrigger" />
       <PNavBar.Content className="NavBarContent">
         <div className="NavBarContentBody">
-          <Accordion.Root type="multiple">
+          <Accordion.Root
+            type="multiple"
+            defaultValue={parsedData ? Object.keys(parsedData) : undefined}
+          >
             {parsedData &&
               Object.entries(parsedData).map(entry => (
                 <NavItems key={entry[0]} entry={entry} useLink={useLink} />
