@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { getDefaultValue, getTableDisplayKey } from "../helpers";
 import { FetchDataSuccessType } from "../types";
-import { useDelete } from "../../hooks";
+import { useDelete } from "../hooks";
 import { EditButton, DeleteAlertButton } from "../helper";
 import "./table.css";
 

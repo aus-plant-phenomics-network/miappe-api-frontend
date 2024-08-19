@@ -1,46 +1,39 @@
 import React from "react";
 import { createContext } from "../helper";
 import {
-  DividerButton,
-  ChevronRightButton,
-  ChevronLeftButton,
-} from "../helper";
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DividerVerticalIcon,
+} from "@radix-ui/react-icons";
+import { createButton } from "../helper";
 
-/**
- * NavBar context shared among its children.
- *
- * activeState value is modified by the Trigger child component
- */
+const DividerButton = createButton(
+  "DividerButton",
+  <DividerVerticalIcon className="Icons" />,
+);
+const ChevronLeftButton = createButton(
+  "ChevronLeftButton",
+  <ChevronLeftIcon className="Icons" />,
+);
+const ChevronRightButton = createButton(
+  "ChevronRightButton",
+  <ChevronRightIcon className="Icons" />,
+);
+
 interface NavBarContextValue {
-  /**
-   * Active state value
-   */
   activeState: boolean;
-  /**
-   * Dispatch method to toggle active state
-   */
   setActiveState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// NavBar context provider and hook
 const [NavBarProvider, useNavBarContext] =
   createContext<NavBarContextValue>("NavBar");
 
-/**
- * Utility method to map state boolean value to active/inactive
- * @param state - boolean value
- * @returns - active/inactive
- */
 function getState(state: boolean): string {
   return state ? "active" : "inactive";
 }
 
 type RootProps = React.ComponentPropsWithoutRef<"div">;
 
-/**
- * Div component that provides nav bar context to its children
- *
- */
 const Root = React.memo(
   React.forwardRef<HTMLDivElement, RootProps>((props, ref) => {
     const { children, ...rest } = props;
@@ -59,34 +52,22 @@ const Root = React.memo(
 
 Root.displayName = "Root";
 
+/**
+ * Trigger to expand/collapse navigation bar
+ */
+
 interface TriggerProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {}
 
-/**
- * Trigger component that alters activeState value onClick.
- *
- * What get rendered depends on context's `activeState` and internal `hoverState`
- *
- * If activeState is False (menu is collapsed), renders an expand button.
- *
- * If activeState is True and hoverState is True, renders a collapse button.
- *
- * If activeState is True and hoverState is False, renders a divider button.
- *
- * Accept any div props except for `children`.
- *
- */
 const Trigger = React.memo(
   React.forwardRef<HTMLButtonElement, TriggerProps>((props, ref) => {
     const { activeState, setActiveState } = useNavBarContext();
     const [hoverState, setHoverState] = React.useState<boolean>(false);
 
-    // Callback to flip activeState on click
     const onClick = React.useCallback(() => {
       setActiveState(state => !state);
     }, []);
 
-    // Callback to change hoverState when hovered/unhovered
     const onMouseEnter = React.useCallback(() => {
       setHoverState(true);
     }, []);
@@ -95,7 +76,6 @@ const Trigger = React.memo(
       setHoverState(false);
     }, []);
 
-    // Variables to store active/hovered states for styling
     const dataActiveState = React.useMemo(
       () => getState(activeState),
       [activeState],
@@ -146,11 +126,6 @@ const Trigger = React.memo(
 );
 Trigger.displayName = "Trigger";
 
-/**
- * Content contains navigation bar content (children prop).
- *
- * Has a data-state variable to store active/inactive state for styling
- */
 const Content = React.memo(
   React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
     (props, ref) => {

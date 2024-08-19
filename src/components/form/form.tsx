@@ -4,15 +4,13 @@ import { Form, FormProps, Link } from "react-router-dom";
 import { InputProps } from "./form.types";
 import { AddButton } from "../helper";
 import { FetchDataArrayType } from "../types";
-import { useFetcherData } from "../../hooks";
+import { useFetcherData } from "../hooks";
 import * as PrimitiveSelect from "../select";
 import "../select/select.css";
 import "./form.css";
 
 /**
- * Input component that is automatically highlighted if validation fails.
- *
- * Accepts regular input component props
+ * Renders a regular input component that accepts tailwind props
  */
 const Input = React.memo(
   React.forwardRef<HTMLInputElement, React.ComponentPropsWithoutRef<"input">>(
@@ -180,9 +178,6 @@ const InputField = React.memo(
   }),
 );
 
-/**
- * Wrapper for react-router Form component. Users can pass props of regular React Router Form to the component
- */
 const FormComponent = React.forwardRef<HTMLFormElement, FormProps>(
   (props, ref) => {
     const { children, ...rest } = props;

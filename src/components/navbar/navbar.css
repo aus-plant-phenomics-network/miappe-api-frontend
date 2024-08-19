@@ -47,6 +47,7 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
+  row-gap: 1rem;
 }
 
 .NavBarContentFooter {
@@ -93,11 +94,9 @@
   .NavBarRoot[data-state="inactive"] {
     color: var(--neutral-400);
   }
-
   .NavBarIcons {
     stroke: var(--neutral-100);
   }
-
   .NavBarButtons {
     background-color: var(--neutral-700);
   }
