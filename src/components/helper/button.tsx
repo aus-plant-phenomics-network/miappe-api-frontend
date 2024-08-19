@@ -1,6 +1,13 @@
 import React from "react";
 import { Tooltip, TooltipProps } from "./tooltip";
-import { Pencil1Icon, TrashIcon, PlusIcon } from "@radix-ui/react-icons";
+import {
+  Pencil1Icon,
+  TrashIcon,
+  PlusIcon,
+  DividerVerticalIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@radix-ui/react-icons";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import "./button.css";
 
@@ -91,5 +98,27 @@ const DeleteAlertButton: React.FC<
   );
 };
 
-export { EditButton, DeleteAlertButton, AddButton, DeleteButton, createButton };
+const DividerButton = createButton(
+  "DividerButton",
+  <DividerVerticalIcon className="Icons" />,
+);
+const ChevronLeftButton = createButton(
+  "ChevronLeftButton",
+  <ChevronLeftIcon className="Icons" />,
+);
+const ChevronRightButton = createButton(
+  "ChevronRightButton",
+  <ChevronRightIcon className="Icons" />,
+);
+
+export {
+  EditButton,
+  DeleteAlertButton,
+  AddButton,
+  DeleteButton,
+  DividerButton,
+  ChevronLeftButton,
+  ChevronRightButton,
+  createButton,
+};
 export type { ButtonProps };
