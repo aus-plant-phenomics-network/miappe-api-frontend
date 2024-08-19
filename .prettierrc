@@ -4,24 +4,36 @@
   "trailingComma": "all",
   "bracketSameLine": false,
   "arrowParens": "avoid",
-  "plugins": ["prettier-plugin-tailwindcss"],
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ],
   "overrides": [
     {
-      "files": ["*.mjs", "*.cjs", "*.js"],
+      "files": [
+        "*.mjs",
+        "*.cjs",
+        "*.js"
+      ],
       "options": {
         "parser": "babel"
       }
     },
-
     {
-      "files": ["*.mts", "*.cts", "*.ts"],
+      "files": [
+        "*.mts",
+        "*.cts",
+        "*.ts"
+      ],
       "options": {
         "parser": "typescript"
       }
     },
-
     {
-      "files": ["*.json", "*.jsonc", "*.json5"],
+      "files": [
+        "*.json",
+        "*.jsonc",
+        "*.json5"
+      ],
       "options": {
         "parser": "json"
       }
