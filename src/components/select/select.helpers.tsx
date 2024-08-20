@@ -97,7 +97,7 @@ const TestSelectComponent: React.FC<SelectTestProps> = ({
                     className="SelectItem"
                     key={dataItem.id as string}
                     selectValue={dataItem.id as string}
-                    textValue={dataItem.title as string}
+                    displayValue={dataItem.title as string}
                   />
                 ))}
             </div>

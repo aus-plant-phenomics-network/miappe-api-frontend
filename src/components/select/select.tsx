@@ -4,7 +4,18 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { matchSorter } from "match-sorter";
 import { createContext } from "../helper";
 
-interface SelectContextValue {
+/**
+ * Context value provided at root
+ *
+ * @param value - set of select value (value to be sent to the server)
+ * @param valueMap - mapping between the select value and display value
+ * @param setValue - handler to update value
+ * @param multiple - whether select accepts multiple values
+ * @param opOptionAdd - handler to add option when a new Select.Item is mounted
+ * @param placeholder - placeholder value
+ * @param valid - validation status
+ */
+interface SelectCondisplayValue {
   value: Set<string> | string;
   valueMap: Map<string, string>;
   setValue: (value: string) => void;
@@ -15,29 +26,33 @@ interface SelectContextValue {
 }
 
 const [SelectContextProvider, useSelectContext] =
-  createContext<SelectContextValue>("ContextProvider");
+  createContext<SelectCondisplayValue>("ContextProvider");
 
 type NativeOption = React.ReactElement<React.ComponentProps<"option">>;
 
-interface SelectProps {
-  autoComplete?: string;
-  autoFocus?: boolean;
-  children?: React.ReactNode;
-  disabled?: boolean;
-  form?: string;
-  multiple?: boolean;
-  name: string;
-  required: boolean;
+/**
+ * Props to Select. Extends native `select`'s props
+ *
+ * @param placeholder - placeholder value
+ * @param defaultValueMap - default mapping between selected value and displayed value
+ * @param excludeId - id or selected value to be excluded from select
+ */
+interface SelectProps extends React.ComponentProps<"select"> {
   placeholder?: string;
-  defaultValue?: string | string[];
   defaultValueMap?: Map<string, string>;
   excludeId?: string;
-  className?: string;
 }
 
+/**
+ * Props to Select.Item component.
+ *
+ * @param selectValue - value to be sent to the server
+ * @param displayValue  - displayed value
+ * @param disabled - whether the option is disabled
+ */
 interface SelectItemProps {
   selectValue: string;
-  textValue: string;
+  displayValue: string;
   disabled?: boolean;
 }
 
@@ -94,7 +109,7 @@ class OptionMap extends ImmutableMap<string, NativeOption> {
       <option
         key={item.selectValue}
         value={item.selectValue}
-        label={item.textValue}
+        label={item.displayValue}
         disabled={item.disabled}
       />
     );
@@ -159,7 +174,7 @@ const Root = React.memo(
 
     const onOptionAdd = React.useCallback((option: SelectItemProps) => {
       const key = option.selectValue;
-      const value = option.textValue;
+      const value = option.displayValue;
       setValueMap(prev => prev.append(key, value, excludeId));
       setOptionMap(prev => prev.addOption(option, excludeId));
     }, []);
@@ -221,6 +236,10 @@ const Root = React.memo(
   }),
 );
 
+/**
+ * Wrapper for radix-ui Popover.Trigger
+ * @param props - button props
+ */
 const Trigger: React.FC<React.ComponentPropsWithoutRef<"button">> = props => {
   const { valid } = useSelectContext();
   return (
@@ -228,12 +247,19 @@ const Trigger: React.FC<React.ComponentPropsWithoutRef<"button">> = props => {
   );
 };
 
+/**
+ * Component that displays selected value(s)
+ * @param props - span props
+ */
 const Value = React.memo(
   React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<"span">>(
     (props, ref) => {
       const { multiple, value, valueMap, setValue, placeholder } =
         useSelectContext();
       let displayContent;
+
+      // Logic for displaying one or multiple values depending on
+      // context value and multiple flag
       if (multiple) {
         displayContent =
           Array.from(value).length !== 0
@@ -266,6 +292,15 @@ type ValueItemProps = {
   onClick: (value: string) => void;
 };
 
+/**
+ * Clickable ValueItem that gets displayed at Value. Clicking on
+ * ValueItem removes the item from value state.
+ *
+ * ValueItem shows the displayed value obtained by referencing a `value` item in
+ * `valueMap`
+ *
+ * @param - props - ValueItemProps
+ */
 const ValueItem = React.memo(
   React.forwardRef<HTMLSpanElement, ValueItemProps>((props, ref) => {
     const { value, onClick, ...rest } = props;
@@ -292,6 +327,9 @@ const ValueItem = React.memo(
   }),
 );
 
+/**
+ * Select Trigger Icon
+ */
 const Icon = React.forwardRef<
   HTMLSpanElement,
   React.ComponentPropsWithoutRef<"span">
@@ -304,15 +342,27 @@ const Icon = React.forwardRef<
   );
 });
 
-type ContentContextValue = {
+/**
+ * Context value provided by Select.Content
+ *
+ * @param query - search query - is a state variable
+ * @param setQuery - handler to update query state
+ * @param queryMatch - list of displayValue  that matches query
+ */
+type ContentCondisplayValue = {
   query: string;
   setQuery: (value: string) => void;
   queryMatch: Set<string>;
 };
 
 const [ContentContextProvider, useContentContext] =
-  createContext<ContentContextValue>("Content");
+  createContext<ContentCondisplayValue>("Content");
 
+/**
+ * Popover content that provides ContentCondisplayValue  values
+ *
+ * @param - props: union between div's props and Popover.PopperContentProps
+ */
 const Content = React.memo(
   React.forwardRef<
     HTMLDivElement,
@@ -324,14 +374,14 @@ const Content = React.memo(
     const searchSpace = Array.from(valueMap.values());
     const queryMatch =
       query === "" ? searchSpace : matchSorter(searchSpace, query);
-    const contentContextValue = {
+    const contentCondisplayValue = {
       query: query,
       setQuery: setQuery,
       queryMatch: new Set(queryMatch),
     };
 
     return (
-      <ContentContextProvider value={contentContextValue}>
+      <ContentContextProvider value={contentCondisplayValue}>
         <Popover.Content ref={ref} {...rest}>
           {children}
         </Popover.Content>
@@ -340,6 +390,14 @@ const Content = React.memo(
   }),
 );
 
+/**
+ * Input element in popover content. Allows users to quickly find the option by
+ * display name
+ *
+ * onChange, will update `query` state using `setQuery` method in content context
+ *
+ * @param props - input props
+ */
 const Search = React.memo(
   React.forwardRef<HTMLInputElement, React.ComponentPropsWithoutRef<"input">>(
     (props, ref) => {
@@ -356,28 +414,42 @@ const Search = React.memo(
   ),
 );
 
+/**
+ * Select Item in popover content. Renders a checkbox with display title of the select option.
+ *
+ * Rendering Item for the first time will update global valueMap with handler
+ * `onOptionAdd`. If `query` is not null (when user type in the search box), options that match
+ *  the query (`displayValue ` in the context `queryMatch`) will have the className `SelectItem` otherwise `SelectItemHidden`
+ * for styling.
+ *
+ * @param selectValue - value to be sent to the server
+ * @param displayValue  - value to be displayed
+ * @param disabled - enable/disable selection of the item
+ */
 const Item = React.memo(
   React.forwardRef<
     HTMLLabelElement,
     React.ComponentPropsWithoutRef<"label"> & SelectItemProps
   >((props, ref) => {
-    const { selectValue, textValue, disabled, ...rest } = props;
+    const { selectValue, displayValue, disabled, ...rest } = props;
     const { setValue, value, multiple, onOptionAdd } = useSelectContext();
     const { queryMatch } = useContentContext();
-    const visible = queryMatch.has(textValue);
+    const visible = queryMatch.has(displayValue);
 
     const checked = multiple
       ? (value as Set<string>).has(selectValue)
       : selectValue === (value as string);
 
     const disabledValue = disabled ? true : false;
+
+    // Effect on mounting for the first time - addOption
     React.useEffect(() => {
       onOptionAdd({
         selectValue: selectValue,
-        textValue: textValue,
+        displayValue: displayValue,
         disabled: disabledValue,
       });
-    }, [onOptionAdd, textValue, selectValue, disabledValue]);
+    }, [onOptionAdd, displayValue, selectValue, disabledValue]);
 
     return (
       <label
@@ -391,13 +463,20 @@ const Item = React.memo(
           checked={checked}
           onChange={() => (disabled ? {} : setValue(selectValue))}
         />
-        {textValue}
+        {displayValue}
       </label>
     );
   }),
 );
 
+/**
+ * radix-ui's Popover Portal
+ */
 const Portal = Popover.Portal;
+
+/**
+ * radix-ui's Popover Arrow
+ */
 const Arrow = Popover.Arrow;
 
 export { Root, Trigger, Value, Icon, Portal, Content, Arrow, Item, Search };

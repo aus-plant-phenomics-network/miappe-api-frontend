@@ -92,7 +92,7 @@ const Select = React.memo(
                       className="SelectItem"
                       key={dataItem.id as string}
                       selectValue={dataItem.id as string}
-                      textValue={dataItem[titleKey] as string}
+                      displayValue={dataItem[titleKey] as string}
                     />
                   ))}
               </div>
