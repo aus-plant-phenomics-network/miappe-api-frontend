@@ -90,7 +90,7 @@ const FieldComponent: React.FC<{ value: GroupType }> = React.memo(
       Object.entries(value).map(entry => {
         const [name, link] = entry;
         return (
-          <NavLink to={link}>
+          <NavLink to={link} key={name}>
             {({ isActive }) => {
               const [state, setState] = React.useState(false);
               const dataState = state || isActive ? "active" : "inactive";

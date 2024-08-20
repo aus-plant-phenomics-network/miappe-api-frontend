@@ -3,7 +3,10 @@ import * as Popover from "@radix-ui/react-popover";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { matchSorter } from "match-sorter";
 import { createContext } from "../helper";
+import { useImmer } from "use-immer";
+import { enableMapSet } from "immer";
 
+enableMapSet();
 /**
  * Context value provided at root
  *
@@ -117,26 +120,17 @@ class OptionMap extends ImmutableMap<string, NativeOption> {
   }
 }
 
-class ImmutableSet<K> extends Set<K> {
-  toggle(key: K): ImmutableSet<K> {
-    const newSet = new ImmutableSet(this);
-    newSet.has(key) ? newSet.delete(key) : newSet.add(key);
-    return newSet;
-  }
-}
-
 const getDefaultValue = (
-  defaultValue?: string | string[],
-  multiple?: boolean,
+  defaultValue?: string | readonly string[] | number,
   excludeId?: string,
-): string | ImmutableSet<string> => {
-  if (defaultValue) {
-    let array = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
-    array = array.filter(item => item !== excludeId);
-    if (array.length > 0)
-      return multiple ? new ImmutableSet<string>(array) : array[0]!;
-  }
-  return multiple ? new ImmutableSet<string>() : "";
+): Set<string> => {
+  let array = defaultValue
+    ? Array.isArray(defaultValue)
+      ? new Array(...defaultValue)
+      : [String(defaultValue)]
+    : [""];
+  array = array.filter(item => item !== excludeId);
+  return new Set<string>(array);
 };
 
 const Root = React.memo(
@@ -179,23 +173,25 @@ const Root = React.memo(
       setOptionMap(prev => prev.addOption(option, excludeId));
     }, []);
 
-    const [stateValue, setStateValue] = React.useState<string | Set<string>>(
-      () => getDefaultValue(defaultValue, multiple, excludeId),
+    // Value State and setValue method declaration
+    const [stateValue, setStateValue] = useImmer<Set<string>>(() =>
+      getDefaultValue(defaultValue, excludeId),
     );
 
-    const setStateFn = React.useMemo(
-      () =>
-        multiple
-          ? (value: string) => {
-              setValid(true);
-              setStateValue(prev =>
-                (prev as ImmutableSet<string>).toggle(value),
-              );
-            }
-          : (value: string) => {
-              setValid(true);
-              setStateValue(value);
-            },
+    const setValue = React.useCallback(
+      (value: string) => {
+        // When a new value is selected, clear invalid state
+        setValid(true);
+        // Add new value if not present else remove
+        setStateValue((draft: Set<string>) => {
+          if (draft.has(value)) {
+            draft.delete(value);
+          } else {
+            if (!multiple) draft.clear();
+            draft.add(value);
+          }
+        });
+      },
       [multiple],
     );
 
@@ -204,7 +200,7 @@ const Root = React.memo(
         value={{
           value: stateValue,
           valueMap: cValueMap,
-          setValue: setStateFn,
+          setValue: setValue,
           multiple: multiple,
           onOptionAdd: onOptionAdd,
           placeholder: placeholder,
@@ -214,7 +210,7 @@ const Root = React.memo(
         <select
           multiple={multiple}
           onChange={() => setValid(true)}
-          value={multiple ? Array.from(stateValue) : (stateValue as string)}
+          value={multiple ? Array.from(stateValue) : Array.from(stateValue)[0]}
           ref={ref}
           required={required}
           onInvalid={e => {

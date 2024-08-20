@@ -5,6 +5,9 @@ import { TestSelectComponent, fetchData } from "./select.helpers";
 import React from "react";
 import { BaseSchema, parseFormData } from "../helpers";
 import { SchemaElementType, SubmissionFormType } from "../types";
+import { enableMapSet } from "immer";
+
+enableMapSet();
 
 const Action = {
   clickOnDropDown: async () => {
@@ -47,7 +50,7 @@ const Validator = {
       expect(document.querySelector("select")).not.toBeVisible();
     },
     hasNoChildren: () => {
-      expect(document.querySelector("select")?.children.length).toBe(1);
+      expect(document.querySelector("select")?.children.length).toBe(0);
     },
   },
   option: {
