@@ -10,10 +10,12 @@
   flex-direction: column;
   row-gap: 1rem;
 }
+
 .FormComponent {
   display: flex;
   justify-content: end;
 }
+
 .FormSubmitButton {
   background-color: var(--neutral-400);
   padding: 0.5rem 0.75rem;
@@ -48,7 +50,6 @@
 
 .FormInput,
 .FormSelectContainer {
-  display: flex;
   flex: 1;
   border-width: 2px;
   border-radius: 0.375rem;
@@ -58,6 +59,10 @@
 
 .FormInput:data-[valid="invalid"] {
   border-color: rgb(239 68 68);
+}
+
+.FormSelectContainer {
+  display: flex;
 }
 
 .FormSelect {
