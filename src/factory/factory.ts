@@ -11,7 +11,6 @@ const createRoutes = (
   defaultColumns: string[],
 ) => {
   const url = `${BASE_URL}/${title}`;
-  console.log(url);
   const idKey = `${title}Id`;
   const handlers = new Handler(schema, url, idKey);
   const pages = new Page(title, schema, defaultColumns, handlers);

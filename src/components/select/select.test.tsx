@@ -50,7 +50,7 @@ const Validator = {
       expect(document.querySelector("select")).not.toBeVisible();
     },
     hasNoChildren: () => {
-      expect(document.querySelector("select")?.children.length).toBe(0);
+      expect(document.querySelector("select")?.children.length).toBe(1);
     },
   },
   option: {

@@ -13,25 +13,21 @@ enableMapSet();
  * @param value - set of select value (value to be sent to the server)
  * @param valueMap - mapping between the select value and display value
  * @param setValue - handler to update value
- * @param multiple - whether select accepts multiple values
  * @param opOptionAdd - handler to add option when a new Select.Item is mounted
  * @param placeholder - placeholder value
  * @param valid - validation status
  */
-interface SelectCondisplayValue {
+interface SelectContext {
   value: Set<string>;
   valueMap: Map<string, string>;
   setValue: (value: string) => void;
-  multiple?: boolean;
   onOptionAdd: (option: SelectItemProps) => void;
   placeholder?: string;
   valid: boolean;
 }
 
 const [SelectContextProvider, useSelectContext] =
-  createContext<SelectCondisplayValue>("ContextProvider");
-
-type NativeOption = React.ReactElement<React.ComponentProps<"option">>;
+  createContext<SelectContext>("ContextProvider");
 
 /**
  * Props to Select. Extends native `select`'s props
@@ -59,67 +55,13 @@ interface SelectItemProps {
   disabled?: boolean;
 }
 
-class ImmutableMap<K, V> extends Map<K, V> {
-  static fromMap<K, V>(value?: Map<K, V>, excludeKey?: K) {
-    const initMap = value
-      ? new ImmutableMap<K, V>(value)
-      : new ImmutableMap<K, V>();
-    return excludeKey ? initMap.remove(excludeKey) : initMap;
-  }
-  append(key: K, value: V, excludeKey?: K): ImmutableMap<K, V> {
-    if (key === excludeKey) return this;
-    const newMap = new ImmutableMap<K, V>(this);
-    newMap.set(key, value);
-    return newMap;
-  }
-  remove(key: K): ImmutableMap<K, V> {
-    const newMap = new ImmutableMap<K, V>(this);
-    newMap.delete(key);
-    return newMap;
-  }
-}
-
-class OptionMap extends ImmutableMap<string, NativeOption> {
-  static fromValueMap(
-    value?: ImmutableMap<string, string>,
-    excludeKey?: string,
-  ) {
-    const initOptionMap = new OptionMap();
-    if (value) {
-      for (const pair of value.entries()) {
-        if (excludeKey && excludeKey === pair[0]) {
-          continue;
-        }
-        const newOption = (
-          <option
-            key={pair[0]}
-            value={pair[0]}
-            label={pair[1]}
-            disabled={false}
-          />
-        );
-        initOptionMap.set(pair[0], newOption);
-      }
-    }
-    return initOptionMap;
-  }
-  append(key: string, value: NativeOption): OptionMap {
-    return new OptionMap(super.append(key, value));
-  }
-  addOption(item: SelectItemProps, excludeKey?: string): OptionMap {
-    if (item.selectValue === excludeKey) return this;
-    const newOption = (
-      <option
-        key={item.selectValue}
-        value={item.selectValue}
-        label={item.displayValue}
-        disabled={item.disabled}
-      />
-    );
-    return this.append(item.selectValue, newOption);
-  }
-}
-
+/**
+ * Convert defaultValue to set
+ *
+ * @param defaultValue - defaultValue
+ * @param excludeId - value to exclude from defaultValue
+ * @returns - filtered value(s) as set
+ */
 const getDefaultValue = (
   defaultValue?: string | readonly string[] | number,
   excludeId?: string,
@@ -128,7 +70,7 @@ const getDefaultValue = (
     ? Array.isArray(defaultValue)
       ? new Array(...defaultValue)
       : [String(defaultValue)]
-    : [""];
+    : [];
   array = array.filter(item => item !== excludeId);
   return new Set<string>(array);
 };
@@ -149,37 +91,26 @@ const Root = React.memo(
     const [valid, setValid] = React.useState<boolean>(true);
 
     // Mapping between select value and display value
-    const [valueMap, setValueMap] = React.useState(
-      new ImmutableMap<string, string>(),
+    const [valueMap, setValueMap] = useImmer<Map<string, string>>(
+      defaultValueMap ? defaultValueMap : new Map<string, string>(),
     );
-    const [optionMap, setOptionMap] = React.useState(new OptionMap());
-    const dependency = defaultValueMap
-      ? JSON.stringify(Array.from(defaultValueMap.keys()))
-      : undefined;
 
-    const fDefaultValueMap = React.useMemo(() => {
-      return ImmutableMap.fromMap(defaultValueMap, excludeId);
-    }, [dependency]);
-
-    const fDefaultOptionMap = React.useMemo(() => {
-      return OptionMap.fromValueMap(fDefaultValueMap, excludeId);
-    }, [dependency]);
-
-    const cValueMap = valueMap.size !== 0 ? valueMap : fDefaultValueMap;
-    const cOptionMap = optionMap.size !== 0 ? optionMap : fDefaultOptionMap;
-
-    const onOptionAdd = React.useCallback((option: SelectItemProps) => {
-      const key = option.selectValue;
-      const value = option.displayValue;
-      setValueMap(prev => prev.append(key, value, excludeId));
-      setOptionMap(prev => prev.addOption(option, excludeId));
-    }, []);
+    const onOptionAdd = React.useCallback(
+      (option: SelectItemProps) => {
+        const key = option.selectValue;
+        const value = option.displayValue;
+        setValueMap((draft: Map<string, string>) => {
+          key !== excludeId && draft.set(key, value);
+        });
+      },
+      [excludeId],
+    );
 
     // Value State and setValue method declaration
     const [stateValue, setStateValue] = useImmer<Set<string>>(
       getDefaultValue(defaultValue, excludeId),
     );
-    console.log(defaultValue, defaultValueMap);
+    // console.log(stateValue, defaultValue, defaultValueMap);
     const setValue = React.useCallback(
       (value: string) => {
         // When a new value is selected, clear invalid state
@@ -201,9 +132,8 @@ const Root = React.memo(
       <SelectContextProvider
         value={{
           value: stateValue,
-          valueMap: cValueMap,
+          valueMap: valueMap,
           setValue: setValue,
-          multiple: multiple,
           onOptionAdd: onOptionAdd,
           placeholder: placeholder,
           valid: valid,
@@ -222,7 +152,14 @@ const Root = React.memo(
           {...rest}
         >
           {stateValue.size === 0 ? <option value="" /> : <></>}
-          {Array.from(cOptionMap.values())}
+          {Array.from(valueMap, ([selectedValue, displayedValue]) => (
+            <option
+              key={selectedValue}
+              value={selectedValue}
+              label={displayedValue}
+              disabled={false}
+            />
+          ))}
         </select>
         <Popover.Root>{children}</Popover.Root>
       </SelectContextProvider>
