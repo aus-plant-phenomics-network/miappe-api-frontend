@@ -19,7 +19,7 @@ enableMapSet();
  * @param valid - validation status
  */
 interface SelectCondisplayValue {
-  value: Set<string> | string;
+  value: Set<string>;
   valueMap: Map<string, string>;
   setValue: (value: string) => void;
   multiple?: boolean;
@@ -145,8 +145,10 @@ const Root = React.memo(
       excludeId,
       ...rest
     } = props;
-
+    // Form validation state
     const [valid, setValid] = React.useState<boolean>(true);
+
+    // Mapping between select value and display value
     const [valueMap, setValueMap] = React.useState(
       new ImmutableMap<string, string>(),
     );
@@ -174,10 +176,10 @@ const Root = React.memo(
     }, []);
 
     // Value State and setValue method declaration
-    const [stateValue, setStateValue] = useImmer<Set<string>>(() =>
+    const [stateValue, setStateValue] = useImmer<Set<string>>(
       getDefaultValue(defaultValue, excludeId),
     );
-
+    console.log(defaultValue, defaultValueMap);
     const setValue = React.useCallback(
       (value: string) => {
         // When a new value is selected, clear invalid state
@@ -219,11 +221,7 @@ const Root = React.memo(
           }}
           {...rest}
         >
-          {stateValue === "" || Array.from(stateValue).length == 0 ? (
-            <option value="" />
-          ) : (
-            <></>
-          )}
+          {stateValue.size === 0 ? <option value="" /> : <></>}
           {Array.from(cOptionMap.values())}
         </select>
         <Popover.Root>{children}</Popover.Root>
@@ -250,29 +248,18 @@ const Trigger: React.FC<React.ComponentPropsWithoutRef<"button">> = props => {
 const Value = React.memo(
   React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<"span">>(
     (props, ref) => {
-      const { multiple, value, valueMap, setValue, placeholder } =
-        useSelectContext();
-      let displayContent;
+      const { value, valueMap, setValue, placeholder } = useSelectContext();
 
-      // Logic for displaying one or multiple values depending on
-      // context value and multiple flag
-      if (multiple) {
-        displayContent =
-          Array.from(value).length !== 0
-            ? Array.from(value).map(item => (
-                <ValueItem
-                  key={item}
-                  value={valueMap.get(item)!}
-                  onClick={setValue}
-                />
-              ))
-            : placeholder;
-      } else {
-        displayContent =
-          value !== "" && valueMap.get(value as string)
-            ? valueMap.get(value as string)
-            : placeholder;
-      }
+      const displayContent =
+        value.size !== 0
+          ? Array.from(value).map(item => (
+              <ValueItem
+                key={item}
+                value={valueMap.get(item)!}
+                onClick={setValue}
+              />
+            ))
+          : placeholder;
 
       return (
         <span {...props} ref={ref}>
@@ -305,7 +292,6 @@ const ValueItem = React.memo(
     const valueKey = Array.from(valueMap.entries()).filter(
       item => item[1] === value,
     )?.[0]?.[0];
-
     return (
       <span
         ref={ref}
@@ -428,13 +414,11 @@ const Item = React.memo(
     React.ComponentPropsWithoutRef<"label"> & SelectItemProps
   >((props, ref) => {
     const { selectValue, displayValue, disabled, ...rest } = props;
-    const { setValue, value, multiple, onOptionAdd } = useSelectContext();
+    const { setValue, value, onOptionAdd } = useSelectContext();
     const { queryMatch } = useContentContext();
     const visible = queryMatch.has(displayValue);
 
-    const checked = multiple
-      ? (value as Set<string>).has(selectValue)
-      : selectValue === (value as string);
+    const checked = value.has(selectValue);
 
     const disabledValue = disabled ? true : false;
 
