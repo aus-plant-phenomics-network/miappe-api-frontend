@@ -240,7 +240,7 @@ const ValueItem = React.memo(
         className="SelectValueItem"
       >
         <Cross2Icon className="SelectValueItemIcon" />
-        {value}
+        <p className="SelectValueItemText">{value}</p>
       </span>
     );
   }),

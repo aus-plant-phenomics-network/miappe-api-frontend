@@ -22,11 +22,10 @@
 .SelectValue {
   display: flex;
   flex-grow: 1;
-  flex-wrap: wrap;
 }
+
 .SelectValueItem {
   display: flex;
-  justify-content: center;
   align-items: center;
   border-width: 2px;
   column-gap: 0.25rem;
@@ -39,6 +38,13 @@
 .SelectValueItem:hover {
   background-color: var(--neutral-800);
   color: white;
+}
+
+.SelectValueItemText {
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .SelectContent {
@@ -66,6 +72,7 @@
   display: flex;
   column-gap: 0.5rem;
 }
+
 .SelectItem:hover {
   background-color: var(--neutral-200);
 }
