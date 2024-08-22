@@ -61,7 +61,7 @@
 
 .SelectItemContainer {
   position: relative;
-  max-height: 50vh;
+  max-height: min(50vh, 3/4*var(--radix-popover-content-available-height));
   overflow-y: auto;
 }
 

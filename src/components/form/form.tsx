@@ -85,8 +85,10 @@ const Select = React.memo(
               <PrimitiveSelect.Content
                 sideOffset={5}
                 align="start"
+                side="bottom"
                 hideWhenDetached={true}
                 className="SelectContent"
+                avoidCollisions={false}
               >
                 <PrimitiveSelect.Search className="SelectSearch" />
                 <div className="SelectItemContainer">
