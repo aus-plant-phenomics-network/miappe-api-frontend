@@ -10,7 +10,9 @@ import "../select/select.css";
 import "./form.css";
 
 /**
- * Renders a regular input component that accepts tailwind props
+ * Regular Input elements with an extra data-valid attribute for styling
+ *
+ * @prop prop - regular input props
  */
 const Input = React.memo(
   React.forwardRef<HTMLInputElement, React.ComponentPropsWithoutRef<"input">>(
@@ -51,6 +53,7 @@ const Select = React.memo(
       ...rest
     } = props;
     const fetcher = useFetcherData(fetcherKey);
+
     const fetchedData = (fetcher.data as FetchDataArrayType)
       ? (fetcher.data as FetchDataArrayType)
       : [];
@@ -59,56 +62,63 @@ const Select = React.memo(
       acc.set(dataItem.id as string, dataItem[titleKey] as string);
       return acc;
     }, new Map<string, string>());
-    return (
-      <div className="FormSelectContainer">
-        <PrimitiveSelect.Root
-          name={name}
-          required={required}
-          multiple={multiple}
-          placeholder="Select from dropdown"
-          defaultValue={defaultValue}
-          defaultValueMap={defaultValueMap}
-          {...rest}
-          ref={ref}
-          className="SelectRoot"
-        >
-          <PrimitiveSelect.Trigger className="SelectTrigger">
-            <PrimitiveSelect.Value className="SelectValue" />
-            <PrimitiveSelect.Icon className="SelectIcon" />
-          </PrimitiveSelect.Trigger>
+    const component =
+      fetcher.state === "idle" && fetcher.data !== undefined ? (
+        <div className="FormSelectContainer">
+          <PrimitiveSelect.Root
+            name={name}
+            required={required}
+            multiple={multiple}
+            placeholder="Select from dropdown"
+            defaultValue={defaultValue}
+            defaultValueMap={defaultValueMap}
+            {...rest}
+            ref={ref}
+            className="SelectRoot"
+          >
+            <PrimitiveSelect.Trigger className="SelectTrigger">
+              <PrimitiveSelect.Value className="SelectValue" />
+              <PrimitiveSelect.Icon className="SelectIcon" />
+            </PrimitiveSelect.Trigger>
 
-          <PrimitiveSelect.Portal>
-            <PrimitiveSelect.Content
-              sideOffset={5}
-              align="start"
-              hideWhenDetached={true}
-              className="SelectContent"
-            >
-              <PrimitiveSelect.Search className="SelectSearch" />
-              <div className="SelectItemContainer">
-                {fetchedData &&
-                  fetchedData.map(dataItem => (
-                    <PrimitiveSelect.Item
-                      className="SelectItem"
-                      key={dataItem.id as string}
-                      selectValue={dataItem.id as string}
-                      displayValue={dataItem[titleKey] as string}
-                    />
-                  ))}
-              </div>
-            </PrimitiveSelect.Content>
-          </PrimitiveSelect.Portal>
-        </PrimitiveSelect.Root>
-        <Link to={`../${fetcherKey}/create`} aria-label={`${name}-create-link`}>
-          <AddButton
-            tooltipContent="Add"
-            type="button"
-            aria-label={`${name}-create-button`}
-            className="FormCreateButton"
-          />
-        </Link>
-      </div>
-    );
+            <PrimitiveSelect.Portal>
+              <PrimitiveSelect.Content
+                sideOffset={5}
+                align="start"
+                hideWhenDetached={true}
+                className="SelectContent"
+              >
+                <PrimitiveSelect.Search className="SelectSearch" />
+                <div className="SelectItemContainer">
+                  {fetchedData &&
+                    fetchedData.map(dataItem => (
+                      <PrimitiveSelect.Item
+                        className="SelectItem"
+                        key={dataItem.id as string}
+                        selectValue={dataItem.id as string}
+                        displayValue={dataItem[titleKey] as string}
+                      />
+                    ))}
+                </div>
+              </PrimitiveSelect.Content>
+            </PrimitiveSelect.Portal>
+          </PrimitiveSelect.Root>
+          <Link
+            to={`../${fetcherKey}/create`}
+            aria-label={`${name}-create-link`}
+          >
+            <AddButton
+              tooltipContent="Add"
+              type="button"
+              aria-label={`${name}-create-button`}
+              className="FormCreateButton"
+            />
+          </Link>
+        </div>
+      ) : (
+        <p>Loading</p>
+      );
+    return component;
   }),
 );
 
