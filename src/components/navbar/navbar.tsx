@@ -13,28 +13,28 @@ interface SchemaType {
 }
 
 const Schema: SchemaType = {
-  "Study Definition": {
+  "Stage 1 - Onboarding": {
     Investigation: "investigation",
     Study: "study",
-    Institution: "institution",
     Staff: "staff",
-    "Data File": "dataFile",
-    Experiment: "experiment",
-  },
-  "Data Collection Setup": {
+    Institution: "institution",
     Facility: "facility",
+    Device: "device",
+    "Biological Material": "biologicalMaterial",
+  },
+  "Stage 2 - Ongoing": {
+    "Experimental Factor": "experimentalFactor",
+    "Experimental Design": "experiment",
+    Environment: "environment",
     "Observation Unit": "observationUnit",
     Sample: "sample",
     Event: "event",
   },
-  "Variable Definition": {
-    Unit: "unit",
-    Method: "method",
-    Device: "device",
-    "Biological Material": "biologicalMaterial",
-    Environment: "environment",
-    "Experimental Factor": "experimentalFactor",
+  "Stage 3 - Compilation": {
     "Observed Variable": "observedVariable",
+    Method: "method",
+    Unit: "unit",
+    "Data File": "dataFile",
   },
   Ontology: {
     Vocabulary: "vocabulary",

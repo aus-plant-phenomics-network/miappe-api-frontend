@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "dev-deploy": "vite --host 0.0.0.0 --port 8080",
     "lint": "eslint src ",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "preview": "vite preview",
