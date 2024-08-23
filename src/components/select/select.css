@@ -3,6 +3,7 @@
   display: none;
 }
 
+
 .SelectTrigger {
   width: 100%;
   border-width: 2px;
@@ -13,6 +14,7 @@
   padding: 0.25rem;
   border-radius: 0.375rem;
   column-gap: 0.375rem;
+  overflow: auto
 }
 
 .SelectTrigger:data-[valid="invalid"] {
@@ -22,6 +24,7 @@
 .SelectValue {
   display: flex;
   flex-grow: 1;
+  overflow: auto;
 }
 
 .SelectValueItem {
